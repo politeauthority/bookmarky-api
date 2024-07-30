@@ -11,8 +11,8 @@ from flask import Flask, jsonify, request
 from werkzeug.exceptions import HTTPException
 
 # from cver.shared.utils.log_config import log_config
-from .utils import db
-from .utils import glow
+from bookmarky.api.utils import db
+from bookmarky.api.utils import glow
 # from cver.api.utils import glow
 # from cver.api.utils import misc
 # from cver.api.controllers.ctrl_models.ctrl_api_key import ctrl_api_key

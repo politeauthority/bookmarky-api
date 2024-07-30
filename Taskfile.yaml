@@ -23,7 +23,7 @@ tasks:
         # kubectl cp -n ${NS} ./tests ${POD}:/
         echo "Coppied source and tests"
         echo "Building"
-        # kubectl exec -it -n ${NS} ${POD} -- sh -c "cd /app/src && pip install ."
+        kubectl exec -it -n ${NS} ${POD} -- sh -c "cd /app/src && pip install ."
   build-docker:
     cmds:
       - |

@@ -7,7 +7,7 @@ import logging
 
 import psycopg2
 
-from cver.api.utils import glow
+from bookmarky.api.utils import glow
 
 
 def connect() -> bool:
