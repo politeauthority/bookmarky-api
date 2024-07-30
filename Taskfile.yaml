@@ -12,6 +12,18 @@ tasks:
         echo $POD
         echo "Execing to pod $POD"
         kubectl exec -n ${NS} -it ${POD} -- sh
+  dev-cp-api:
+    cmds:
+      - |
+        NS=$"{{.K8S_NS_DEV}}"
+        POD=$(kubectl get pods -n ${NS} --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
+        echo "Copying to pod $NS/$POD"
+        kubectl cp -n ${NS} ./src ${POD}:/app
+        kubectl cp -n ${NS} ./pyproject.toml ${POD}:/app/src
+        # kubectl cp -n ${NS} ./tests ${POD}:/
+        echo "Coppied source and tests"
+        echo "Building"
+        # kubectl exec -it -n ${NS} ${POD} -- sh -c "cd /app/src && pip install ."
   build-docker:
     cmds:
       - |

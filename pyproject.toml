@@ -9,16 +9,15 @@ requires-python = ">=3.11"
 dependencies = [
     "gunicorn>=22.0.0",
     "Flask>=3.0.3",
-    "paho-mqtt>=2.0.0",
-    "PyYAML>=6.0.1",
     "requests>=2.32.2",
-    "polite-lib>=0.0.9"
 ]
 
 [tool.hatch.build.targets.sdist]
 include = [
-  "quigley_api/*.py",
-  "quigley_api/modules/*.py",
+  "bookmarky/api/*.py",
+  "bookmarky/api/models/*.py",
+  "bookmarky/api/utils/*.py",
+  
 ]
 # exclude = [
 #   "*.json",
