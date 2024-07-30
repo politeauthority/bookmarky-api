@@ -31,7 +31,7 @@ RUN apk add --update --no-cache --virtual .build-deps \
     # Remove build dependencies
     && apk del .build-deps
 
-RUN cd /app/ && pip install .
+# RUN cd /app/ && pip install .
 
 CMD ["gunicorn", "web-app:app", "--chdir", "/app/bookmarky", "--bind=0.0.0.0:80"]
 
