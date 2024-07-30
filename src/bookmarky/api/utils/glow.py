@@ -15,6 +15,7 @@ db = {
     "conn": "",
     "cursor": "",
     "HOST": os.environ.get("BOOKMARKY_DB_HOST"),
+    "PORT": os.environ.get("BOOKMARKY_DB_PORT", 5321),
     "NAME": os.environ.get("BOOKMARKY_DB_NAME"),
     "USER": os.environ.get("BOOKMARKY_DB_USER"),
     "PASS": os.environ.get("BOOKMARKY_DB_PASS"),

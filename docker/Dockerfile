@@ -13,7 +13,7 @@ WORKDIR /app/
 ADD ./build-files/pyproject.toml /app/
 ADD ./build-files/tox.ini /app/
 ADD ./build-files/src /app/
-# ADD ./scripts/install-polite-lib.sh /app
+ADD ./scripts/install-polite-lib.sh /app
 
 # Set environment variables
 ENV LIB_DIR="/root"
@@ -27,8 +27,8 @@ RUN apk add --update --no-cache --virtual .build-deps \
     libgcc libstdc++ ca-certificates \
     postgresql-dev \ 
     # Shitty Polit-Lib Install
+    && /app/install-polite-lib.sh \
     && apk add git \
-    # && /app/install-polite-lib.sh \
     # Remove build dependencies
     && apk del .build-deps
 

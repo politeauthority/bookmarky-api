@@ -12,9 +12,10 @@ import logging
 import arrow
 import psycopg2
 
-from cver.shared.utils import xlate
-from cver.shared.utils import date_utils
-from cver.api.utils import glow
+from polite_lib.utils import xlate
+from polite_lib.utils import date_utils
+
+from bookmarky.api.utils import glow
 
 
 class Base:

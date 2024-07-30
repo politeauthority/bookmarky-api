@@ -17,7 +17,8 @@ include = [
   "bookmarky/api/*.py",
   "bookmarky/api/models/*.py",
   "bookmarky/api/utils/*.py",
-  
+  "bookmarky/migrations/*",
+  "bookmarky/shared/*"
 ]
 # exclude = [
 #   "*.json",
