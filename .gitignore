@@ -1,3 +1,6 @@
+# K8s
+kubernetes-manifests/envs/dev/secrets.yaml
+
 # MacOS
 .DS_Store
 

@@ -4,6 +4,14 @@ vars:
   K8S_NS_DEV: "bookmarky-dev"
 
 tasks:
+  dev-exec-api:
+    cmds:
+      - |
+        NS=$"{{.K8S_NS_DEV}}"
+        POD=$(kubectl get pods -n ${NS} --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
+        echo $POD
+        echo "Execing to pod $POD"
+        kubectl exec -n ${NS} -it ${POD} -- sh
   build-docker:
     cmds:
       - |
