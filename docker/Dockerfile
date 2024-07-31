@@ -23,16 +23,14 @@ ENV LIB_DIR="/root"
 RUN apk add --update --no-cache --virtual .build-deps \
     gcc libc-dev linux-headers bash git \
     && apk add --no-cache libffi-dev \
-    && apk add --no-cache --update --virtual .runtime-deps \
-    libgcc libstdc++ ca-certificates \
-    postgresql-dev gcc python3-dev musl-dev && \
-    # Shitty Polit-Lib Install
-    && /app/install-polite-lib.sh \
+    && apk add --no-cache --update --virtual .runtime-deps libgcc libstdc++ ca-certificates postgresql-dev gcc python3-dev musl-dev
+
+# Shitty polite-lub insta;;
+RUN /app/install-polite-lib.sh \
     && apk add git \
-    # Remove build dependencies
     && apk del .build-deps
 
-# RUN cd /app/ && pip install .
+RUN cd /app/ && pip install .
 
 CMD ["gunicorn", "web-app:app", "--chdir", "/app/bookmarky", "--bind=0.0.0.0:80"]
 
