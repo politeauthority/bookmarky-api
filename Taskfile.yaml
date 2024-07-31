@@ -12,6 +12,7 @@ tasks:
         echo $POD
         echo "Execing to pod $POD"
         kubectl exec -n ${NS} -it ${POD} -- sh
+
   dev-cp-api:
     cmds:
       - |
@@ -24,6 +25,12 @@ tasks:
         echo "Coppied source and tests"
         echo "Building"
         kubectl exec -it -n ${NS} ${POD} -- sh -c "cd /app/src && pip install ."
+
+  dev-deploy:
+    cmds:
+      - |
+        kustomize build kubernetes-manifests/envs/dev | kubectl apply -f -
+
   build-docker:
     cmds:
       - |

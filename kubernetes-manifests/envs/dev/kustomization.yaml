@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: bookmarky-dev
 resources:
   - ../../base
-  # - network.yaml
+  - network.yaml
   - secrets.yaml
 # images:
 #   - name: politeauthority/bookm
@@ -30,27 +30,3 @@ patches:
       #     value: "/dev/config-dev.yaml"
       # - op: remove
       #   path: /spec/template/spec/containers/0/resources
-
-#   - target:
-#       kind: Deployment
-#       name: quigley-consumer
-#     patch: |-
-#       - op: add
-#         path: /spec/template/spec/containers/0/imagePullPolicy
-#         value: Always
-#       - op: replace
-#         path: /metadata/name
-#         value: quigley-consumer
-#       - op: replace
-#         path: /spec/template/spec/volumes/0/secret/secretName
-#         value: quigley-config-dev
-#       - op: add
-#         path: /spec/template/spec/containers/0/command
-#         value: ["tail", "-f", "/dev/null"]
-#       - op: add
-#         path: /spec/template/spec/containers/0/env/-
-#         value:
-#           name: QUIGLEY_CONFIG
-#           value: "/dev/config-dev.yaml"
-#       - op: remove
-#         path: /spec/template/spec/containers/0/resources

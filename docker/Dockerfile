@@ -25,7 +25,7 @@ RUN apk add --update --no-cache --virtual .build-deps \
     && apk add --no-cache libffi-dev \
     && apk add --no-cache --update --virtual .runtime-deps \
     libgcc libstdc++ ca-certificates \
-    postgresql-dev \ 
+    postgresql-dev gcc python3-dev musl-dev && \
     # Shitty Polit-Lib Install
     && /app/install-polite-lib.sh \
     && apk add git \

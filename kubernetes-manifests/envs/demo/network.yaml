@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: bookmarky-dev
+  name: bookmarky
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/upstream-vhost: $host
@@ -14,7 +14,7 @@ metadata:
 spec:
   ingressClassName: nginx-public
   rules:
-    - host: api.bookmarky-dev.alix.lol
+    - host: example.com
       http:
         paths:
           - backend:
@@ -26,5 +26,5 @@ spec:
             pathType: Prefix
   tls:
     - hosts:
-        - api-bookmarky-dev.alix.lol
-      secretName: api-bookmarky-dev-alix-lol
+        - bookmarky-dev.alix.lol
+      secretName: bookmarky-dev-alix-lol

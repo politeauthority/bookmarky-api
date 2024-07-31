@@ -17,6 +17,7 @@ spec:
       containers:
         - name: bookmarky-api
           image: harbor.squid-ink.us/politeauthority/bookmarky:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           env:

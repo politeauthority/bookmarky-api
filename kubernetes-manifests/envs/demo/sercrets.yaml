@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: bookmarky-creds
+data:
+  BOOKMARKY_DB_HOST: ""
+  BOOKMARKY_DB_NAME: ""
+  BOOKMARKY_DB_PASS: ""
+  BOOKMARKY_DB_USER: ""
+type: Opaque

@@ -1,5 +1,7 @@
-# K8s
+# Bookmarky
+## K8s
 kubernetes-manifests/envs/dev/secrets.yaml
+bookmarky.code-workspace
 
 # MacOS
 .DS_Store
