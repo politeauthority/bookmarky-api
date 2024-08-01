@@ -1,14 +1,25 @@
-name: Staging
+name: Push Main
 
 on:
-  pull_request:
-    branches: ["stage"]
   push:
-    branches: ["stage"]
+    branches: ["main"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
+jobs:
+  validate:
+    uses: ./.github/workflows/generic-taste.yaml
+    secrets: inherit
+    permissions:
+      task: 
+      pull-requests: read
+      contents: read
+    with:
+      task: "ci-new-stage"
+      cicd-version: "${{ vars.CICD_VERSION }}"
+      harbor-user: "${{ vars.HARBOR_USER }}"
 
 jobs:
   validate:
@@ -34,24 +45,23 @@ jobs:
       cicd-version: "${{ vars.CICD_VERSION }}"
       harbor-user: "${{ vars.HARBOR_USER }}"
 
-  deploy:
-    runs-on: self-hosted
-    needs: [build-api]
-    container:
-      image: harbor.squid-ink.us/politeauthority/polite-cicd:${{ vars.CICD_VERSION }}
-      credentials:
-        username: ${{ vars.HARBOR_USER }}
-        password: ${{ secrets.HARBOR_PASSWORD }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.PAT }}
-      - name: Deploy Main
-        run: |
-          mkdir ~/.kube
-          echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config.yaml
-          export KUBECONFIG=~/.kube/config.yaml
-          chmod 600 ~/.kube/config.yaml
-          task stage-deploy
-
+  # deploy:
+  #   runs-on: self-hosted
+  #   needs: [build-api]
+  #   container:
+  #     image: harbor.squid-ink.us/politeauthority/polite-cicd:${{ vars.CICD_VERSION }}
+  #     credentials:
+  #       username: ${{ vars.HARBOR_USER }}
+  #       password: ${{ secrets.HARBOR_PASSWORD }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         token: ${{ secrets.PAT }}
+  #     - name: Deploy Main
+  #       run: |
+  #         mkdir ~/.kube
+  #         echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config.yaml
+  #         export KUBECONFIG=~/.kube/config.yaml
+  #         chmod 600 ~/.kube/config.yaml
+  #         task stage-deploy
 # End File: politeauthority/bookmarky/.github/workflows/push-main.yaml

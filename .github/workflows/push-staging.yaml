@@ -1,4 +1,4 @@
-name: Staging
+name: Push Staging
 
 on:
   pull_request:
