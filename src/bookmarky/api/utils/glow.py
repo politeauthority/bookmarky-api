@@ -29,7 +29,7 @@ options = {}
 global general
 general = {
     "LOG_LEVEL": os.environ.get("CVER_LOG_LEVEL", "INFO"),
-    # "VERSION": version,
+    "CVER_VERSION": "dev",
     "CVER_BUILD": os.environ.get("CVER_BUILD"),
     "CVER_BUILD_SHORT": "",
     "CVER_ENV": os.environ.get("CVER_ENV"),

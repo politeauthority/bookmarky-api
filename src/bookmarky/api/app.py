@@ -25,7 +25,7 @@ from bookmarky.api.utils import glow
 #     ctrl_cluster_image_builds)
 # from cver.api.controllers.ctrl_models.ctrl_cluster import ctrl_cluster
 # from cver.api.controllers.ctrl_collections.ctrl_clusters import ctrl_clusters
-# from cver.api.controllers.ctrl_index import ctrl_index
+from bookmarky.api.controllers.ctrl_index import ctrl_index
 # from cver.api.controllers.ctrl_models.ctrl_image import ctrl_image
 # from cver.api.controllers.ctrl_collections.ctrl_images import ctrl_images
 # from cver.api.controllers.ctrl_models.ctrl_image_build import ctrl_image_build
@@ -72,7 +72,7 @@ app.debugger = False
 
 def register_blueprints(app: Flask) -> bool:
     """Register controller blueprints to flask."""
-    # app.register_blueprint(ctrl_api_key)
+    app.register_blueprint(ctrl_index)
     # app.register_blueprint(ctrl_api_keys)
     return True
 
