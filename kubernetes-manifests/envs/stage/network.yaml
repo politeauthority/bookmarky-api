@@ -11,6 +11,7 @@ metadata:
       more_set_headers "X-Content-Type-Options: nosniff";
       more_set_headers "Referrer-Policy: no-referrer-when-downgrade";
       more_set_headers "Permissions-Policy: none";
+      more_set_headers "Access-Control-Allow-Origin: *";
 spec:
   ingressClassName: nginx-public
   rules:
@@ -34,8 +35,14 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: bookmarky-int
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/upstream-vhost: $host
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "Access-Control-Allow-Origin: *";
 spec:
   ingressClassName: nginx-private
+
   rules:
     - host: api.bookmarky-stage.colfax.int
       http:
