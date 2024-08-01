@@ -75,7 +75,7 @@ jobs:
           IMAGE_ID=$(docker images --filter "reference=${SEARCH_IMAGE}" --format "{{.ID}}")
 
           # Get tag names
-          VERSION_FILE="src/quigley_api/modules/version.py"
+          VERSION_FILE="src/bookmarky/api/version.py"
           VERSION=$(grep -o 'version = "[^"]*"' ${VERSION_FILE} | cut -d '"' -f 2)
           VERSION_TAG="stage-${VERSION}"
 
