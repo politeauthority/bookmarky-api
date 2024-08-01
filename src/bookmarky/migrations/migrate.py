@@ -11,7 +11,7 @@ import time
 from bookmarky.api.utils import db
 from bookmarky.api.utils import glow
 from bookmarky.api.models.migration import Migration
-# from bookmarky.migrate.data.data_options import DataOptions
+from bookmarky.migrations.data.data_options import DataOptions
 from bookmarky.migrations.data.data_rbac import DataRbac
 from bookmarky.migrations.data.data_users import DataUsers
 # from bookmarky.migrate.data.data_test_data import DataTestData
@@ -55,7 +55,7 @@ class Migrate:
         # self.run_migrations()
         self.create_rbac()
         self.create_users()
-        # self.create_options()
+        self.create_options()
         # self.create_test_data()
         logging.info("Migrations were successful")
 
@@ -151,10 +151,10 @@ class Migrate:
         time.sleep(2)
         return True
 
-    # def create_options(self):
-    #     """Create the Options and set their defaults."""
-    #     logging.info("Creating Options")
-    #     DataOptions().create()
+    def create_options(self):
+        """Create the Options and set their defaults."""
+        logging.info("Creating Options")
+        DataOptions().create()
 
     def create_rbac(self):
         """Create the Rbac roles/role perms and perms."""

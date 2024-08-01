@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS roles (
 );
 
 ---
-
+--- Create perms
 ---
 CREATE TABLE IF NOT EXISTS perms (
     id SERIAL PRIMARY KEY,
@@ -65,6 +65,24 @@ CREATE TABLE IF NOT EXISTS role_perms (
     enabled BOOLEAN DEFAULT True
 );
 
+--- 
+--- Create options
+---
+CREATE TABLE IF NOT EXISTS options (
+    id SERIAL PRIMARY KEY,
+    created_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    type VARCHAR,
+    name VARCHAR UNIQUE,
+    value TEXT,
+    acl_write TEXT[],
+    acl_read TEXT[],
+    hide_value BOOLEAN
+);
+
+--- 
+--- Bookmarky speccific
+---
 ---
 --- Create bookmarks
 ---
