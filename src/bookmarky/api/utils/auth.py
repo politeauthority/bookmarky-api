@@ -6,7 +6,6 @@
 import datetime
 from functools import wraps
 import logging
-import os
 import random
 
 from flask import make_response, request, jsonify

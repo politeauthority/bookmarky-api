@@ -8,3 +8,9 @@ Self hosted open source bookmark tool
  - Through recently added
  - Through recently clicked
  - Through folders
+
+## Development
+### Process
+ - Branch from `stage` branch
+ - Merge to `stage`
+ - Merge `stage` to `main`
