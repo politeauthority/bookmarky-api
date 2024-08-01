@@ -9,11 +9,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate:
-    uses: ./.github/workflows/generic-taste.yaml
+  new-stage:
+    uses: ./.github/workflows/generic-task.yaml
     secrets: inherit
     permissions:
-      task: 
+      task:
       pull-requests: read
       contents: read
     with:
@@ -21,9 +21,9 @@ jobs:
       cicd-version: "${{ vars.CICD_VERSION }}"
       harbor-user: "${{ vars.HARBOR_USER }}"
 
-jobs:
   validate:
     uses: ./.github/workflows/validate.yaml
+    needs: [new-stage]
     secrets: inherit
     permissions:
       pull-requests: read
