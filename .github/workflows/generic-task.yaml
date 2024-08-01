@@ -22,7 +22,7 @@ jobs:
       - name: Generic Task
         run: |
           # Run the Task
-          TASK = "${{ inputs.task }}"
+          TASK="${{ inputs.task }}"
           task ${TASK}
 
 # End File: politeauthority/bookmarky/.github/workflows/generic-task.yaml
