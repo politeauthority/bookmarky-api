@@ -17,7 +17,7 @@ on:
         type: string
 
 jobs:
-  build-:
+  build:
     runs-on: self-hosted
     needs: [validate]
     container:
