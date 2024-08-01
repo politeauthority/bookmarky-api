@@ -2,7 +2,7 @@ name: Push Staging
 
 on:
   pull_request:
-    branches: ["stage"]
+    branches: ["main"]
   push:
     branches: ["stage"]
 

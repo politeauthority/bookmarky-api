@@ -1,4 +1,4 @@
-name: Build Cver Api Container
+name: Buil Api Container
 
 on:
   workflow_call:
@@ -6,13 +6,7 @@ on:
       tag-prefix:
         required: true
         type: string
-      git-sha:
-        required: true
-        type: string
-      cicd-version:
-        required: true
-        type: string
-      harbor-user:
+      build-target:
         required: true
         type: string
 
@@ -39,7 +33,7 @@ jobs:
           task build-docker -- dev
       - name: Push Container
         run: |
-          TAG_PREFIX="${{ vars.HARBOR_USER }}"
+          TAG_PREFIX="${{ inputs.tag-prefix }}"
 
           # Get image
           SEARCH_IMAGE="harbor.squid-ink.us/politeauthority/bookmarky"
