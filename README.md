@@ -1,4 +1,4 @@
-# Bookmarky v0.0.0.6
+# Bookmarky v0.0.0.13
 Self hosted open source bookmark tool
 
 ## Features
@@ -8,3 +8,9 @@ Self hosted open source bookmark tool
  - Through recently added
  - Through recently clicked
  - Through folders
+
+## Development
+### Process
+ - Branch from `stage` branch
+ - Merge to `stage`
+ - Merge `stage` to `main`

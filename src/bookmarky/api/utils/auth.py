@@ -6,7 +6,6 @@
 import datetime
 from functools import wraps
 import logging
-import os
 import random
 
 from flask import make_response, request, jsonify
@@ -179,9 +178,8 @@ def verify_api_key(client_id: str, raw_api_key: str) -> bool:
     return data
 
 
-def generate_client_id():
-    """Generates a client id to be used in api authentication.
-    """
+def generate_client_id() -> str:
+    """Generates a client id to be used in api authentication."""
     length = 10
     characters = "abcdefghijklmnopqrstuvwxyz1234567890"
     client_id = ""
@@ -190,9 +188,8 @@ def generate_client_id():
     return client_id
 
 
-def generate_api_key():
-    """Creates an api-key.
-    """
+def generate_api_key() -> str:
+    """Creates an api-key."""
     password_length = 19
     characters = "abcdefghijklmnopqrstuvwxyz1234567890"
     api_key = ""
