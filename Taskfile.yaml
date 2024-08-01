@@ -109,7 +109,7 @@ tasks:
     cmds:
       - |
         git config --global --add safe.directory /__w/bookmarky/bookmarky
-        git stash pop
+        git stash
         git fetch origin main
         git checkout main
         git pull origin main
