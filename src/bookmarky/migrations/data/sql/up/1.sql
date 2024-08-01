@@ -31,6 +31,9 @@ CREATE TABLE IF NOT EXISTS users (
     last_access TIMESTAMP
 );
 
+---
+--- Create roles
+---
 CREATE TABLE IF NOT EXISTS roles (
     id SERIAL PRIMARY KEY,
     created_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -40,7 +43,7 @@ CREATE TABLE IF NOT EXISTS roles (
 );
 
 ---
---- Create role_perms
+--- Create perms
 ---
 CREATE TABLE IF NOT EXISTS perms (
     id SERIAL PRIMARY KEY,

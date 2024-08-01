@@ -2,6 +2,7 @@ version: "3"
 vars:
   K8S_NS: "bookmarky"
   K8S_NS_DEV: "bookmarky-dev"
+  K8S_NS_STAGE: "bookmarky-stage"
 
 tasks:
   dev-exec-api:
@@ -30,6 +31,24 @@ tasks:
     cmds:
       - |
         kustomize build kubernetes-manifests/envs/dev | kubectl apply -f -
+
+  stage-deploy:
+    cmds:
+      - |
+        kustomize build kubernetes-manifests/envs/stage | kubectl apply -f -
+
+  stage-logs-api:
+    cmds:
+      - |
+        stern -n bookmarky_stage deployment/bookmarky-api
+
+  stage-exec-api:
+    cmds:
+      - |
+        NS=$"{{.K8S_NS_STAGE}}"
+        POD=$(kubectl get pods -n ${NS} -l app=bookmarky-api --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
+        echo "Execing to pod $POD"
+        kubectl exec -n ${NS} -it ${POD} -- sh
 
   build-docker:
     cmds:

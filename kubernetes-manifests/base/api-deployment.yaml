@@ -43,8 +43,8 @@ spec:
                 secretKeyRef:
                   name: bookmarky-creds
                   key: BOOKMARKY_DB_PASS
-            - name: BOOKMARKY_DB_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: bookmarky-creds
-                  key: SECRET_KEY
+            # - name: SECRET_KEY
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: bookmarky-creds
+            #       key: SECRET_KEY
