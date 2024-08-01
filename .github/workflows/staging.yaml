@@ -105,6 +105,6 @@ jobs:
           token: ${{ secrets.PAT }}
       - name: Deploy Staging
         run: |
-          kustomize build kubernetes-manifests/envs/dev | kubectl apply -f
+          task stage-deploy
 
 # End File: politeauthority/bookmarky/.github/workflows/staging.yaml
