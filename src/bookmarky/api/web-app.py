@@ -85,7 +85,7 @@ def register_blueprints(app: Flask) -> bool:
     app.register_blueprint(ctrl_user)
     app.register_blueprint(ctrl_bookmark)
     app.register_blueprint(ctrl_bookmarks)
-    
+
     return True
 
 
