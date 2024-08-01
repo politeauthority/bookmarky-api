@@ -62,4 +62,5 @@ jobs:
   #         export KUBECONFIG=~/.kube/config.yaml
   #         chmod 600 ~/.kube/config.yaml
   #         task stage-deploy
+
 # End File: politeauthority/bookmarky/.github/workflows/push-main.yaml
