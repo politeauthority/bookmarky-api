@@ -2,7 +2,7 @@ name: Push Main
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "cicd"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,7 +13,7 @@ jobs:
     uses: ./.github/workflows/generic-task.yaml
     secrets: inherit
     permissions:
-      task:
+      task: ci-new-stage:
       pull-requests: read
       contents: read
     with:
