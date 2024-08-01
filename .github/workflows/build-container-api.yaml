@@ -39,6 +39,8 @@ jobs:
           task build-docker -- dev
       - name: Push Container
         run: |
+          TAG_PREFIX="${{ vars.HARBOR_USER }}"
+
           # Get image
           SEARCH_IMAGE="harbor.squid-ink.us/politeauthority/bookmarky"
           IMAGE_ID=$(docker images --filter "reference=${SEARCH_IMAGE}" --format "{{.ID}}")
@@ -46,18 +48,19 @@ jobs:
           # Get tag names
           VERSION_FILE="src/bookmarky/api/version.py"
           VERSION=$(grep -o 'version = "[^"]*"' ${VERSION_FILE} | cut -d '"' -f 2)
-          VERSION_TAG="stage-${VERSION}"
+          TAG_NAMED="${TAG_PREFIX}-latest"
+          TAG_VERSION="${TAG_PREFIX}-${VERSION}"
 
           # Tag
-          docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky:stage-latest
-          docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky:${VERSION_TAG}
+          docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky:${TAG_NAMED}
+          docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky:${TAG_VERSION}
 
           # Push
-          docker push harbor.squid-ink.us/politeauthority/bookmarky:stage-latest
-          docker push harbor.squid-ink.us/politeauthority/bookmarky:${VERSION_TAG}
+          docker push harbor.squid-ink.us/politeauthority/bookmarky:${TAG_NAMED}
+          docker push harbor.squid-ink.us/politeauthority/bookmarky:${TAG_VERSION}
 
           echo "# Docker Build" >> $GITHUB_STEP_SUMMARY
-          echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky:stage-latest" >> $GITHUB_STEP_SUMMARY
+          echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky:${TAG_NAMED}" >> $GITHUB_STEP_SUMMARY
           echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky:${VERSION_TAG}" >> $GITHUB_STEP_SUMMARY
 
 # End File: politeauthority/bookmarky/.github/workflows/build-container-api.yaml
