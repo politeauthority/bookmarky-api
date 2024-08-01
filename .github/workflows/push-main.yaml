@@ -9,14 +9,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  new-stage:
-    uses: ./.github/workflows/generic-task.yaml
-    secrets: inherit
-    permissions:
-      pull-requests: read
-      contents: read
-    with:
-      task: "ci-new-stage"
+  # new-stage:
+  #   uses: ./.github/workflows/generic-task.yaml
+  #   secrets: inherit
+  #   permissions:
+  #     pull-requests: read
+  #     contents: read
+  #   with:
+  #     task: "ci-new-stage"
 
 validate:
     uses: ./.github/workflows/generic-taste.yaml
