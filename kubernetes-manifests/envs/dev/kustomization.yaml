@@ -22,8 +22,8 @@ patches:
       - op: add
         path: /spec/template/spec/containers/0/env/-
         value:
-          - name: JWT_EXPIRE_MINUTES
-            value: "5760"
+          name: JWT_EXPIRE_MINUTES
+          value: "5760"
 
       # - op: remove
       #   path: /spec/template/spec/containers/0/startupProbe
