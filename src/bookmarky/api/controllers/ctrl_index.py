@@ -13,6 +13,7 @@ from bookmarky.shared.utils import date_utils
 # from bookmarky.api.stats import tasks as tasks_stats
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import glow
+from bookmarky.api.version import version
 from bookmarky.api.models.user import User
 from bookmarky.migrations.migrate import CURRENT_MIGRATION
 
@@ -23,8 +24,8 @@ ctrl_index = Blueprint("index", __name__, url_prefix="/")
 def index():
     logging.info("Serving /")
     data = {
-        "info": "Cver Api",
-        "version": glow.general["VERSION"],
+        "info": "Bookmarky",
+        "version": version,
         "env": glow.general["CVER_ENV"],
         "build": glow.general["CVER_BUILD"],
         "build_short": glow.general["CVER_BUILD_SHORT"],
