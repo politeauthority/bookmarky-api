@@ -1,7 +1,6 @@
 """
     Bookmark Api
-    Collection
-    Bookmarks
+    Collection - Bookmarks
 
 """
 from bookmarky.api.collects.base import Base
@@ -22,4 +21,4 @@ class Bookmarks(Base):
         self.field_map = self.collect_model().field_map
         self.per_page = 20
 
-# End File: bookmarky/src/bookmarky/api/collects/bookmarks.py
+# End File: politeauthority/bookmarky/src/bookmarky/api/collects/bookmarks.py

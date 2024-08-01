@@ -23,7 +23,7 @@ def get_model(user_id: int = None) -> Response:
     """GET operation for a bookmark.
     GET /user
     """
-    logging.info("GET - /user")
+    logging.info("GET - /bookmark")
     data = ctrl_base.get_model(Bookmark, user_id)
     if not isinstance(data, dict):
         return data
@@ -38,14 +38,14 @@ def post_model(bookmark_id: int = None):
     """POST operation for a User model.
     POST /bookmark
     """
-    logging.info("POST User")
+    logging.info("POST Bookmark")
     return ctrl_base.post_model(Bookmark, bookmark_id)
 
 
 @ctrl_bookmark.route("/<bookmark_id>", methods=["DELETE"])
 @auth.auth_request
 def delete_model(bookmark_id: int = None):
-    """DELETE operation for a User model.
+    """DELETE operation for a Bookmark model.
     DELETE /bookmark
     """
     logging.debug("DELETE Bookmark")

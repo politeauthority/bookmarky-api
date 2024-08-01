@@ -18,10 +18,6 @@ from bookmarky.api.utils import glow
 # from cver.api.utils import glow
 # from cver.api.utils import misc
 from bookmarky.api.controllers.models.ctrl_api_key import ctrl_api_key
-
-
-from bookmarky.api.controllers.models.ctrl_bookmark import ctrl_bookmark
-from bookmarky.api.controllers.collections.ctrl_bookmarks import ctrl_bookmarks
 from bookmarky.api.controllers.collections.ctrl_api_keys import ctrl_api_keys
 from bookmarky.api.controllers.ctrl_index import ctrl_index
 # from cver.api.controllers.ctrl_collections.ctrl_migrations import ctrl_migrations
@@ -36,6 +32,10 @@ from bookmarky.api.controllers.collections.ctrl_users import ctrl_users
 from bookmarky.api.controllers.models.ctrl_option import ctrl_option
 from bookmarky.api.controllers.collections.ctrl_options import ctrl_options
 
+from bookmarky.api.controllers.models.ctrl_bookmark import ctrl_bookmark
+from bookmarky.api.controllers.collections.ctrl_bookmarks import ctrl_bookmarks
+from bookmarky.api.controllers.models.ctrl_tag import ctrl_tag
+from bookmarky.api.controllers.collections.ctrl_tags import ctrl_tags
 
 logging.config.dictConfig(log_config)
 logger = logging.getLogger(__name__)
@@ -57,6 +57,8 @@ def register_blueprints(app: Flask) -> bool:
     app.register_blueprint(ctrl_options)
     app.register_blueprint(ctrl_bookmark)
     app.register_blueprint(ctrl_bookmarks)
+    app.register_blueprint(ctrl_tag)
+    app.register_blueprint(ctrl_tags)
 
     return True
 

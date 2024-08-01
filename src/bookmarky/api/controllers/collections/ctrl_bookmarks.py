@@ -1,7 +1,6 @@
 """
     Bookmark Api
-    Controller Collection
-    Api Keys
+    Controller Collection - Bookmarks
 
 """
 
@@ -22,4 +21,5 @@ def index():
     return jsonify(data)
 
 
-# End File: bookmarky/src/bookmarky/api/controllers/ctrl_collections/ctrl_bookmarks.py
+# End File: politeauthority/bookmarky/src/bookmarky/api/controllers/ctrl_collections/
+#           ctrl_bookmarks.py

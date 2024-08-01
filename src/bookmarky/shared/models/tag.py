@@ -1,6 +1,6 @@
 """
     Bookmarky Shared
-    Model - Bookmark
+    Model - Tag
 
 """
 
@@ -27,20 +27,14 @@ FIELD_MAP = {
         "api_writeable": True,
         "api_searchable": True,
     },
-    "tags": {
-        "name": "tags",
-        "type": "list",
-        "api_writeable": True,
-        "api_searchable": True,
-    },
     "name": {
         "name": "name",
         "type": "str",
-        "api_display": True,
         "api_writeable": True,
+        "api_searchable": True,
     },
-    "url": {
-        "name": "url",
+    "slug": {
+        "name": "slug",
         "type": "str",
         "api_display": True,
         "api_writeable": True,
@@ -53,8 +47,8 @@ FIELD_MAP = {
 }
 
 FIELD_META = {
-    "ux_key": ["user_id", "url"]
+    "ux_key": ["user_id", "slug"]
 }
 
 
-# End File: politeauthority/bookmarky/src/bookmarky/shared/models/bookmark.py
+# End File: politeauthority/bookmarky/src/bookmarky/shared/models/tag.py

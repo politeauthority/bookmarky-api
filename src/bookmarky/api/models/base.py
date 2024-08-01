@@ -283,8 +283,8 @@ class Base:
                 self,
                 len(self.field_map),
                 len(raw))
-            msg += "Model Fields: %s\n" % (self.field_map.keys())
-            msg += "Field Map: %s\n" % str(self.field_map)
+            msg += "Model Fields:\t\t%s\n" % (self.field_map.keys())
+            msg += "Field Map Fields:\t%s\n" % str(self.field_map.keys())
             msg += "Raw Record: %s\n" % str(raw)
             msg += "Maybe .setup() has not been run"
             logging.error(msg)
