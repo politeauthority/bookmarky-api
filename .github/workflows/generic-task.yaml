@@ -8,9 +8,8 @@ on:
         type: string
 
 jobs:
-  build:
+  run:
     runs-on: self-hosted
-    needs: [validate]
     container:
       image: harbor.squid-ink.us/politeauthority/polite-cicd:${{ vars.CICD_VERSION }}
       credentials:
