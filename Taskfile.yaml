@@ -75,7 +75,7 @@ tasks:
   stage-logs-api:
     cmds:
       - |
-        stern -n bookmarky_stage deployment/bookmarky-api
+        stern -n bookmarky-stage deployment/bookmarky-api
 
   stage-exec-api:
     cmds:

@@ -4,11 +4,10 @@ namespace: bookmarky-dev
 resources:
   - ../../base
   - network.yaml
-  # - secrets.yaml
+  - secrets.yaml
 images:
   - name: harbor.squid-ink.us/politeauthority/bookmarky
-    newTag: 0.0.0.6
-
+    newTag: 0.0.0.7
 patches:
   - target:
       kind: Deployment

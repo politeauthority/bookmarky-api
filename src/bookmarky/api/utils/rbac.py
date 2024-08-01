@@ -50,16 +50,6 @@ ACL = {
         "POST": ["write-all"],
         "DELETE": ["write-all"],
     },
-    "/registry": {
-        "GET": ["read-all"],
-        "POST": ["write-all"],
-        "DELETE": ["write-all"],
-    },
-    "/registries": {
-        "GET": ["read-all"],
-        "POST": ["write-all"],
-        "DELETE": ["write-all"],
-    },
     "/role": {
         "GET": ["read-all"],
         "POST": ["write-all"],
@@ -80,36 +70,6 @@ ACL = {
         "POST": ["write-all"],
         "DELETE": ["write-all"],
     },
-    "/scan-raw": {
-        "GET": ["read-all"],
-        "POST": ["write-all"],
-        "DELETE": ["write-all"],
-    },
-    "/scan-raws": {
-        "GET": ["read-all"],
-        "POST": ["write-all"],
-        "DELETE": ["write-all"],
-    },
-    "/scan": {
-        "GET": ["read-all"],
-        "POST": ["write-all"],
-        "DELETE": ["write-all"],
-    },
-    "/scans": {
-        "GET": ["read-all"],
-        "POST": ["write-all"],
-        "DELETE": ["delete-all"],
-    },
-    "/scanner": {
-        "GET": ["read-all"],
-        "POST": ["write-all"],
-        "DELETE": ["write-all"],
-    },
-    "/scanners": {
-        "GET": ["read-all"],
-        "POST": ["write-all"],
-        "DELETE": ["write-all"],
-    },
     "/user": {
         "GET": ["read-all"],
         "POST": ["write-all"],
@@ -124,6 +84,14 @@ ACL = {
         "GET": ["read-all"],
         "POST": ["write-all"],
         "DELETE": ["write-all"],
+    },
+    "/bookmark": {
+        "GET": ["read-all"],
+        "POST": ["write-all"],
+        "DELETE": ["write-all"],
+    },
+    "/bookmarks": {
+        "GET": ["read-all"],
     },
 }
 
@@ -163,16 +131,15 @@ def get_perms_by_role_id(role_id: int) -> list:
     sql = """
     SELECT p.name, p.slug_name
     FROM roles as r
-    JOIN role_perms as rp
-        ON r.id = rp.role_id
-    JOIN perms as p
-        ON rp.perm_id = p.id
+        JOIN role_perms as rp
+            ON r.id = rp.role_id
+        JOIN perms as p
+            ON rp.perm_id = p.id
     WHERE
         r.id = %s
         AND
         rp.enabled is True;
-
-    """ % role_id
+    """
     glow.db["cursor"].execute(sql, (role_id,))
     res = glow.db["cursor"].fetchall()
     role_perms = []
@@ -180,4 +147,4 @@ def get_perms_by_role_id(role_id: int) -> list:
         role_perms.append(rp[1])
     return role_perms
 
-# End File: bookmarky/src/bookmarky/api/utils/rbac.py
+# End File: politeauthority/bookmarky/src/bookmarky/api/utils/rbac.py
