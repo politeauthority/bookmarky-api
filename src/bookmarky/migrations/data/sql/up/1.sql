@@ -31,12 +31,9 @@ CREATE TABLE IF NOT EXISTS users (
     last_access TIMESTAMP
 );
 
-<<<<<<< HEAD
 ---
 --- Create roles
 ---
-=======
->>>>>>> ecf2a33 (Bootstrap (#1))
 CREATE TABLE IF NOT EXISTS roles (
     id SERIAL PRIMARY KEY,
     created_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -46,11 +43,7 @@ CREATE TABLE IF NOT EXISTS roles (
 );
 
 ---
-<<<<<<< HEAD
---- Create perms
-=======
---- Create role_perms
->>>>>>> ecf2a33 (Bootstrap (#1))
+
 ---
 CREATE TABLE IF NOT EXISTS perms (
     id SERIAL PRIMARY KEY,
@@ -84,8 +77,4 @@ CREATE TABLE IF NOT EXISTS bookmarks (
     url VARCHAR,
     deleted BOOLEAN DEFAULT False,
     UNIQUE (user_id, url)
-<<<<<<< HEAD
 );
-=======
-);
->>>>>>> ecf2a33 (Bootstrap (#1))
