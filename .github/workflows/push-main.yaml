@@ -13,7 +13,6 @@ jobs:
     uses: ./.github/workflows/generic-task.yaml
     secrets: inherit
     permissions:
-      task: "ci-new-stage"
       pull-requests: read
       contents: read
     with:
