@@ -1,0 +1,35 @@
+name: Generic Task
+
+on:
+  workflow_call:
+    inputs:
+      cicd-version:
+        required: true
+        type: string
+      harbor-user:
+        required: true
+        type: string
+      task:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: self-hosted
+    needs: [validate]
+    container:
+      image: harbor.squid-ink.us/politeauthority/polite-cicd:${{ vars.CICD_VERSION }}
+      credentials:
+        username: ${{ vars.HARBOR_USER }}
+        password: ${{ secrets.HARBOR_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+      - name: Generic Task
+        run: |
+          # Run the Task
+          TASK = "${{ inputs.task }}"
+          task ${TASK}
+
+# End File: politeauthority/bookmarky/.github/workflows/generic-task.yaml

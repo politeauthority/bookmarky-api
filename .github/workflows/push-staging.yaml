@@ -63,7 +63,7 @@ jobs:
 
   deploy:
     runs-on: self-hosted
-    needs: [build]
+    needs: [build-api]
     container:
       image: harbor.squid-ink.us/politeauthority/polite-cicd:${{ vars.CICD_VERSION }}
       credentials:
