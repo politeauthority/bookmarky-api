@@ -30,7 +30,7 @@ jobs:
       contents: read
     with:
       tag-prefix: "stage"
-      build-targer: "dev"
+      build-target: "dev"
 
   deploy:
     runs-on: self-hosted
