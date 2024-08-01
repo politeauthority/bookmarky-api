@@ -32,7 +32,7 @@ from bookmarky.api.controllers.ctrl_index import ctrl_index
 # from cver.api.controllers.ctrl_models.ctrl_perm import ctrl_perm
 # from cver.api.controllers.ctrl_collections.ctrl_perms import ctrl_perms
 from bookmarky.api.controllers.models.ctrl_user import ctrl_user
-# from cver.api.controllers.ctrl_collections.ctrl_users import ctrl_users
+from bookmarky.api.controllers.collections.ctrl_users import ctrl_users
 from bookmarky.api.controllers.models.ctrl_option import ctrl_option
 from bookmarky.api.controllers.collections.ctrl_options import ctrl_options
 
@@ -52,6 +52,7 @@ def register_blueprints(app: Flask) -> bool:
     app.register_blueprint(ctrl_api_key)
     app.register_blueprint(ctrl_api_keys)
     app.register_blueprint(ctrl_user)
+    app.register_blueprint(ctrl_users)
     app.register_blueprint(ctrl_option)
     app.register_blueprint(ctrl_options)
     app.register_blueprint(ctrl_bookmark)

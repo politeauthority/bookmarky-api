@@ -45,7 +45,7 @@ tasks:
 
         # Update README
         file_path="README.md"
-        sed -i "" "s/# Quigley Api v$current_version/# Quigley Api v$new_version/g" $file_path
+        sed -i "" "s/# Bookmarky v$current_version/# Bookmarky v$new_version/g" $file_path
 
         #Update pyproject
         file_path="pyproject.toml"
