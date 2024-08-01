@@ -108,9 +108,10 @@ tasks:
   ci-new-stage:
     cmds:
       - |
-        git stash pop
+        git config --global --add safe.directory /__w/bookmarky/bookmarky
+        git stash
         git fetch origin main
-        git co main
-        git co -b stage
+        git checkout main
+        git checkout -b stage
         git push origin stage
     silent: True

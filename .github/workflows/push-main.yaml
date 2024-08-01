@@ -2,7 +2,7 @@ name: Push Main
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "cicd"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,15 +13,12 @@ jobs:
     uses: ./.github/workflows/generic-task.yaml
     secrets: inherit
     permissions:
-      task:
       pull-requests: read
       contents: read
     with:
       task: "ci-new-stage"
-      cicd-version: "${{ vars.CICD_VERSION }}"
-      harbor-user: "${{ vars.HARBOR_USER }}"
 
-  validate:
+validate:
     uses: ./.github/workflows/generic-taste.yaml
     secrets: inherit
     permissions:
@@ -32,6 +29,7 @@ jobs:
       task: "ci-new-stage"
       cicd-version: "${{ vars.CICD_VERSION }}"
       harbor-user: "${{ vars.HARBOR_USER }}"
+
 
   validate:
     uses: ./.github/workflows/validate.yaml
