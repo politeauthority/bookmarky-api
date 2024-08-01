@@ -38,6 +38,8 @@ CMD ["gunicorn", "web-app:app", "--chdir", "/app/bookmarky", "--bind=0.0.0.0:80"
 # Development container tools
 FROM base as dev
 
+RUN apk add bash curl vim postgresql-client
+
 # RUN pip install -r /app/requirements-dev.txt && mkdir /dev-spot
 
 # ADD ./build-files/tests /work/

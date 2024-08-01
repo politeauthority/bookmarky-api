@@ -8,7 +8,7 @@ tasks:
     cmds:
       - |
         NS=$"{{.K8S_NS_DEV}}"
-        POD=$(kubectl get pods -n ${NS} --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
+        POD=$(kubectl get pods -n ${NS} -l app=bookmarky-api --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
         echo $POD
         echo "Execing to pod $POD"
         kubectl exec -n ${NS} -it ${POD} -- sh
@@ -17,7 +17,7 @@ tasks:
     cmds:
       - |
         NS=$"{{.K8S_NS_DEV}}"
-        POD=$(kubectl get pods -n ${NS} --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
+        POD=$(kubectl get pods -l app=bookmarky-api -n ${NS} --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
         echo "Copying to pod $NS/$POD"
         kubectl cp -n ${NS} ./src ${POD}:/app
         kubectl cp -n ${NS} ./pyproject.toml ${POD}:/app/src

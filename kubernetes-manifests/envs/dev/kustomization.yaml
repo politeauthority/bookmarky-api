@@ -5,10 +5,9 @@ resources:
   - ../../base
   - network.yaml
   - secrets.yaml
-# images:
-#   - name: politeauthority/bookm
-#     newName: harbor.squid-ink.us/politeauthority/quigley-api
-#     newTag: stage-latest
+images:
+  - name: harbor.squid-ink.us/politeauthority/bookmarky
+    newTag: 0.0.0.1
 
 patches:
   - target:

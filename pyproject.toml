@@ -10,6 +10,8 @@ dependencies = [
     "gunicorn>=22.0.0",
     "Flask>=3.0.3",
     "requests>=2.32.2",
+    "psycopg2==2.9.9",
+    "ipdb==0.13.13"
 ]
 
 [tool.hatch.build.targets.sdist]

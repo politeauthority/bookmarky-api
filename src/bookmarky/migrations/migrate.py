@@ -31,7 +31,7 @@ dictConfig({
         'formatter': 'default'
     }},
     'root': {
-        'level': 'INFO',
+        'level': 'DEBUG',
         'handlers': ['wsgi']
     }
 })
@@ -47,8 +47,9 @@ class Migrate:
         # self.create_table_sql()
         logging.info("Working with database %s" % glow.db["NAME"])
         # self.create_database()
-        db.connect()
-        import ipdb; ipdb.set_trace()
+        if not db.connect():
+            logging.critical("Failed database connection, exiting")
+            exit(1)
         self.last_migration = self.get_migration_info()
         self.this_migration = Migration()
         self.run_migrations()
@@ -86,15 +87,15 @@ class Migrate:
         if self.last_migration and CURRENT_MIGRATION == self.last_migration.number:
             logging.info("Migration: %s Caught Up" % CURRENT_MIGRATION)
             return True
-        # if self.last_migration:
-        #     migration_no = self.last_migration.number + 1
-        # else:
-        #     migration_no = 1
+        if self.last_migration:
+            migration_no = self.last_migration.number + 1
+        else:
+            migration_no = 1
 
-        logging.warning("MIGRATIONS ARE NOT BEING RUN YET")
-        # while migration_no <= CURRENT_MIGRATION:
-        #     self.run_migration(migration_no)
-        #     migration_no += 1
+        # logging.warning("MIGRATIONS ARE NOT BEING RUN YET")
+        while migration_no <= CURRENT_MIGRATION:
+            self.run_migration(migration_no)
+            migration_no += 1
         return True
 
     def run_migration(self, migration_no: int):
@@ -102,10 +103,12 @@ class Migrate:
         @todo: This is broken right now, needs to be updated for PSQL
         """
         logging.info("Running Migration #%s" % migration_no)
-
+        APPLICATION_DIR = "/app/src/bookmarky/"
         migration_file = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)),
-            "sql/up/%s.sql" % migration_no)
+            APPLICATION_DIR, "migrations/data/sql/up/%s.sql" % migration_no)
+        # migration_file = os.path.join(
+        #     os.path.dirname(os.path.realpath(__file__)),
+        #     "sql/up/%s.sql" % migration_no)
         cmd = "psql -h %s --port %s -u %s --password=%s %s < %s" % (
             glow.db["HOST"],
             glow.db["PORT"],
@@ -115,7 +118,7 @@ class Migrate:
             migration_file
         )
         if not os.path.exists(migration_file):
-            logging.critical("File doesnt exist")
+            logging.critical(f"File doesnt exist: {migration_file}")
             return False
         db.close()
         try:
