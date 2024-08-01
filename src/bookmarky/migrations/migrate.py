@@ -12,7 +12,7 @@ from bookmarky.api.utils import db
 from bookmarky.api.utils import glow
 from bookmarky.api.models.migration import Migration
 # from bookmarky.migrate.data.data_options import DataOptions
-# from bookmarky.migrate.data.data_rbac import DataRbac
+from bookmarky.migrations.data.data_rbac import DataRbac
 # from bookmarky.migrate.data.data_users import DataUsers
 # from bookmarky.migrate.data.data_test_data import DataTestData
 # from bookmarky.migrate.data.data_misc import DataMisc
@@ -52,9 +52,9 @@ class Migrate:
             exit(1)
         self.last_migration = self.get_migration_info()
         self.this_migration = Migration()
-        self.run_migrations()
+        # self.run_migrations()
+        self.create_rbac()
         # self.create_options()
-
         # self.create_test_data()
         logging.info("Migrations were successful")
 
@@ -155,11 +155,11 @@ class Migrate:
     #     logging.info("Creating Options")
     #     DataOptions().create()
 
-    # def create_rbac(self):
-    #     """Create the Rbac roles/role perms and perms."""
-    #     logging.info("Creating Roles")
-    #     db.connect()
-    #     self.rbac = DataRbac().create()
+    def create_rbac(self):
+        """Create the Rbac roles/role perms and perms."""
+        logging.info("Creating Roles")
+        db.connect()
+        self.rbac = DataRbac().create()
 
     # def create_users(self):
     #     """Create the users and api keys."""

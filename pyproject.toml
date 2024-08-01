@@ -18,6 +18,9 @@ dependencies = [
 [tool.hatch.build.targets.sdist]
 include = [
   "bookmarky/api/*.py",
+  "bookmarky/api/collects/*.py",
+  "bookmarky/api/controllers/*.py",
+  "bookmarky/api/controllers/models/*.py",
   "bookmarky/api/models/*.py",
   "bookmarky/api/utils/*.py",
   "bookmarky/migrations/*",

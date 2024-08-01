@@ -44,7 +44,7 @@ from bookmarky.api.controllers.ctrl_index import ctrl_index
 # from cver.api.controllers.ctrl_collections.ctrl_role_perms import ctrl_role_perms
 # from cver.api.controllers.ctrl_models.ctrl_perm import ctrl_perm
 # from cver.api.controllers.ctrl_collections.ctrl_perms import ctrl_perms
-# from cver.api.controllers.ctrl_models.ctrl_user import ctrl_user
+from bookmarky.api.controllers.models.ctrl_user import ctrl_user
 # from cver.api.controllers.ctrl_collections.ctrl_users import ctrl_users
 # from cver.api.controllers.ctrl_models.ctrl_option import ctrl_option
 # from cver.api.controllers.ctrl_collections.ctrl_options import ctrl_options

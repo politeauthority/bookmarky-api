@@ -17,7 +17,7 @@ from werkzeug import security
 from bookmarky.shared.utils import date_utils
 from bookmarky.api.models.api_key import ApiKey
 from bookmarky.api.models.user import User
-# from bookmarky.api.utils import rbac
+from bookmarky.api.utils import rbac
 from bookmarky.api.utils import glow
 
 SECRET_KEY = os.environ.get("CVER_SECRET_KEY")
