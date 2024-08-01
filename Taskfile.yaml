@@ -108,6 +108,7 @@ tasks:
   ci-new-stage:
     cmds:
       - |
+        git config --global --add safe.directory /__w/bookmarky/bookmarky
         git stash pop
         git fetch origin main
         git checkout main
