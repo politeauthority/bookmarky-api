@@ -53,11 +53,11 @@ tasks:
 
         # Update the newTag in the kustomization.yaml file
         file_path="kubernetes-manifests/envs/stage/kustomization.yaml"
-        yq e ".images[0].newTag = \"$new_version\"" -i $file_path
+        yq e ".images[0].newTag = \"stage-$new_version\"" -i $file_path
 
         # Update the newTag in the kustomization.yaml file
         file_path="kubernetes-manifests/envs/dev/kustomization.yaml"
-        yq e ".images[0].newTag = \"$new_version\"" -i $file_path
+        yq e ".images[0].newTag = \"stage-$new_version\"" -i $file_path
 
         git add src/bookmarky/api/version.py
         git add README.md
