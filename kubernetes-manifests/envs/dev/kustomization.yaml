@@ -7,7 +7,7 @@ resources:
   - secrets.yaml
 images:
   - name: harbor.squid-ink.us/politeauthority/bookmarky
-    newTag: 0.0.1.2
+    newTag: 0.0.1.3
 
 patches:
   - target:
