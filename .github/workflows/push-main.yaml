@@ -22,6 +22,19 @@ jobs:
       harbor-user: "${{ vars.HARBOR_USER }}"
 
   validate:
+    uses: ./.github/workflows/generic-taste.yaml
+    secrets: inherit
+    permissions:
+      task: 
+      pull-requests: read
+      contents: read
+    with:
+      task: "ci-new-stage"
+      cicd-version: "${{ vars.CICD_VERSION }}"
+      harbor-user: "${{ vars.HARBOR_USER }}"
+
+jobs:
+  validate:
     uses: ./.github/workflows/validate.yaml
     needs: [new-stage]
     secrets: inherit
