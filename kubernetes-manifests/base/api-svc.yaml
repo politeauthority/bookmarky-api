@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookmarky-api
+  labels:
+    app: bookmarky-api
+    kubernetes.io/name: "bookmarky-api"
+spec:
+  selector:
+    app: bookmarky-api
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP

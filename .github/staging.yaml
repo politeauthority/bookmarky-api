@@ -1,0 +1,94 @@
+name: Staging
+
+on:
+  pull_request:
+    branches: ["stage"]
+  push:
+    branches: ["stage"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # validate-pep8:
+  #   runs-on: self-hosted
+  #   container:
+  #     image: harbor.squid-ink.us/politeauthority/polite-cicd:${{ vars.CICD_VERSION }}
+  #     credentials:
+  #       username: ${{ vars.HARBOR_USER }}
+  #       password: ${{ secrets.HARBOR_PASSWORD }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         token: ${{ secrets.PAT }}
+  #     - name: Validate Pep8
+  #       run: |
+  #         pipx install flake8
+  #         python3.11 -m flake8 --config=src/flake8 src
+
+  validate:
+    runs-on: self-hosted
+    container:
+      image: harbor.squid-ink.us/politeauthority/polite-cicd:${{ vars.CICD_VERSION }}
+      credentials:
+        username: ${{ vars.HARBOR_USER }}
+        password: ${{ secrets.HARBOR_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+      - name: Validate K8s Manifests
+        run: |
+          kustomize build kubernetes-manifests/base >> /dev/null
+          # kustomize build kubernetes-manifests/envs/prod >> /dev/null
+          kustomize build kubernetes-manifests/envs/dev >> /dev/null
+      # - name: Install Dependancies
+      #   run: |
+      #     python3.11 -m pip install .
+
+  build:
+    runs-on: self-hosted
+    needs: [validate]
+    container:
+      image: harbor.squid-ink.us/politeauthority/polite-cicd:${{ vars.CICD_VERSION }}
+      credentials:
+        username: ${{ vars.HARBOR_USER }}
+        password: ${{ secrets.HARBOR_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+      - uses: docker/login-action@v3
+        with:
+          registry: harbor.squid-ink.us
+          username: ${{ vars.HARBOR_USER }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+      - name: Build Container
+        run: |
+          echo "Run Task: Build"
+          task build-docker -- dev
+      - name: Push Container
+        run: |
+          # Get image
+          SEARCH_IMAGE="harbor.squid-ink.us/politeauthority/bookmarky"
+          IMAGE_ID=$(docker images --filter "reference=${SEARCH_IMAGE}" --format "{{.ID}}")
+
+          # Get tag names
+          VERSION_FILE="src/quigley_api/modules/version.py"
+          VERSION=$(grep -o 'version = "[^"]*"' ${VERSION_FILE} | cut -d '"' -f 2)
+          VERSION_TAG="stage-${VERSION}"
+
+          # Tag
+          docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky:stage-latest
+          docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky:${VERSION_TAG}
+
+          # Push
+          docker push harbor.squid-ink.us/politeauthority/bookmarky:stage-latest
+          docker push harbor.squid-ink.us/politeauthority/bookmarky:${VERSION_TAG}
+
+          echo "# Docker Build" >> $GITHUB_STEP_SUMMARY
+          echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky:stage-latest" >> $GITHUB_STEP_SUMMARY
+          echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky:${VERSION_TAG}" >> $GITHUB_STEP_SUMMARY
+
+# End File: politeauthority/bookmarky/.github/workflows/staging.yaml

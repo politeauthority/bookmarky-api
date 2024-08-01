@@ -1,3 +1,12 @@
+# Bookmarky
+## K8s
+kubernetes-manifests/envs/dev/secrets.yaml
+kubernetes-manifests/envs/stage/secrets.yaml
+bookmarky.code-workspace
+
+# MacOS
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
