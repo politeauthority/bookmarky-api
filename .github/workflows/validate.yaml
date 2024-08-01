@@ -1,0 +1,51 @@
+name: Validate
+
+on:
+  workflow_call:
+    inputs:
+      cicd-version:
+        required: true
+        type: string
+      harbor-user:
+        required: true
+        type: string
+
+jobs:
+  validate:
+    runs-on: self-hosted
+    container:
+      image: harbor.squid-ink.us/politeauthority/polite-cicd:${{ vars.CICD_VERSION }}
+      credentials:
+        username: ${{ vars.HARBOR_USER }}
+        password: ${{ secrets.HARBOR_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+      - name: Validate K8s Manifests
+        run: |
+          kustomize build kubernetes-manifests/base >> /dev/null
+          kustomize build kubernetes-manifests/envs/prod >> /dev/null
+          kustomize build kubernetes-manifests/envs/stage >> /dev/null
+          kustomize build kubernetes-manifests/envs/dev >> /dev/null
+      # - name: Install Dependancies
+      #   run: |
+      #     python3.11 -m pip install .
+
+  # validate-pep8:
+  #   runs-on: self-hosted
+  #   container:
+  #     image: harbor.squid-ink.us/politeauthority/polite-cicd:${{ vars.CICD_VERSION }}
+  #     credentials:
+  #       username: ${{ vars.HARBOR_USER }}
+  #       password: ${{ secrets.HARBOR_PASSWORD }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         token: ${{ secrets.PAT }}
+  #     - name: Validate Pep8
+  #       run: |
+  #         pipx install flake8
+  #         python3.11 -m flake8 --config=src/flake8 src
+
+# End File: politeauthority/bookmarky/.github/workflows/validate.py

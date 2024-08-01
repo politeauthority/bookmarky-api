@@ -11,42 +11,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # validate-pep8:
-  #   runs-on: self-hosted
-  #   container:
-  #     image: harbor.squid-ink.us/politeauthority/polite-cicd:${{ vars.CICD_VERSION }}
-  #     credentials:
-  #       username: ${{ vars.HARBOR_USER }}
-  #       password: ${{ secrets.HARBOR_PASSWORD }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         token: ${{ secrets.PAT }}
-  #     - name: Validate Pep8
-  #       run: |
-  #         pipx install flake8
-  #         python3.11 -m flake8 --config=src/flake8 src
-
   validate:
-    runs-on: self-hosted
-    container:
-      image: harbor.squid-ink.us/politeauthority/polite-cicd:${{ vars.CICD_VERSION }}
-      credentials:
-        username: ${{ vars.HARBOR_USER }}
-        password: ${{ secrets.HARBOR_PASSWORD }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.PAT }}
-      - name: Validate K8s Manifests
-        run: |
-          kustomize build kubernetes-manifests/base >> /dev/null
-          kustomize build kubernetes-manifests/envs/prod >> /dev/null
-          kustomize build kubernetes-manifests/envs/stage >> /dev/null
-          kustomize build kubernetes-manifests/envs/dev >> /dev/null
-      # - name: Install Dependancies
-      #   run: |
-      #     python3.11 -m pip install .
+    uses: ./.github/workflows/validate.yaml
+    secrets: inherit
+    permissions:
+      pull-requests: read
+      contents: read
+    with:
+      cicd-version: "${{ vars.CICD_VERSION }}"
+      harbor-user: "${{ vars.HARBOR_USER }}"
 
   build-api:
     needs: [validate]
