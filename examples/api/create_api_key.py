@@ -3,11 +3,14 @@
     Create a new Api Key for a User
 
 """
+import json
+import os
+
 import requests
 
-API_URL=""
-API_CLIENT_ID = "w6lk58ufsw"
-API_API_KEY = "32e7-i26h-tnvm-2umq"
+API_URL = os.environ.get("BOOKMARKY_URL")
+API_CLIENT_ID = os.environ.get("BOOKMARKY_CLIENT_ID")
+API_API_KEY = os.environ.get("BOOKMARKY_API_KEY")
 
 
 def run():
@@ -19,7 +22,7 @@ def get_token():
         "X-Api-Key": API_API_KEY,
         "Client-Id": API_CLIENT_ID,
     }
-    response = requests.post("{API_URL}/auth", data=json.dumps())
+    response = requests.post("{API_URL}/auth", data=json.dumps(data))
 
 
 if __name__ == "__main__":

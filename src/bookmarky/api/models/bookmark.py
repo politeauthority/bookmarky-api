@@ -18,7 +18,7 @@ class Bookmark(BaseEntityMeta):
         super(Bookmark, self).__init__(conn, cursor)
         self.field_map = FIELD_MAP
         self.table_name = "bookmarks"
-        self.immutable = True
+        self.immutable = False
         self.createable = True
         self.setup()
 

@@ -100,7 +100,7 @@ def post_model(model, entity_id: int = None, generated_data: dict = {}):
             else:
                 entity_found = True
                 logging.info("POST - Found entity by ID: %s" % entity)
-
+    
     # Dont allow api creates on api uncreateble models
     if not entity.id and not entity.createable:
         data["message"] = "Not allowed to create entity %s" % entity.model_name
