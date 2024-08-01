@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bookmarky-stage
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/upstream-vhost: $host
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "Content-Security-Policy default-src 'self'";
+      more_set_headers "X-Frame-Options: SAMEORIGIN";
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "Referrer-Policy: no-referrer-when-downgrade";
+      more_set_headers "Permissions-Policy: none";
+spec:
+  ingressClassName: nginx-public
+  rules:
+    - host: api.bookmarky-stage.alix.lol
+      http:
+        paths:
+          - backend:
+              service:
+                name: bookmarky-api
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - api-bookmarky-stage.alix.lol
+      secretName: api-bookmarky-stage-alix-lol
