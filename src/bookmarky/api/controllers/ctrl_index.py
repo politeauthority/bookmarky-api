@@ -24,7 +24,7 @@ def index():
     logging.info("Serving /")
     data = {
         "info": "Cver Api",
-        "version": glow.general["CVER_VERSION"],
+        "version": glow.general["VERSION"],
         "env": glow.general["CVER_ENV"],
         "build": glow.general["CVER_BUILD"],
         "build_short": glow.general["CVER_BUILD_SHORT"],
@@ -32,48 +32,48 @@ def index():
     return jsonify(data)
 
 
-# @ctrl_index.route("/auth", methods=["POST"])
-# def authenticate():
-#     """Authentication route. Take a Client-Id and X-Api-Key header and attempt to verify those
-#     credentials. Then return a JWT back to the user which can be used to authenticate all other
-#     requests.
-#     """
-#     logging.debug("Starting authentication flow")
-#     data = {
-#         "message": "Failed login",
-#         "status": "Error"
-#     }
-#     if "X-Api-Key" not in request.headers or "Client-Id" not in request.headers:
-#         if not "X-Api-Key" not in request.headers:
-#             data["message"] = "No api key sent with request."
-#             logging.warning("No api key sent with request")
-#         elif "Client-Id" not in request.headers:
-#             data["message"] = "No client id sent with request"
-#             logging.warning("No client id sent with request")
-#         return jsonify(data), 400
+@ctrl_index.route("/auth", methods=["POST"])
+def authenticate():
+    """Authentication route. Take a Client-Id and X-Api-Key header and attempt to verify those
+    credentials. Then return a JWT back to the user which can be used to authenticate all other
+    requests.
+    """
+    logging.debug("Starting authentication flow")
+    data = {
+        "message": "Failed login",
+        "status": "Error"
+    }
+    if "X-Api-Key" not in request.headers or "Client-Id" not in request.headers:
+        if not "X-Api-Key" not in request.headers:
+            data["message"] = "No api key sent with request."
+            logging.warning("No api key sent with request")
+        elif "Client-Id" not in request.headers:
+            data["message"] = "No client id sent with request"
+            logging.warning("No client id sent with request")
+        return jsonify(data), 400
 
-#     # Try to authenticate
-#     client_id = request.headers["Client-Id"]
-#     api_key_raw = request.headers["X-Api-Key"]
-#     authed_event = auth.verify_api_key(client_id, api_key_raw)
-#     if not authed_event:
-#         logging.warning("Failed login attempt, client_id: %s" % client_id)
-#         return jsonify(data), 403
-#     logging.info("Verified api key")
+    # Try to authenticate
+    client_id = request.headers["Client-Id"]
+    api_key_raw = request.headers["X-Api-Key"]
+    authed_event = auth.verify_api_key(client_id, api_key_raw)
+    if not authed_event:
+        logging.warning("Failed login attempt, client_id: %s" % client_id)
+        return jsonify(data), 403
+    logging.info("Verified api key")
 
-#     user = User()
-#     user.get_by_id(authed_event["user_id"])
-#     glow.user["user_id"] = user.id
-#     glow.user["org_id"] = user.org_id
-#     glow.user["role_id"] = user.role_id
-#     auth.record_last_access(user, authed_event["api_key"])
+    user = User()
+    user.get_by_id(authed_event["user_id"])
+    glow.user["user_id"] = user.id
+    glow.user["org_id"] = user.org_id
+    glow.user["role_id"] = user.role_id
+    auth.record_last_access(user, authed_event["api_key"])
 
-#     # Mint the JWT
-#     data["token"] = auth.mint_jwt()
-#     data["message"] = "Authenticated user and minted token"
-#     data["status"] = "Success"
-#     logging.info("Sending back the token to the client")
-#     return jsonify(data)
+    # Mint the JWT
+    data["token"] = auth.mint_jwt()
+    data["message"] = "Authenticated user and minted token"
+    data["status"] = "Success"
+    logging.info("Sending back the token to the client")
+    return jsonify(data)
 
 
 @ctrl_index.route("/info")

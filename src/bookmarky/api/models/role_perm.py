@@ -48,7 +48,7 @@ class RolePerm(Base):
         #     LIMIT 1; """ % (sql_tools.sql_safe(role_id), sql_tools.sql_safe(perm_id))
 
         # @ todo verify this change works
-        logging.waring("get_by_role_perm ")
+        logging.warning("get_by_role_perm ")
         sql = """
             SELECT *
             FROM role_perms

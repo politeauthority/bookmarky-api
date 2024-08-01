@@ -13,7 +13,7 @@ from bookmarky.api.utils import glow
 from bookmarky.api.models.migration import Migration
 # from bookmarky.migrate.data.data_options import DataOptions
 from bookmarky.migrations.data.data_rbac import DataRbac
-# from bookmarky.migrate.data.data_users import DataUsers
+from bookmarky.migrations.data.data_users import DataUsers
 # from bookmarky.migrate.data.data_test_data import DataTestData
 # from bookmarky.migrate.data.data_misc import DataMisc
 
@@ -54,6 +54,7 @@ class Migrate:
         self.this_migration = Migration()
         # self.run_migrations()
         self.create_rbac()
+        self.create_users()
         # self.create_options()
         # self.create_test_data()
         logging.info("Migrations were successful")
@@ -161,10 +162,10 @@ class Migrate:
         db.connect()
         self.rbac = DataRbac().create()
 
-    # def create_users(self):
-    #     """Create the users and api keys."""
-    #     logging.info("Creating Users and Keys")
-    #     DataUsers().create()
+    def create_users(self):
+        """Create the users and api keys."""
+        logging.info("Creating Users and Keys")
+        DataUsers().create()
 
     # def create_test_data(self) -> bool:
     #     """Create the test data if we're in a test environment."""

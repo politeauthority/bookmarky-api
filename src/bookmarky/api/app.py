@@ -6,6 +6,8 @@
 
 """
 import logging
+import traceback
+import sys
 
 from flask import Flask, jsonify, request
 from werkzeug.exceptions import HTTPException
@@ -15,9 +17,14 @@ from bookmarky.api.utils import db
 from bookmarky.api.utils import glow
 # from cver.api.utils import glow
 # from cver.api.utils import misc
-# from cver.api.controllers.ctrl_models.ctrl_api_key import ctrl_api_key
-# from cver.api.controllers.ctrl_collections.ctrl_api_keys import ctrl_api_keys
-# from cver.api.controllers.ctrl_models.ctrl_cluster_image import ctrl_cluster_image
+from bookmarky.api.controllers.models.ctrl_api_key import ctrl_api_key
+
+
+from bookmarky.api.controllers.models.ctrl_bookmark import ctrl_bookmark
+from bookmarky.api.controllers.collections.ctrl_bookmarks import ctrl_bookmarks
+from bookmarky.api.controllers.collections.ctrl_api_keys import ctrl_api_keys
+
+# from cver.api.controllers.models.ctrl_cluster_image import ctrl_cluster_image
 # from cver.api.controllers.ctrl_collections.ctrl_cluster_images import ctrl_cluster_images
 # from cver.api.controllers.ctrl_models.ctrl_cluster_image_build import (
 #     ctrl_cluster_image_build)
@@ -73,7 +80,12 @@ app.debugger = False
 def register_blueprints(app: Flask) -> bool:
     """Register controller blueprints to flask."""
     app.register_blueprint(ctrl_index)
-    # app.register_blueprint(ctrl_api_keys)
+    app.register_blueprint(ctrl_api_key)
+    app.register_blueprint(ctrl_api_keys)
+    app.register_blueprint(ctrl_user)
+    app.register_blueprint(ctrl_bookmark)
+    app.register_blueprint(ctrl_bookmarks)
+    
     return True
 
 
@@ -87,19 +99,19 @@ def handle_exception(e):
         "request-id": glow.session["short_id"],
         "status": "error"
     }
+    RESPONSE_CODE = 500
     # pass through HTTP errors
     if isinstance(e, HTTPException):
         data["message"] = e.description
-        return jsonify(data), e.code
+        return jsonify(data), RESPONSE_CODE
 
-    traceback = "No full tracebook"
-    logging.error("Unhandled Exception")
+    traceback.print_exc(file=sys.stdout)
     print(traceback)
     if glow.general["CVER_TEST"]:
         data["message"] = traceback
         return jsonify(data), 500
     else:
-        return jsonify(data), e.code
+        return jsonify(data), RESPONSE_CODE
 
 
 @app.before_request

@@ -19,7 +19,7 @@ spec:
         paths:
           - backend:
               service:
-                name: bookmarky
+                name: bookmarky-api
                 port:
                   number: 80
             path: /

@@ -20,7 +20,7 @@ from bookmarky.api.models.user import User
 from bookmarky.api.utils import rbac
 from bookmarky.api.utils import glow
 
-SECRET_KEY = os.environ.get("CVER_SECRET_KEY")
+SECRET_KEY = glow.general["SECRET_KEY"]
 
 
 def auth_request(f):
@@ -100,7 +100,7 @@ def mint_jwt():
         }
         return make_response(jsonify(data), 503)
     role_perms = rbac.get_perms_by_role_id(glow.user["role_id"])
-    expiration_minutes = int(glow.general["CVER_JWT_EXPIRE_MINUTES"])
+    expiration_minutes = int(glow.general["JWT_EXPIRE_MINUTES"])
     payload = {
         "user_id": glow.user["user_id"],
         "role_perms": role_perms,

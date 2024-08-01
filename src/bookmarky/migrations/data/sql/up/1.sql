@@ -75,4 +75,3 @@ CREATE TABLE IF NOT EXISTS bookmarks (
     deleted BOOLEAN DEFAULT False,
     UNIQUE (user_id, url)
 );
-

@@ -29,12 +29,12 @@ options = {}
 global general
 general = {
     "LOG_LEVEL": os.environ.get("CVER_LOG_LEVEL", "INFO"),
-    "CVER_VERSION": "dev",
+    "VERSION": "dev",
     "CVER_BUILD": os.environ.get("CVER_BUILD"),
     "CVER_BUILD_SHORT": "",
     "CVER_ENV": os.environ.get("CVER_ENV"),
-    "CVER_JWT_EXPIRE_MINUTES": os.environ.get("CVER_JWT_EXPIRE_MINUTES", 60),
-    "CVER_SECRET_KEY": os.environ.get("CVER_SECRET_KEY"),
+    "JWT_EXPIRE_MINUTES": os.environ.get("JWT_EXPIRE_MINUTES", 60),
+    "SECRET_KEY": os.environ.get("SECRET_KEY", "hello-world123"),
     "CVER_TEST": os.environ.get("CVER_TEST", False),
     "CVER_LOG_HEALTH_CHECKS": os.environ.get("CVER_LOG_HEALTH_CHECKS", False),
     "CVER_DEPLOYED_AT": os.environ.get("CVER_DEPLOYED_AT", None)

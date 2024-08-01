@@ -1,6 +1,6 @@
 """
-    Cver Migrate
-    Data - Rbac
+    Bookmarky Migrate
+    Data - Users
 
 """
 from datetime import datetime
@@ -9,12 +9,11 @@ import os
 
 import arrow
 
-from cver.api.utils import glow
-from cver.api.collects.roles import Roles
-from cver.api.models.api_key import ApiKey
-from cver.api.models.user import User
-from cver.api.models.organization import Organization
-from cver.api.utils import auth
+from bookmarky.api.utils import glow
+from bookmarky.api.collects.roles import Roles
+from bookmarky.api.models.api_key import ApiKey
+from bookmarky.api.models.user import User
+from bookmarky.api.utils import auth
 
 
 class DataUsers:
@@ -33,29 +32,12 @@ class DataUsers:
 
     def create(self) -> bool:
         """Create the first user, and test users if this is a test environment."""
-        self.create_first_org()
         if not glow.general["CVER_TEST"]:
             logging.info("")
             self.create_first_admin()
         else:
             self.create_first_test_user()
             self.create_test_users()
-
-    def create_first_org(self) -> bool:
-        """Create the first Organization
-        @todo: Make this more dynamic.
-        """
-        org = Organization()
-        if org.get_by_field(field_name="email", field_value="test@example.com"):
-            logging.info("Organization %s already exists, skipping creation" % org.name)
-            self.org_id = org.id
-            return True
-        org.name = "First Org"
-        org.email = "test@example.com"
-        org.save()
-        logging.info("Created Org: %s" % org)
-        self.org_id = org.id
-        return True
 
     def create_first_admin(self) -> bool:
         """Create the first admin level user, but only if one doesn't already exist."""
@@ -87,24 +69,6 @@ class DataUsers:
         if not glow.general["CVER_TEST"]:
             logging.info("Not creating test users")
             return True
-
-        logging.info("Creating Test Users")
-        client_id = os.environ.get("CVER_TEST_INGEST_CLIENT_ID")
-        if not client_id:
-            logging.warning("Missing CVER_TEST_INGEST_CLIENT_ID env var, skipping user creation.")
-            return False
-        api_key = os.environ.get("CVER_TEST_INGEST_API_KEY")
-        roles_id = self.roles["ingestor"].id
-        self.create_user("test-ingest", "ingest@example.com", roles_id, client_id, api_key)
-
-        # Create User: test-engine
-        client_id = os.environ.get("CVER_TEST_ENGINE_CLIENT_ID")
-        if not client_id:
-            logging.warning("Missing CVER_TEST_ENGINE_CLIENT_ID env var, skipping user creation.")
-            return False
-        api_key = os.environ.get("CVER_TEST_ENGINE_API_KEY")
-        roles_id = self.roles["engineer"].id
-        self.create_user("test-engine", "engine@example.com", roles_id, client_id, api_key)
 
     def create_user(
             self,
