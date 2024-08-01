@@ -8,6 +8,7 @@ resources:
 images:
   - name: harbor.squid-ink.us/politeauthority/bookmarky
     newTag: stage-0.0.0.14
+
 patches:
   - target:
       kind: Deployment
