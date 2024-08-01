@@ -1,8 +1,8 @@
-name: Staging
+name: Push Staging
 
 on:
-  pull_request:
-    branches: ["stage"]
+  # pull_request:
+  #   branches: ["main"]
   push:
     branches: ["stage"]
 
@@ -30,9 +30,7 @@ jobs:
       contents: read
     with:
       tag-prefix: "stage"
-      git-sha: "${{ github.sha }}"
-      cicd-version: "${{ vars.CICD_VERSION }}"
-      harbor-user: "${{ vars.HARBOR_USER }}"
+      build-target: "dev"
 
   deploy:
     runs-on: self-hosted

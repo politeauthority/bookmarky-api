@@ -104,3 +104,14 @@ tasks:
         docker build -t harbor.squid-ink.us/politeauthority/bookmarky --target ${BUILD_TARGET} --no-cache docker/
         rm -rf docker/build-files
     silent: True
+
+  ci-new-stage:
+    cmds:
+      - |
+        git stash pop
+        git fetch origin main
+        git co main
+        git pull origin main
+        git co -bstage
+        git push origin stage
+    silent: True
