@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bookmarky"
+version = "0.0.0.1"
+requires-python = ">=3.11"
+dependencies = [
+    "gunicorn>=22.0.0",
+    "Flask>=3.0.3",
+    "requests>=2.32.2",
+    "psycopg2==2.9.9",
+    "PyJWT==2.8.0",
+    "ipdb==0.13.13"
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "bookmarky/api/*.py",
+  "bookmarky/api/collects/*.py",
+  "bookmarky/api/controllers/*.py",
+  "bookmarky/api/controllers/models/*.py",
+  "bookmarky/api/models/*.py",
+  "bookmarky/api/utils/*.py",
+  "bookmarky/migrations/*",
+  "bookmarky/shared/*"
+]
+# exclude = [
+#   "*.json",
+#   "pkg/_compat.py",
+# ]

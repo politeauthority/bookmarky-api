@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookmarky-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookmarky-api
+  template:
+    metadata:
+      labels:
+        app: bookmarky-api
+    spec:
+      imagePullSecrets:
+        - name: harbor-registry
+      containers:
+        - name: bookmarky-api
+          image: harbor.squid-ink.us/politeauthority/bookmarky:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: BOOKMARKY_ENV
+              value: "dev"
+            - name: BOOKMARKY_DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: BOOKMARKY_DB_HOST
+                  name: bookmarky-creds
+            - name: BOOKMARKY_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: bookmarky-creds
+                  key: BOOKMARKY_DB_NAME
+            - name: BOOKMARKY_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: bookmarky-creds
+                  key: BOOKMARKY_DB_USER
+            - name: BOOKMARKY_DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: bookmarky-creds
+                  key: BOOKMARKY_DB_PASS
+            - name: BOOKMARKY_DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: bookmarky-creds
+                  key: SECRET_KEY
