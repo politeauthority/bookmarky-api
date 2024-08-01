@@ -30,9 +30,7 @@ jobs:
       contents: read
     with:
       tag-prefix: "stage"
-      git-sha: "${{ github.sha }}"
-      cicd-version: "${{ vars.CICD_VERSION }}"
-      harbor-user: "${{ vars.HARBOR_USER }}"
+      build-targer: "dev"
 
   deploy:
     runs-on: self-hosted
