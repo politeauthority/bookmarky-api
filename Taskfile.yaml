@@ -32,6 +32,41 @@ tasks:
       - |
         kustomize build kubernetes-manifests/envs/dev | kubectl apply -f -
 
+  update-version:
+    cmds:
+      - |
+        new_version="{{.CLI_ARGS}}"
+        file_path="src/bookmarky/api/version.py"
+        current_version=$(awk -F'"' '/version = / {print $2}' $file_path)
+
+        echo $current_version
+        # Replace the current version number with the new version number using a different delimiter
+        sed -i "" 's/version = "'"$current_version"'"/version = "'"$new_version"'"/g' $file_path
+
+        # Update README
+        file_path="README.md"
+        sed -i "" "s/# Quigley Api v$current_version/# Quigley Api v$new_version/g" $file_path
+
+        #Update pyproject
+        file_path="pyproject.toml"
+        sed -i "" "s/version = \"$current_version\"/version = \"$new_version\"/g" $file_path
+
+        # Update the newTag in the kustomization.yaml file
+        file_path="kubernetes-manifests/envs/stage/kustomization.yaml"
+        yq e ".images[0].newTag = \"$new_version\"" -i $file_path
+
+        # Update the newTag in the kustomization.yaml file
+        file_path="kubernetes-manifests/envs/dev/kustomization.yaml"
+        yq e ".images[0].newTag = \"$new_version\"" -i $file_path
+
+        git add src/bookmarky/api/version.py
+        git add README.md
+        git add pyproject.toml
+        git add kubernetes-manifests/envs/dev/kustomization.yaml
+        git add kubernetes-manifests/envs/stage/kustomization.yaml
+        echo "Version number updated from $current_version to $new_version"
+    silent: True
+
   stage-deploy:
     cmds:
       - |

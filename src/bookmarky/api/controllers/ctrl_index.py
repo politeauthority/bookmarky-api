@@ -1,18 +1,19 @@
 """
     Bookmarky Api
-    Controller
-    Index
+    Controller - Index
+    {API_URL}/
 
 """
 import logging
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, Response
 
 from bookmarky.shared.utils import date_utils
 # from bookmarky.api.stats import totals
 # from bookmarky.api.stats import tasks as tasks_stats
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import glow
+from bookmarky.api.version import version
 from bookmarky.api.models.user import User
 from bookmarky.migrations.migrate import CURRENT_MIGRATION
 
@@ -20,11 +21,11 @@ ctrl_index = Blueprint("index", __name__, url_prefix="/")
 
 
 @ctrl_index.route("/")
-def index():
+def index() -> Response:
     logging.info("Serving /")
     data = {
-        "info": "Cver Api",
-        "version": glow.general["VERSION"],
+        "info": "Bookmarky",
+        "version": version,
         "env": glow.general["CVER_ENV"],
         "build": glow.general["CVER_BUILD"],
         "build_short": glow.general["CVER_BUILD_SHORT"],
@@ -33,7 +34,7 @@ def index():
 
 
 @ctrl_index.route("/auth", methods=["POST"])
-def authenticate():
+def authenticate() -> Response:
     """Authentication route. Take a Client-Id and X-Api-Key header and attempt to verify those
     credentials. Then return a JWT back to the user which can be used to authenticate all other
     requests.
@@ -78,7 +79,7 @@ def authenticate():
 
 @ctrl_index.route("/info")
 @auth.auth_request
-def info() -> dict:
+def info() -> Response:
     """Get information on model totals and task success reports."""
     # model_totals = totals.get_model_totals()
     # task_totals = tasks_stats.get_task_totals()
@@ -96,47 +97,47 @@ def info() -> dict:
     return jsonify(data)
 
 
-# @ctrl_index.route("/who-am-i")
-# @auth.auth_request
-# def who_am_i():
-#     """Tells a user what User Cver Api believes them to be."""
-#     token_details = auth.validate_jwt(request.headers["token"])
-#     token_details["expiration_date"] = date_utils.json_date_out(
-#         date_utils.from_epoch(token_details["exp"]))
-#     token_details["issue_date"] = date_utils.json_date_out(
-#         date_utils.from_epoch(token_details["iat"]))
-#     user = User()
-#     user.get_by_id(token_details["user_id"])
-#     data = {
-#         "status": "success",
-#         "token": token_details,
-#         "user": user.json()
-#     }
-#     return jsonify(data)
+@ctrl_index.route("/who-am-i")
+@auth.auth_request
+def who_am_i() -> Response:
+    """Tells a user what User the Api believes them to be."""
+    token_details = auth.validate_jwt(request.headers["token"])
+    token_details["expiration_date"] = date_utils.json_date_out(
+        date_utils.from_epoch(token_details["exp"]))
+    token_details["issue_date"] = date_utils.json_date_out(
+        date_utils.from_epoch(token_details["iat"]))
+    user = User()
+    user.get_by_id(token_details["user_id"])
+    data = {
+        "status": "success",
+        "token": token_details,
+        "user": user.json()
+    }
+    return jsonify(data)
 
 
-# @ctrl_index.route("/healthz")
-# def healthz():
-#     data = {
-#         "status": "Success",
-#         "message": "Healthy"
-#     }
-#     if glow.general["CVER_LOG_HEALTH_CHECKS"]:
-#         logging.info("Helath check, reporting healthy")
-#     return jsonify(data)
+@ctrl_index.route("/healthz")
+def healthz() -> Response:
+    data = {
+        "status": "Success",
+        "message": "Healthy"
+    }
+    if glow.general["CVER_LOG_HEALTH_CHECKS"]:
+        logging.info("Helath check, reporting healthy")
+    return jsonify(data)
 
 
-# @ctrl_index.route("/debug")
-# def debug():
-#     data = {
-#         "info": "Cver Api",
-#         "version": glow.general["VERSION"],
-#         "env": glow.general["CVER_ENV"],
-#         "build": glow.general["CVER_BUILD"]
-#     }
-#     if glow.general["CVER_TEST"]:
-#         data["test"] = True
-#     return jsonify(data)
+@ctrl_index.route("/debug")
+def debug() -> Response:
+    data = {
+        "info": "Cver Api",
+        "version": glow.general["VERSION"],
+        "env": glow.general["CVER_ENV"],
+        "build": glow.general["CVER_BUILD"]
+    }
+    if glow.general["CVER_TEST"]:
+        data["test"] = True
+    return jsonify(data)
 
 
-# End File: cve/src/api/controllers/ctrl_index.py
+# End File: politeauthroity/bookmarky/src/bookmarky/api/controllers/ctrl_index.py
