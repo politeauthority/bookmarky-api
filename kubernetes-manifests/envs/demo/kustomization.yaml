@@ -4,4 +4,4 @@ namespace: bookmarky
 resources:
   - ../../base
   - network.yaml
-  - secrets.yaml
+  # - secrets.yaml
