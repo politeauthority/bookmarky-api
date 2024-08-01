@@ -110,8 +110,8 @@ tasks:
       - |
         git stash pop
         git fetch origin main
-        git co main
+        git checkout main
         git pull origin main
-        git co -bstage
+        git checkout -b stage
         git push origin stage
     silent: True
