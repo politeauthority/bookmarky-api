@@ -21,5 +21,4 @@ def index():
     return jsonify(data)
 
 
-# End File: politeauthority/bookmarky/src/bookmarky/api/controllers/ctrl_collections/
-#           ctrl_bookmarks.py
+# End File: politeauthority/bookmarky/src/bookmarky/api/controllers/collections/ctrl_bookmarks.py
