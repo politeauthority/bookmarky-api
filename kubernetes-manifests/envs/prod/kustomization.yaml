@@ -4,7 +4,7 @@ namespace: bookmarky
 resources:
   - ../../base
   - network.yaml
-  - secrets.yaml
+  # - secrets.yaml
 images:
   - name: harbor.squid-ink.us/politeauthority/bookmarky
     newTag: stage-0.0.0.16
