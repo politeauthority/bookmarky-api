@@ -1,19 +1,20 @@
 """
-    Cver Migrate
+    Bookmarky Migrations
+    Migrate
+    Entrypont for Bookmarky migrations
 
 """
 import logging
 from logging.config import dictConfig
 import os
-import subprocess
-import time
 
-from bookmarky.api.utils import db
-from bookmarky.api.utils import glow
-from bookmarky.api.models.migration import Migration
 from bookmarky.migrations.data.data_options import DataOptions
 from bookmarky.migrations.data.data_rbac import DataRbac
 from bookmarky.migrations.data.data_users import DataUsers
+from bookmarky.api.utils import db
+from bookmarky.api.utils import glow
+from bookmarky.api.models.migration import Migration
+
 # from bookmarky.migrate.data.data_test_data import DataTestData
 # from bookmarky.migrate.data.data_misc import DataMisc
 
@@ -103,7 +104,7 @@ class Migrate:
         @todo: This is broken right now, needs to be updated for PSQL
         """
         logging.info("Running Migration #%s" % migration_no)
-        if glow.general["env"] == "dev":
+        if glow.general["ENV"] == "dev":
             APPLICATION_DIR = "/app/src/bookmarky/"
         else:
             APPLICATION_DIR = "/app/bookmarky/"
