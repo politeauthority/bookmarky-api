@@ -99,6 +99,11 @@ tasks:
         echo "Execing to pod $POD"
         kubectl exec -n ${NS} -it ${POD} -- sh
 
+  prod-logs-api:
+    cmds:
+      - |
+        stern -n bookmarky deployment/bookmarky-api
+
   build-docker:
     cmds:
       - |
