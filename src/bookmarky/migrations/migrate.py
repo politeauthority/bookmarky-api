@@ -47,7 +47,7 @@ class Migrate:
         """Primary entry point for migrations."""
         # self.create_table_sql()
         logging.info("Working with database %s" % glow.db["NAME"])
-        # self.create_database()
+    # self.create_database()
         if not db.connect():
             logging.critical("Failed database connection, exiting")
             exit(1)
