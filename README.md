@@ -1,4 +1,4 @@
-# Bookmarky v0.0.0.14
+# Bookmarky v0.0.0.15
 Self hosted open source bookmark tool
 
 ## Features

@@ -25,9 +25,6 @@ RUN apk add --update --no-cache --virtual .build-deps \
     && apk add --no-cache libffi-dev \
     && apk add --no-cache --update --virtual .runtime-deps libgcc libstdc++ ca-certificates postgresql-dev gcc python3-dev musl-dev
 
-# Import the posgres-client for migrations, this can be done better.
-RUN apk add postgresql-client
-
 # Shitty polite-lub insta;;
 RUN /app/install-polite-lib.sh \
     && apk add git \
