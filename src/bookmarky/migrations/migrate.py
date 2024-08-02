@@ -18,7 +18,7 @@ from bookmarky.migrations.data.data_users import DataUsers
 # from bookmarky.migrate.data.data_misc import DataMisc
 
 
-CURRENT_MIGRATION = 1
+CURRENT_MIGRATION = 2
 
 dictConfig({
     'version': 1,
@@ -52,11 +52,10 @@ class Migrate:
             exit(1)
         self.last_migration = self.get_migration_info()
         self.this_migration = Migration()
-        # self.run_migrations()
+        self.run_migrations()
         self.create_rbac()
         self.create_users()
         self.create_options()
-        # self.create_test_data()
         logging.info("Migrations were successful")
 
     def create_database(self) -> True:
@@ -104,51 +103,18 @@ class Migrate:
         @todo: This is broken right now, needs to be updated for PSQL
         """
         logging.info("Running Migration #%s" % migration_no)
+        # @warning @todo: This is not production ready! (file pathing needs to be resolved)
         APPLICATION_DIR = "/app/src/bookmarky/"
         migration_file = os.path.join(
             APPLICATION_DIR, "migrations/data/sql/up/%s.sql" % migration_no)
         # migration_file = os.path.join(
         #     os.path.dirname(os.path.realpath(__file__)),
         #     "sql/up/%s.sql" % migration_no)
-        cmd = "psql -h %s --port %s -u %s --password=%s %s < %s" % (
-            glow.db["HOST"],
-            glow.db["PORT"],
-            glow.db["USER"],
-            glow.db["PASS"],
-            glow.db["NAME"],
-            migration_file
-        )
-        if not os.path.exists(migration_file):
-            logging.critical(f"File doesnt exist: {migration_file}")
-            return False
-        db.close()
-        try:
-            child = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
-            rc = child.returncode
-            # If the command exits higher than 0 save that.
-            if rc and rc > 0:
-                logging.critical("Failed to run migration: %s")
-                db.connect()
-                m = Migration()
-                m.number = migration_no
-                m.success = False
-                m.save()
-                return False
-            time.sleep(5)
-        except Exception as e:
-            logging.critical("Failed to run migration: %s" % e)
-            db.connect()
-            m = Migration()
-            m.number = migration_no
-            m.success = False
-            m.save()
-            exit(1)
-        db.connect()
-        m = Migration()
-        m.number = migration_no
-        m.success = True
-        m.save()
-        time.sleep(2)
+        with open(migration_file, 'r') as sql_file:
+            sql_content = sql_file.read()
+        glow.db["cursor"].execute(sql_content)
+        glow.db["conn"].commit()
+        logging.info("Applied Migration Up: %s" % migration_no)
         return True
 
     def create_options(self):
@@ -190,4 +156,4 @@ if __name__ == "__main__":
     Migrate().run()
 
 
-# End File: cver/src/migrate/migrate.py
+# End File: politeauthority/bookmarky/src/bookmarky/migrations/migrate.py
