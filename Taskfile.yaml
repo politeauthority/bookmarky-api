@@ -53,6 +53,10 @@ tasks:
         sed -i "" "s/version = \"$current_version\"/version = \"$new_version\"/g" $file_path
 
         # Update the newTag in the kustomization.yaml file
+        file_path="kubernetes-manifests/envs/prod/kustomization.yaml"
+        yq e ".images[0].newTag = \"prod-$new_version\"" -i $file_path
+
+        # Update the newTag in the kustomization.yaml file
         file_path="kubernetes-manifests/envs/stage/kustomization.yaml"
         yq e ".images[0].newTag = \"stage-$new_version\"" -i $file_path
 
@@ -65,6 +69,7 @@ tasks:
         git add pyproject.toml
         git add kubernetes-manifests/envs/dev/kustomization.yaml
         git add kubernetes-manifests/envs/stage/kustomization.yaml
+        git add kubernetes-manifests/envs/prod/kustomization.yaml
         echo "Version number updated from $current_version to $new_version"
     silent: True
 
