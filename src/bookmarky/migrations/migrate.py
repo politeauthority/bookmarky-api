@@ -103,13 +103,12 @@ class Migrate:
         @todo: This is broken right now, needs to be updated for PSQL
         """
         logging.info("Running Migration #%s" % migration_no)
-        # @warning @todo: This is not production ready! (file pathing needs to be resolved)
-        APPLICATION_DIR = "/app/src/bookmarky/"
+        if glow["env"] == "dev":
+            APPLICATION_DIR = "/app/src/bookmarky/"
+        else:
+            APPLICATION_DIR = "/app/bookmarky/"
         migration_file = os.path.join(
             APPLICATION_DIR, "migrations/data/sql/up/%s.sql" % migration_no)
-        # migration_file = os.path.join(
-        #     os.path.dirname(os.path.realpath(__file__)),
-        #     "sql/up/%s.sql" % migration_no)
         with open(migration_file, 'r') as sql_file:
             sql_content = sql_file.read()
         glow.db["cursor"].execute(sql_content)

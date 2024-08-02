@@ -26,7 +26,7 @@ def index() -> Response:
     data = {
         "info": "Bookmarky",
         "version": version,
-        "env": glow.general["CVER_ENV"],
+        "env": glow.general["ENV"],
         "build": glow.general["CVER_BUILD"],
         "build_short": glow.general["CVER_BUILD_SHORT"],
     }
@@ -86,7 +86,7 @@ def info() -> Response:
     data = {
         "info": "Cver Api",
         "version": glow.general["VERSION"],
-        "env": glow.general["CVER_ENV"],
+        "env": glow.general["ENV"],
         "build": glow.general["CVER_BUILD"],
         "build_short": glow.general["CVER_BUILD_SHORT"],
         "migration": CURRENT_MIGRATION,
@@ -132,7 +132,7 @@ def debug() -> Response:
     data = {
         "info": "Cver Api",
         "version": glow.general["VERSION"],
-        "env": glow.general["CVER_ENV"],
+        "env": glow.general["ENV"],
         "build": glow.general["CVER_BUILD"]
     }
     if glow.general["CVER_TEST"]:

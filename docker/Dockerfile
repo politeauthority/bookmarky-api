@@ -17,6 +17,7 @@ ADD ./scripts/install-polite-lib.sh /app
 
 # Set environment variables
 ENV LIB_DIR="/root"
+ENV BOOKMARKY_ENV="prod"
 # ENV POLITE_LIB_BRANCH="main"
 
 # Install apk requirements
