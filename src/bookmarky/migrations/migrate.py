@@ -103,7 +103,7 @@ class Migrate:
         @todo: This is broken right now, needs to be updated for PSQL
         """
         logging.info("Running Migration #%s" % migration_no)
-        if glow["env"] == "dev":
+        if glow.general["env"] == "dev":
             APPLICATION_DIR = "/app/src/bookmarky/"
         else:
             APPLICATION_DIR = "/app/bookmarky/"
