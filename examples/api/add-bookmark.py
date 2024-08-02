@@ -5,7 +5,6 @@
 """
 import json
 import os
-import sys
 
 import requests
 
@@ -19,7 +18,7 @@ API_CLIENT_ID = os.environ.get(f"{THE_ENV}_BOOKMARKY_CLIENT_ID")
 API_API_KEY = os.environ.get(f"{THE_ENV}_BOOKMARKY_API_KEY")
 
 
-def run():
+def run() -> bool:
     print("Using %s on %s" % (THE_ENV, API_URL))
     token = get_token()
     if not token:
@@ -30,6 +29,13 @@ def run():
         "name": "Google"
     }
     write_bookmark = create_bookmark(token, the_args)
+    if write_bookmark:
+        print("Wrote Bookmark")
+        return True
+    else:
+        print("Failed to write Bookmark")
+        exit(1)
+        return False
 
 
 def get_token() -> str:
@@ -68,13 +74,13 @@ def create_bookmark(token: str, the_args: dict) -> bool:
     )
     if response.status_code not in [200, 201]:
         print("Error: could not write bookmark. %s" % response.text)
-        import ipdb; ipdb.set_trace()
         return False
     response_json = response.json()
     print("Created Bookmark:")
     print(response)
     print(response_json)
     return True
+
 
 if __name__ == "__main__":
     run()
