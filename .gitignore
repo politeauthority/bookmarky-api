@@ -2,6 +2,7 @@
 ## K8s
 kubernetes-manifests/envs/dev/secrets.yaml
 kubernetes-manifests/envs/stage/secrets.yaml
+kubernetes-manifests/envs/prod/secrets.yaml
 bookmarky.code-workspace
 
 # MacOS

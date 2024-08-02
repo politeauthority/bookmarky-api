@@ -7,7 +7,7 @@ resources:
   # - secret.yaml
 images:
   - name: harbor.squid-ink.us/politeauthority/bookmarky
-    newTag: stage-0.0.0.13
+    newTag: stage-0.0.0.19
 patches:
   - target:
       kind: Deployment
@@ -18,3 +18,8 @@ patches:
         value:
           name: JWT_EXPIRE_MINUTES
           value: "2880"
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: BOOKMARKY_ENV
+          value: "stage"

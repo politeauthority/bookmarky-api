@@ -21,8 +21,6 @@ spec:
           ports:
             - containerPort: 80
           env:
-            - name: BOOKMARKY_ENV
-              value: "dev"
             - name: BOOKMARKY_DB_HOST
               valueFrom:
                 secretKeyRef:
@@ -45,6 +43,8 @@ spec:
                   key: BOOKMARKY_DB_PASS
             - name: LOG_LEVEL
               value: "DEBUG"
+            - name: BOOKMARKY_ENV
+              value: "prod"
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:

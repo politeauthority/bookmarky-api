@@ -3,6 +3,7 @@ vars:
   K8S_NS: "bookmarky"
   K8S_NS_DEV: "bookmarky-dev"
   K8S_NS_STAGE: "bookmarky-stage"
+  K8S_NS_PROD: "bookmarky"
 
 tasks:
   dev-exec-api:
@@ -52,6 +53,10 @@ tasks:
         sed -i "" "s/version = \"$current_version\"/version = \"$new_version\"/g" $file_path
 
         # Update the newTag in the kustomization.yaml file
+        file_path="kubernetes-manifests/envs/prod/kustomization.yaml"
+        yq e ".images[0].newTag = \"prod-$new_version\"" -i $file_path
+
+        # Update the newTag in the kustomization.yaml file
         file_path="kubernetes-manifests/envs/stage/kustomization.yaml"
         yq e ".images[0].newTag = \"stage-$new_version\"" -i $file_path
 
@@ -64,6 +69,7 @@ tasks:
         git add pyproject.toml
         git add kubernetes-manifests/envs/dev/kustomization.yaml
         git add kubernetes-manifests/envs/stage/kustomization.yaml
+        git add kubernetes-manifests/envs/prod/kustomization.yaml
         echo "Version number updated from $current_version to $new_version"
     silent: True
 
@@ -84,6 +90,24 @@ tasks:
         POD=$(kubectl get pods -n ${NS} -l app=bookmarky-api --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
         echo "Execing to pod $POD"
         kubectl exec -n ${NS} -it ${POD} -- sh
+
+  prod-deploy:
+    cmds:
+      - |
+        kustomize build kubernetes-manifests/envs/prod | kubectl apply -f -
+
+  prod-exec-api:
+    cmds:
+      - |
+        NS=$"{{.K8S_NS_PROD}}"
+        POD=$(kubectl get pods -n ${NS} -l app=bookmarky-api --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
+        echo "Execing to pod $POD"
+        kubectl exec -n ${NS} -it ${POD} -- sh
+
+  prod-logs-api:
+    cmds:
+      - |
+        stern -n bookmarky deployment/bookmarky-api
 
   build-docker:
     cmds:

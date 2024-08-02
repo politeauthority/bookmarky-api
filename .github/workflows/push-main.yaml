@@ -18,19 +18,6 @@ jobs:
   #   with:
   #     task: "ci-new-stage"
 
-validate:
-    uses: ./.github/workflows/generic-taste.yaml
-    secrets: inherit
-    permissions:
-      task:
-      pull-requests: read
-      contents: read
-    with:
-      task: "ci-new-stage"
-      cicd-version: "${{ vars.CICD_VERSION }}"
-      harbor-user: "${{ vars.HARBOR_USER }}"
-
-
   validate:
     uses: ./.github/workflows/validate.yaml
     needs: [new-stage]
@@ -72,5 +59,4 @@ validate:
   #         export KUBECONFIG=~/.kube/config.yaml
   #         chmod 600 ~/.kube/config.yaml
   #         task stage-deploy
-
 # End File: politeauthority/bookmarky/.github/workflows/push-main.yaml
