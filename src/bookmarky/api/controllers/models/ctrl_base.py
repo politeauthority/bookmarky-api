@@ -100,7 +100,7 @@ def post_model(model, entity_id: int = None, generated_data: dict = {}):
             else:
                 entity_found = True
                 logging.info("POST - Found entity by ID: %s" % entity)
-    
+
     # Dont allow api creates on api uncreateble models
     if not entity.id and not entity.createable:
         data["message"] = "Not allowed to create entity %s" % entity.model_name
@@ -115,7 +115,7 @@ def post_model(model, entity_id: int = None, generated_data: dict = {}):
         return make_response("ERROR", 401)
 
     search_type = _determine_entity_search_type(entity, entity_id, request_args)
-    
+
     if search_type == "cant":
         entity_found = False
 
@@ -318,4 +318,4 @@ def _determine_entity_search_type(entity, entity_id=None, request_args: dict = N
     return "cant"
 
 
-# End File: bookmarky/src/bookmarky/api/controllers/ctrl_models/ctrl_base.py
+# End File: politeauthority/bookmarky/src/bookmarky/api/controllers/ctrl_models/ctrl_base.py

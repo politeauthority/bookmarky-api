@@ -11,6 +11,7 @@ from flask import Blueprint, jsonify, Response
 from bookmarky.api.controllers.models import ctrl_base
 from bookmarky.api.models.bookmark import Bookmark
 from bookmarky.api.utils import auth
+from bookmarky.api.utils import glow
 
 ctrl_bookmark = Blueprint("bookmark", __name__, url_prefix="/bookmark")
 
@@ -38,8 +39,11 @@ def post_model(bookmark_id: int = None):
     """POST operation for a User model.
     POST /bookmark
     """
+    data = {
+        "user_id": glow.user["user_id"]
+    }
     logging.info("POST Bookmark")
-    return ctrl_base.post_model(Bookmark, bookmark_id)
+    return ctrl_base.post_model(Bookmark, bookmark_id, data)
 
 
 @ctrl_bookmark.route("/<bookmark_id>", methods=["DELETE"])

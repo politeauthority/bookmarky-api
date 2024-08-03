@@ -5,6 +5,9 @@ kubernetes-manifests/envs/stage/secrets.yaml
 kubernetes-manifests/envs/prod/secrets.yaml
 bookmarky.code-workspace
 
+# Exension
+extensions/scratch.txt
+
 # MacOS
 .DS_Store
 
