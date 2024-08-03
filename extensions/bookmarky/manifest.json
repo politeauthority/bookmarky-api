@@ -7,7 +7,7 @@
         "32": "icons/button-32.png"
     },
     "homepage_url": "https://github.com/politeauthority/bookmarky",
-    "permissions": ["activeTab", "tabs"],
+    "permissions": ["activeTab", "tabs", "webRequest", "<all_urls>"],
     "browser_action": {
         "default_icon": {
             "19": "icons/button_19.png",
