@@ -2,17 +2,16 @@
 // Main
 //
 
-console.log("yo");
+console.log("Starting Main");
 
 // Stage Envs
 // var API_URL = "http://api.bookmarky-stage.colfax.int/info";
-// var TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjpudWxsLCJyb2xlX3Blcm1zIjpbXSwib3JnX2lkIjpudWxsLCJpYXQiOjE3MjI1NTE5MDEsImV4cCI6MTcyMjcyNDcwMX0.9-iQ9-FvEXtdOgPhXUEkne0tXf_21yigNWpHV26XRPM";
+// var TOKEN = "";
 // var API_KEY = "";
 // var CLIENT_ID = "";
 
 // Dev Envs
-var API_URL = "http://api.bookmarky-dev.colfax.int/info";
-var TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlX3Blcm1zIjpbIndyaXRlLWFsbCIsInJlYWQtYWxsIiwiZGVsZXRlLWFsbCJdLCJvcmdfaWQiOjEsImlhdCI6MTcyMjU1MTgxMSwiZXhwIjoxNzIyNTU1NDExfQ.HjqYzInv72WmmB7ZJ13kwu__b_QsYSBUtMPuZAHWK1c";
+var API_URL = "http://api.bookmarky-dev.alix.lol/info";
 var API_KEY = "";
 var CLIENT_ID = "";
 
@@ -29,8 +28,28 @@ function get_info(){
     });
 }
 
-function get_browser_details(){
 
+function get_token(){
+  /// Get an access token from the Bookmarky api
+  $.ajax({
+    type: "POST",
+    url: API_URL + "/auth",
+    headers: {
+        "X-Api-Key": API_KEY,
+        "Client-ID": API_KEY,
+    },
+    //   data: data,
+    success: success,
+    dataType: "json"
+    });
+}
+
+function success(data){
+  console.log("success!");
+  console.log(data);
+}
+
+function get_browser_details(){
   browser.tabs.query({active: true, currentWindow: true}, (tabs) => {
     // Get the URL and title of the current active tab
     var url = tabs[0].url;
@@ -45,5 +64,7 @@ function get_browser_details(){
 $(document).ready(function(){
   $("#url").text("updated");
   console.log("hello");
-  get_browser_details();
+  // get_browser_details();
+  get_info();
+  console.log("goodbye");
 });
