@@ -84,7 +84,7 @@ def info() -> Response:
     # model_totals = totals.get_model_totals()
     # task_totals = tasks_stats.get_task_totals()
     data = {
-        "info": "Cver Api",
+        "info": "Bookmarky Api",
         "version": glow.general["VERSION"],
         "env": glow.general["ENV"],
         "build": glow.general["CVER_BUILD"],
