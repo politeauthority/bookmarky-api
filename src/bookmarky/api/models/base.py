@@ -102,6 +102,8 @@ class Base:
             self.conn.commit()
         except psycopg2.errors.UniqueViolation as e:
             logging.warning(f"Query violates unique constraint, entity already exists. {e}")
+            if self.get_by_ux_key():
+                return True
             return False
         except Exception as e:
             logging.error(f"Error inserting to Postgres: {e}")
@@ -232,11 +234,23 @@ class Base:
         """
         if not self.ux_key:
             raise AttributeError("Model: %s has no self.ux_key set." % self)
-        if len(kw_args) != len(self.ux_key):
-            msg = "Model has ux key fields: %s, request has %s fields" % (
-                str(self.ux_key), kw_args.keys())
-            raise AttributeError(msg)
-        self.apply_dict(kw_args)
+
+        logging.info("Attempting to get model by UX key based on model attributes")
+        has_fields_ux_field_by_model = True
+        for ux_field in self.ux_key:
+            if not getattr(self, ux_field):
+                has_fields_ux_field_by_model = False
+                msg = "Couldnt get model by ux field from model attriubute. Model %s is missing "
+                msg += "attribute value for %s"
+                logging.warning(msg % (self, ux_field))
+                break
+
+        if not has_fields_ux_field_by_model:
+            if len(kw_args) != len(self.ux_key):
+                msg = "Model has ux key fields: %s, request has %s fields" % (
+                    str(self.ux_key), kw_args.keys())
+                raise AttributeError(msg)
+            self.apply_dict(kw_args)
         where_and = self._gen_where_sql_and(self.ux_key)
         sql = f"""
             SELECT *
@@ -316,11 +330,7 @@ class Base:
             # Handle the list field type.
             elif field['type'] == 'list':
                 if field_value:
-                    if "," in field_value:
-                        val = field_value.split(',')
-                    else:
-                        val = [field_value]
-                    setattr(self, field_name, val)
+                    setattr(self, field_name, field_value)
                 else:
                     setattr(self, field_name, None)
 

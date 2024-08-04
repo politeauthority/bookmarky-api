@@ -25,6 +25,7 @@ include = [
   "bookmarky/api/controllers/models/*.py",
   "bookmarky/api/models/*.py",
   "bookmarky/api/utils/*.py",
+  "bookmarky/introspect/*.py",
   "bookmarky/migrations/*",
   "bookmarky/shared/*"
 ]
