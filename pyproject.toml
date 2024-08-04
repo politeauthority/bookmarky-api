@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "bookmarky"
-version = "0.0.0.20"
+version = "0.0.1.1"
 
 
 requires-python = ">=3.11"
@@ -25,6 +25,7 @@ include = [
   "bookmarky/api/controllers/models/*.py",
   "bookmarky/api/models/*.py",
   "bookmarky/api/utils/*.py",
+  "bookmarky/introspect/*.py",
   "bookmarky/migrations/*",
   "bookmarky/shared/*"
 ]

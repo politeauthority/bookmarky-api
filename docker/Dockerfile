@@ -34,7 +34,6 @@ RUN cd /app/ && pip install .
 
 CMD ["gunicorn", "web-app:app", "--chdir", "/app/bookmarky/api", "--bind=0.0.0.0:80"]
 
-
 # Development container tools
 FROM base as dev
 
