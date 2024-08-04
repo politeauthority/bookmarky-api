@@ -12,7 +12,7 @@ import logging
 import math
 
 from bookmarky.api.utils import glow
-# from bookmarky.api.utils import sql_tools
+from bookmarky.api.utils import sql_tools
 
 
 class Base:
