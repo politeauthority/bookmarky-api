@@ -116,19 +116,13 @@ class AutoAddTags:
         domain = urlparse(bookmark.url).netloc
         if domain != "www.reddit.com":
             return False
-        if not "reddit.com/r/" in bookmark.url:
+        if "reddit.com/r/" not in bookmark.url:
             return False
         find_section = "reddit.com/r/"
         subreddit_start = bookmark.url.find(find_section)
         subreddit_section = bookmark.url[subreddit_start + len(find_section):]
         subreddit = subreddit_section[:subreddit_section.find("/")]
-        print("\n\n")
-        print("REDDIT")
-        print(subreddit)
-        print("REDDIT")
-        print("\n\n")
-        
-        tag_name = "reddit-%s" % subreddit
+        tag_name = "reddit-sub-%s" % subreddit
         tag = self.get_or_make_tag(tag_name)
         return tag
 
