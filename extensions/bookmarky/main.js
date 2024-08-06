@@ -63,6 +63,7 @@ function getToken() {
 
 
 function add_boomark(token, url, name){
+
   browser.tabs.query({active: true, currentWindow: true}, (tabs) => {
     // Get the URL and title of the current active tab
     var url = tabs[0].url;
@@ -89,8 +90,6 @@ function add_boomark(token, url, name){
     });
 }
 
-
-
 function success(data){
   console.log("success!");
   $("#url").text("updated");
@@ -98,6 +97,7 @@ function success(data){
   console.log(data.object.url);
   $("#name").text(data.object.name);
   $("#url").text(data.object.url);
+
 }
 
 
@@ -139,9 +139,8 @@ $(document).ready(function(){
       }
   });
 
-
-
   // get_browser_details();
   // console.log(url);
+
   console.log("goodbye");
 });
