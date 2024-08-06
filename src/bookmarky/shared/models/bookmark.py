@@ -45,10 +45,17 @@ FIELD_MAP = {
         "api_display": True,
         "api_writeable": True,
     },
+    "directory": {
+        "name": "directory",
+        "type": "str",
+        "api_display": True,
+        "api_writeable": True,
+    },
     "deleted": {
         "name": "deleted",
         "type": "datetime",
         "api_searchable": True,
+        "api_display": False,
     }
 }
 

@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS bookmarks (
     tags TEXT[],
     name VARCHAR,
     url VARCHAR,
+    directory VARCHAR,
     deleted BOOLEAN DEFAULT False,
     UNIQUE (user_id, url)
 );

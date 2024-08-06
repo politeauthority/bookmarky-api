@@ -19,7 +19,7 @@ from bookmarky.api.models.migration import Migration
 # from bookmarky.migrate.data.data_misc import DataMisc
 
 
-CURRENT_MIGRATION = 2
+CURRENT_MIGRATION = 3
 
 dictConfig({
     'version': 1,
@@ -60,7 +60,7 @@ class Migrate:
         logging.info("Migrations were successful")
 
     def create_database(self) -> True:
-        """Create the database for CVER.
+        """Create the database for Bookmarky.
         @todo: This could be done more securily by attempting to connect to the database first.
         """
         conn, cursor = db.connect_no_db()
