@@ -163,9 +163,10 @@ class Base:
         if limit == 0:
             limit = per_page
         query = self._generate_paginated_sql(page, where_and, order_by, limit)
-        logging.debug("\nPAGINATIED SQL\n")
-        logging.debug("WHERE AND: %s" % where_and)
-        logging.debug(f"{query['sql']}\n{query['params']}\n\n")
+        log_msg = "\nPAGINATIED SQL\n \nMETHOD:get_paginatd\n"
+        log_msg += f"PARAMS:\n\tWHERE AND:{where_and}"
+        log_msg += f"{query['sql']}\n{query['params']}\n\n"
+        logging.debug(log_msg)
         self.cursor.execute(query["sql"], query["params"])
         raw = self.cursor.fetchall()
         prestines = []
@@ -252,7 +253,7 @@ class Base:
         """
         total_sql = self._edit_pagination_sql_for_info(query, user_limit)
         # logging.info("PAGINATION INFO SQL:\n%s" % total_sql)
-        self.cursor.execute(total_sql)
+        self.cursor.execute(total_sql, query["params"])
         raw = self.cursor.fetchone()
         if not raw:
             return 0

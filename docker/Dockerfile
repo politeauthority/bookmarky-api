@@ -25,7 +25,7 @@ RUN apk add --update --no-cache --virtual .build-deps \
     && apk add --no-cache libffi-dev \
     && apk add --no-cache --update --virtual .runtime-deps libgcc libstdc++ ca-certificates postgresql-dev gcc python3-dev musl-dev
 
-# Shitty polite-lub insta;;
+# Shitty polite-lub install
 RUN /app/install-polite-lib.sh \
     && apk add git \
     && apk del .build-deps
@@ -43,4 +43,4 @@ RUN pip install -r /app/requirements-dev.txt && mkdir /work
 WORKDIR /work/
 
 ADD build-files/tests /work/tests
-RUN cd /work/tests/ && python3 setup.py build && setup.py install 
+# RUN cd /work/tests/ python3 /work/tests/setup.py build && python3 /work/tests/setup.py install

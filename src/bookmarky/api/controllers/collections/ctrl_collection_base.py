@@ -1,5 +1,5 @@
 """
-    Cver Api
+    Bookmarky Api
     Controllers
     Collection Base
 
@@ -80,7 +80,7 @@ def _parse_body(raw_args: dict, field_map: dict) -> dict:
                 },
                 "limit": 5
             }
-    :unit-test: TestCtrlCollectionBase.test___parse_body
+    :unit-test: TestCtrlCollectionBase::test___parse_body
     """
     ret = {
         "where_and": [],
