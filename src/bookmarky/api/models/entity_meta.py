@@ -104,4 +104,4 @@ class EntityMeta(Base):
         }
         return json_ret
 
-# End File: cver/src/api/models/entity_meta.py
+# End File: politeauthority/bookmarky-api//src/api/models/entity_meta.py

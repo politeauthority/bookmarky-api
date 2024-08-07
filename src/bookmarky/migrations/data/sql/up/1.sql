@@ -79,3 +79,5 @@ CREATE TABLE IF NOT EXISTS options (
     acl_read TEXT[],
     hide_value BOOLEAN
 );
+
+-- End file: politeauthority/bookmarky-api/src/bookmarky/migrations/data/sql/up/1.sql

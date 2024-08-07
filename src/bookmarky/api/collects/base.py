@@ -1,9 +1,9 @@
 """
-    Cver Api
+    Bookmarky Api
     Collects - Base
 
     Testing:
-        Unit test file  cver/tests/unit/api/collects/test_base.py
+        Unit test file  bookmarkys/tests/unit/api/collects/test_base.py
         Unit tested     11/29
 
 """
@@ -35,7 +35,7 @@ class Base:
             self.field_map = self.collect_model().field_map
 
     def build_from_lists(self, raws: list) -> list:
-        """Creates list of hydrated collection objects. """
+        """Creates list of hydrated collection objects."""
         prestines = []
         for raw_item in raws:
             new_object = self.collect_model(self.conn, self.cursor)
@@ -43,7 +43,13 @@ class Base:
             prestines.append(new_object)
         return prestines
 
-    def get_all(self):
+    def get_all(self) -> list:
+        """Get all units.
+        @note: This should be used sparingly as it has no limits.
+        """
+        msg = "Use this method: collect_base.basebase().get_all() sparingling as it hasno limit"
+        msg += "on the query"
+        logging.warning(msg)
         sql = """SELECT * FROM %s;""" % self.table_name
         self.cursor.execute(sql)
         raws = self.cursor.fetchall()
@@ -157,9 +163,9 @@ class Base:
         if limit == 0:
             limit = per_page
         sql = self._generate_paginated_sql(page, where_and, order_by, limit)
-        # logging.debug("\nPAGINATIED SQL\n")
-        # logging.debug("WHERE AND: %s" % where_and)
-        # logging.debug("%s\n\n" % sql)
+        logging.debug("\nPAGINATIED SQL\n")
+        logging.debug("WHERE AND: %s" % where_and)
+        logging.debug("%s\n\n" % sql)
         self.cursor.execute(sql)
         raw = self.cursor.fetchall()
         prestines = []
@@ -437,4 +443,4 @@ class Base:
             WHERE id IN %s;"""
         return sql
 
-# End File: cver/src/api/collections/base.py
+# End File: politeauthority/bookmarky/src/bookmarky/api/collections/base.py

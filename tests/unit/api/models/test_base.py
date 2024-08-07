@@ -1,7 +1,7 @@
 """
     Bookmarky Api - Test Unit
     Api Model - Base
-    Tests File: cver/src/cver/api/models/base.py
+    Tests File: bookmarks-api/src/bookmarky/api/models/base.py
     @todo: Many of these tests could stand to be expanded out to test more types and complex models.
 
 """
