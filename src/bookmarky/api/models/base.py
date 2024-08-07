@@ -1,6 +1,6 @@
 """
     Cver Api
-    Base Model v. 0.3.2
+    Base Model v. 0.4.0
     Parent class for all models to inherit, providing methods for creating tables, inserting, updating,
     selecting and deleting data.
 
@@ -160,8 +160,9 @@ class Base:
             search_id = _id
         else:
             search_id = self.id
+        fields_str = self._get_field_names_str()
         sql = f"""
-            SELECT *
+            SELECT {fields_str}
             FROM {self.table_name}
              WHERE id = %s;
         """
@@ -186,8 +187,9 @@ class Base:
         if not hasattr(self, field_name):
             raise Exception(f"Model {self} does not have field: {field_name}")
 
+        fields_str = self._get_field_names_str()
         sql = f"""
-            SELECT *
+            SELECT {fields_str}
             FROM {self.table_name}
             WHERE {field_name} = %s;
             """
@@ -215,8 +217,9 @@ class Base:
         :unit-test: None
         """
         sql_fields = self._gen_get_by_fields_sql(fields)
+        fields_str = self._get_field_names_str()
         sql = f"""
-            SELECT *
+            SELECT {fields_str}
             FROM {self.table_name}
             WHERE {sql_fields["sql"]}
             LIMIT 1;"""
@@ -252,8 +255,9 @@ class Base:
                 raise AttributeError(msg)
             self.apply_dict(kw_args)
         where_and = self._gen_where_sql_and(self.ux_key)
+        fields_str = self._get_field_names_str()
         sql = f"""
-            SELECT *
+            SELECT {fields_str}
             FROM {self.table_name}
             WHERE {where_and["sql"]}
         """
@@ -263,7 +267,7 @@ class Base:
         if raw:
             self.build_from_list(raw)
             return True
-        else: 
+        else:
             return False
 
     def get_last(self) -> bool:
@@ -284,6 +288,18 @@ class Base:
             if field["name"] == field_name:
                 return field
         return None
+
+    def _get_field_names_list(self) -> list:
+        """Get the model's fields in a lists.
+        :unit-test: TestApiModelBase::test__get_field_names_list
+        """
+        return self.field_map.keys()
+
+    def _get_field_names_str(self) -> str:
+        """Get the model's fields in a lists.
+        :unit-test: TestApiModelBase::test__get_field_names_str
+        """
+        return ",".join(self.field_map.keys())
 
     def build_from_list(self, raw: list) -> bool:
         """Build a model from an ordered list, converting data types to their desired type where
@@ -571,8 +587,9 @@ class Base:
         """Generate the last created row SQL.
         :unit-test: TestApiModelBase::test___gen_get_last_sql
         """
+        fields_str = self._get_field_names_str()
         sql = f"""
-            SELECT *
+            SELECT {fields_str}
             FROM {self.table_name}
             ORDER BY created_ts DESC
             LIMIT 1;
@@ -910,4 +927,4 @@ class Base:
                 logging.error("Couldnt parse date str: %s" % date_string)
                 return None
 
-# End File: politeauthority/bookmarky/src/bookmarky/api/models/base.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/api/models/base.py

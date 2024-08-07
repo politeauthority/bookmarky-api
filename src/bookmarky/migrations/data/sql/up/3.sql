@@ -2,4 +2,4 @@
 --- Bookmarky updates
 ---
 ALTER TABLE bookmarks
-    directory VARCHAR;
+    ADD COLUMN directory VARCHAR;

@@ -13,7 +13,8 @@ import jwt
 from jwt.exceptions import ExpiredSignatureError, InvalidSignatureError
 from werkzeug import security
 
-from bookmarky.shared.utils import date_utils
+from polite_lib.utils import date_utils
+
 from bookmarky.api.models.api_key import ApiKey
 from bookmarky.api.models.user import User
 from bookmarky.api.utils import rbac

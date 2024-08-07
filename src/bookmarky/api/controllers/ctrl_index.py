@@ -1,20 +1,23 @@
 """
     Bookmarky Api
     Controller - Index
-    {API_URL}/
+    /
 
 """
 import logging
 
 from flask import Blueprint, jsonify, request, Response
 
-from bookmarky.shared.utils import date_utils
+
+from polite_lib.utils import date_utils
+
 # from bookmarky.api.stats import totals
 # from bookmarky.api.stats import tasks as tasks_stats
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import glow
 from bookmarky.api.version import version
 from bookmarky.api.models.user import User
+from bookmarky.api.version import version
 from bookmarky.migrations.migrate import CURRENT_MIGRATION
 
 ctrl_index = Blueprint("index", __name__, url_prefix="/")
@@ -85,7 +88,7 @@ def info() -> Response:
     # task_totals = tasks_stats.get_task_totals()
     data = {
         "info": "Bookmarky Api",
-        "version": glow.general["VERSION"],
+        "version": version,
         "env": glow.general["ENV"],
         "build": glow.general["CVER_BUILD"],
         "build_short": glow.general["CVER_BUILD_SHORT"],
