@@ -17,7 +17,6 @@ from bookmarky.api.utils import auth
 from bookmarky.api.utils import glow
 from bookmarky.api.version import version
 from bookmarky.api.models.user import User
-from bookmarky.api.version import version
 from bookmarky.migrations.migrate import CURRENT_MIGRATION
 
 ctrl_index = Blueprint("index", __name__, url_prefix="/")

@@ -39,10 +39,8 @@ FROM base as dev
 
 RUN apk add bash curl vim
 
-# RUN pip install -r /app/requirements-dev.txt && mkdir /dev-spot
+RUN pip install -r /app/requirements-dev.txt && mkdir /work
+WORKDIR /work/
 
-# ADD ./build-files/tests /work/
+ADD tests /work/tests
 
-
-# RUN pip install -r /app/requirements-dev.txt
-# RUN apk add --update --no-cache bash vim

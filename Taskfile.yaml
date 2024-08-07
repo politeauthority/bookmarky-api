@@ -21,12 +21,12 @@ tasks:
         NS=$"{{.K8S_NS_DEV}}"
         POD=$(kubectl get pods -l app=bookmarky-api -n ${NS} --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
         echo "Copying to pod $NS/$POD"
-        kubectl cp -n ${NS} ./src ${POD}:/app
-        kubectl cp -n ${NS} ./pyproject.toml ${POD}:/app/src
-        # kubectl cp -n ${NS} ./tests ${POD}:/
+        kubectl cp -n ${NS} ./src ${POD}:/work
+        kubectl cp -n ${NS} ./pyproject.toml ${POD}:/work/src/
+        kubectl cp -n ${NS} ./tests ${POD}:/work
         echo "Coppied source and tests"
         echo "Building"
-        kubectl exec -it -n ${NS} ${POD} -- sh -c "cd /app/src && pip install ."
+        kubectl exec -it -n ${NS} ${POD} -- sh -c "cd /work/src && pip install ."
 
   dev-deploy:
     cmds:
@@ -124,7 +124,7 @@ tasks:
         cp pyproject.toml docker/build-files
         cp tox.ini docker/build-files
         cp -r src docker/build-files
-        # cp -r tests docker/build-files
+        cp -r tests docker/build-files
         docker build -t harbor.squid-ink.us/politeauthority/bookmarky --target ${BUILD_TARGET} --no-cache docker/
         rm -rf docker/build-files
     silent: True
