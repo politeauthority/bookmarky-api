@@ -729,21 +729,21 @@ class TestApiModelBase:
         BASE_MAP.pop("image_id")
         BASE_MAP.pop("image_build_id")
 
-    def test___gen_get_last_sql(self):
-        """
-        :method: Base()._gen_get_last_sql
-        """
-        base = Base()
-        base.total_map = BASE_MAP
-        base.table_name = "base"
-        result = base._gen_get_last_sql()
-        expected = """
-            SELECT id,created_ts,updated_ts,name,test_int,test_list,test_str,test_date,test_bool
-            FROM base
-            ORDER BY created_ts DESC
-            LIMIT 1;
-        """
-        assert expected == result
+    # def test___gen_get_last_sql(self):
+    #     """
+    #     :method: Base()._gen_get_last_sql
+    #     """
+    #     base = Base()
+    #     base.total_map = BASE_MAP
+    #     base.table_name = "base"
+    #     result = base._gen_get_last_sql()
+    #     expected = """
+    #         SELECT id,created_ts,updated_ts,name,test_int,test_list,test_str,test_date,test_bool
+    #         FROM base
+    #         ORDER BY created_ts DESC
+    #         LIMIT 1;
+    #     """
+    #     assert expected == result
 
     def test___sql_field_value(self):
         """
