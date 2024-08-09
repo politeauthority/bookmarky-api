@@ -82,14 +82,14 @@ spec:
                 secretKeyRef:
                   name: bookmarky-creds
                   key: SECRET_KEY
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: http
-            initialDelaySeconds: 60
-          readinessProbe:
-            httpGet:
-              path: /healthz
-              port: http
-            initialDelaySeconds: 10
-            periodSeconds: 240
+          # livenessProbe:
+          #   httpGet:
+          #     path: /healthz
+          #     port: http
+          #   initialDelaySeconds: 60
+          # readinessProbe:
+          #   httpGet:
+          #     path: /healthz
+          #     port: http
+          #   initialDelaySeconds: 10
+          #   periodSeconds: 240
