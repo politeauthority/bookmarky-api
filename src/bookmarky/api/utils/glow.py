@@ -36,7 +36,7 @@ general = {
     "JWT_EXPIRE_MINUTES": os.environ.get("JWT_EXPIRE_MINUTES", 60),
     "SECRET_KEY": os.environ.get("SECRET_KEY", "hello-world123"),
     "CVER_TEST": os.environ.get("CVER_TEST", False),
-    "LOG_HEALTH_CHECKS": os.environ.get("CVER_LOG_HEALTH_CHECKS", True),
+    "LOG_HEALTH_CHECKS": os.environ.get("LOG_HEALTH_CHECKS", True),
     "CVER_DEPLOYED_AT": os.environ.get("CVER_DEPLOYED_AT", None)
 }
 if general["CVER_BUILD"]:
@@ -45,10 +45,10 @@ if general["CVER_TEST"] == "true":
     general["CVER_TEST"] = True
 else:
     general["CVER_TEST"] = False
-if general["CVER_LOG_HEALTH_CHECKS"] == "true":
-    general["CVER_LOG_HEALTH_CHECKS"] = True
+if general["LOG_HEALTH_CHECKS"] == "true":
+    general["LOG_HEALTH_CHECKS"] = True
 else:
-    general["CVER_LOG_HEALTH_CHECKS"] = False
+    general["LOG_HEALTH_CHECKS"] = False
 
 # Store Current User Info
 global user
