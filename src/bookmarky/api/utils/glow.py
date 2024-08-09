@@ -35,7 +35,7 @@ general = {
     "ENV": os.environ.get("BOOKMARKY_ENV"),
     "JWT_EXPIRE_MINUTES": os.environ.get("JWT_EXPIRE_MINUTES", 60),
     "SECRET_KEY": os.environ.get("SECRET_KEY", "hello-world123"),
-    "CVER_TEST": os.environ.get("CVER_TEST", False),
+    "TEST": os.environ.get("TEST", False),
     "LOG_HEALTH_CHECKS": os.environ.get("LOG_HEALTH_CHECKS", True),
     "CVER_DEPLOYED_AT": os.environ.get("CVER_DEPLOYED_AT", None)
 }

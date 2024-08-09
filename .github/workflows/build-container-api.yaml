@@ -42,8 +42,13 @@ jobs:
           # Get tag names
           VERSION_FILE="src/bookmarky/api/version.py"
           VERSION=$(grep -o 'version = "[^"]*"' ${VERSION_FILE} | cut -d '"' -f 2)
-          TAG_NAMED="${TAG_PREFIX}-latest"
-          TAG_VERSION="${TAG_PREFIX}-${VERSION}"
+          if [ "$TAG_PREFIX" = "prod" ]; then
+            TAG_NAMED="latest"
+            TAG_VERSION="${VERSION}"
+          else
+            TAG_NAMED="${TAG_PREFIX}-latest"
+            TAG_VERSION="${TAG_PREFIX}-${VERSION}"
+          fi
 
           # Tag
           docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky:${TAG_NAMED}
