@@ -260,5 +260,4 @@ def _get_operation(query_data: dict, field_map_field: dict) -> str:
             operation = "="
     return operation
 
-# End File: politeauthority/bookmarky-api/src/api/controllers/ctrl_collections/
-#            ctrl_collection_base.py
+# End File: politeauthority/bookmarky-api/src/api/controllers/collections/ctrl_collection_base.py

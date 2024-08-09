@@ -98,7 +98,7 @@ class Migrate:
             migration_no += 1
         return True
 
-    def run_migration(self, migration_no: int):
+    def run_migration(self, migration_no: int) -> bool:
         """Running a single migration.
         @todo: This is broken right now, needs to be updated for PSQL
         """
@@ -107,11 +107,8 @@ class Migrate:
         this_migration.number = migration_no
         if glow.general["ENV"] == "dev":
             APPLICATION_DIR = "/work/src/bookmarky/"
-            logging.warning("Using Dev Migrations location: %s" % APPLICATION_DIR)
-
         else:
             APPLICATION_DIR = "/app/bookmarky/"
-            logging.debug("Using Migrations location: %s" % APPLICATION_DIR)
 
         migration_file = os.path.join(
             APPLICATION_DIR, "migrations/data/sql/up/%s.sql" % migration_no)
@@ -130,21 +127,22 @@ class Migrate:
         this_migration.save()
         return True
 
-    def create_options(self):
+    def create_options(self) -> bool:
         """Create the Options and set their defaults."""
         logging.info("Creating Options")
-        DataOptions().create()
+        return DataOptions().create()
 
-    def create_rbac(self):
+    def create_rbac(self) -> bool:
         """Create the Rbac roles/role perms and perms."""
         logging.info("Creating Roles")
         db.connect()
         self.rbac = DataRbac().create()
+        return True
 
-    def create_users(self):
+    def create_users(self) -> bool:
         """Create the users and api keys."""
         logging.info("Creating Users and Keys")
-        DataUsers().create()
+        return DataUsers().create()
 
     # def create_test_data(self) -> bool:
     #     """Create the test data if we're in a test environment."""
@@ -169,4 +167,4 @@ if __name__ == "__main__":
     Migrate().run()
 
 
-# End File: politeauthority/bookmarky/src/bookmarky/migrations/migrate.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/migrations/migrate.py

@@ -22,6 +22,9 @@ class Base:
 
     def __init__(self, conn=None, cursor=None):
         """Base model constructor
+        Sets up all the required class vars for the model.
+        self.rx_only_own: This is in development and may be buggy if True. Currently it tries to
+            limit 
         :unit-test: TestApiModelBase::test____init__
         """
         self._establish_db(conn, cursor)
@@ -38,6 +41,7 @@ class Base:
         self.backed_iodku = True
         self.backend = "postgres"
         self.skip_fields = ["id", "created_ts", "updated_ts"]
+        self.rw_only_own = False
         self.ux_key = []
         self.setup()
 

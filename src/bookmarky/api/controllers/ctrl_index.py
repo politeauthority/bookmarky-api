@@ -27,7 +27,7 @@ def index() -> Response:
     logging.info("Serving /")
     data = {
         "info": "Bookmarky",
-        "version": version,
+        "version": glow.general["VERSION"],
         "env": glow.general["ENV"],
         "build": glow.general["CVER_BUILD"],
         "build_short": glow.general["CVER_BUILD_SHORT"],
