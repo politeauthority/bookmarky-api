@@ -2,7 +2,7 @@ name: Push Main
 
 on:
   push:
-    branches: ["main", "cicd"]
+    branches: ["stage"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -30,23 +30,24 @@ jobs:
       tag-prefix: "prod"
       build-target: "base"
 
-  # deploy:
-  #   runs-on: self-hosted
-  #   needs: [build-api]
-  #   container:
-  #     image: harbor.squid-ink.us/politeauthority/polite-cicd:${{ vars.CICD_VERSION }}
-  #     credentials:
-  #       username: ${{ vars.HARBOR_USER }}
-  #       password: ${{ secrets.HARBOR_PASSWORD }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         token: ${{ secrets.PAT }}
-  #     - name: Deploy Main
-  #       run: |
-  #         mkdir ~/.kube
-  #         echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config.yaml
-  #         export KUBECONFIG=~/.kube/config.yaml
-  #         chmod 600 ~/.kube/config.yaml
-  #         task stage-deploy
-# End File: politeauthority/bookmarky/.github/workflows/push-main.yaml
+  deploy:
+    runs-on: self-hosted
+    needs: [build-api]
+    container:
+      image: harbor.squid-ink.us/politeauthority/polite-cicd:${{ vars.CICD_VERSION }}
+      credentials:
+        username: ${{ vars.HARBOR_USER }}
+        password: ${{ secrets.HARBOR_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+      - name: Deploy Staging
+        run: |
+          mkdir ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config.yaml
+          export KUBECONFIG=~/.kube/config.yaml
+          chmod 600 ~/.kube/config.yaml
+          kustomize build kubernetes-manifests/envs/prod | kubectl apply -f -
+
+# End File: politeauthority/bookmarky-api/.github/workflows/push-main.yaml
