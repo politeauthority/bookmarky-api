@@ -2,7 +2,7 @@ name: Push Main
 
 on:
   push:
-    branches: ["stage"]
+    branches: ["main"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
