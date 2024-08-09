@@ -37,10 +37,10 @@ general = {
     "SECRET_KEY": os.environ.get("SECRET_KEY", "hello-world123"),
     "TEST": os.environ.get("TEST", False),
     "LOG_HEALTH_CHECKS": os.environ.get("LOG_HEALTH_CHECKS", True),
-    "CVER_DEPLOYED_AT": os.environ.get("CVER_DEPLOYED_AT", None)
+    "DEPLOYED_AT": os.environ.get("DEPLOYED_AT", None)
 }
 if general["BUILD"]:
-    general["BUILD_SHORT"] = general["CVER_BUILD"][:12]
+    general["BUILD_SHORT"] = general["BUILD"][:12]
 if general["TEST"] == "true":
     general["TEST"] = True
 else:

@@ -81,7 +81,7 @@ def handle_exception(e):
 
     traceback.print_exc(file=sys.stdout)
     logging.error(traceback)
-    if glow.general["CVER_TEST"]:
+    if glow.general["TEST"]:
         data["message"] = traceback
         return jsonify(data), 500
     else:
