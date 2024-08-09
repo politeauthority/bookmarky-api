@@ -1,5 +1,6 @@
 --- 
---- Bookmarky speccific
+--- Migration 2
+--- Bookmarky specific
 ---
 ---
 --- Create bookmarks
@@ -12,6 +13,7 @@ CREATE TABLE IF NOT EXISTS bookmarks (
     tags TEXT[],
     name VARCHAR,
     url VARCHAR,
+    directory VARCHAR,
     deleted BOOLEAN DEFAULT False,
     UNIQUE (user_id, url)
 );
@@ -29,3 +31,5 @@ CREATE TABLE IF NOT EXISTS tags (
     deleted BOOLEAN DEFAULT False,
     UNIQUE (user_id, slug)
 );
+
+-- End file: politeauthority/bookmarky-api/src/bookmarky/migrations/data/sql/up/2.sql

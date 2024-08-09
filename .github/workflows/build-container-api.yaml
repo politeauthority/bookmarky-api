@@ -57,4 +57,4 @@ jobs:
           echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky:${TAG_NAMED}" >> $GITHUB_STEP_SUMMARY
           echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky:${TAG_VERSION}" >> $GITHUB_STEP_SUMMARY
 
-# End File: politeauthority/bookmarky/.github/workflows/build-container-api.yaml
+# End File: politeauthority/bookmarky-api/.github/workflows/build-container-api.yaml

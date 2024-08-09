@@ -1,10 +1,10 @@
 """
     Utility Xlate
-    Cver Shared
+    Bookmarky Shared
     A collection of misc trasnlation functions used all throuhout the Pignus platofrm.
 
     Testing:
-        Unit test file  cver/tests/unit/shared/utils/test_xlate.py
+        Unit test file  bookmarky/tests/unit/shared/utils/test_xlate.py
         Unit tested     10/15
 
 """
@@ -290,4 +290,14 @@ def snake_to_camel_case(snake: str) -> str:
         camel = camel[:pos] + camel[pos].upper() + camel[pos + 1:]
     return camel
 
-# End File: cver/src/cver/shared/utils/xlate.py
+
+def slugify(butterfly: str) -> str:
+    """Convert a pretty name into a url safe slug name for easier manipulation and keying."""
+    if not butterfly:
+        return ""
+    slug = butterfly.lower()
+    if " " in slug:
+        slug = slug.replace(" ", "-")
+    return slug
+
+# End File: politeauthority/bookmarky/src/bookmarky/shared/utils/xlate.py

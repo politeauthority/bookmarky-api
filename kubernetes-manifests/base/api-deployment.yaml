@@ -14,6 +14,38 @@ spec:
     spec:
       imagePullSecrets:
         - name: harbor-registry
+      initContainers:
+        - name: bookmarky-migrations
+          image: harbor.squid-ink.us/politeauthority/bookmarky:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: BOOKMARKY_DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: BOOKMARKY_DB_HOST
+                  name: bookmarky-creds
+            - name: BOOKMARKY_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: bookmarky-creds
+                  key: BOOKMARKY_DB_NAME
+            - name: BOOKMARKY_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: bookmarky-creds
+                  key: BOOKMARKY_DB_USER
+            - name: BOOKMARKY_DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: bookmarky-creds
+                  key: BOOKMARKY_DB_PASS
+            - name: LOG_LEVEL
+              value: "DEBUG"
+            - name: BOOKMARKY_ENV
+              value: "prod"
+          command: ["python3", "/app/bookmarky/migrations/migrate.py"]
       containers:
         - name: bookmarky-api
           image: harbor.squid-ink.us/politeauthority/bookmarky:latest

@@ -1,5 +1,5 @@
 """
-    Cver Shared
+    Bookmarky Shared
     Model - Migrate
 
 """
@@ -28,4 +28,4 @@ FIELD_MAP = {
     }
 }
 
-# End File: cver/src/shared/models/migrate.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/shared/models/migrate.py

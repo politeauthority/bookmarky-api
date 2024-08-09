@@ -19,7 +19,7 @@ from bookmarky.api.models.migration import Migration
 # from bookmarky.migrate.data.data_misc import DataMisc
 
 
-CURRENT_MIGRATION = 2
+CURRENT_MIGRATION = 4
 
 dictConfig({
     'version': 1,
@@ -52,7 +52,6 @@ class Migrate:
             logging.critical("Failed database connection, exiting")
             exit(1)
         self.last_migration = self.get_migration_info()
-        self.this_migration = Migration()
         self.run_migrations()
         self.create_rbac()
         self.create_users()
@@ -60,7 +59,7 @@ class Migrate:
         logging.info("Migrations were successful")
 
     def create_database(self) -> True:
-        """Create the database for CVER.
+        """Create the database for Bookmarky.
         @todo: This could be done more securily by attempting to connect to the database first.
         """
         conn, cursor = db.connect_no_db()
@@ -99,43 +98,51 @@ class Migrate:
             migration_no += 1
         return True
 
-    def run_migration(self, migration_no: int):
+    def run_migration(self, migration_no: int) -> bool:
         """Running a single migration.
         @todo: This is broken right now, needs to be updated for PSQL
         """
         logging.info("Running Migration #%s" % migration_no)
+        this_migration = Migration()
+        this_migration.number = migration_no
         if glow.general["ENV"] == "dev":
-            APPLICATION_DIR = "/app/src/bookmarky/"
-            logging.warning("Using Dev Migrations location: %s" % APPLICATION_DIR)
-
+            APPLICATION_DIR = "/work/src/bookmarky/"
         else:
             APPLICATION_DIR = "/app/bookmarky/"
-            logging.debug("Using Migrations location: %s" % APPLICATION_DIR)
 
         migration_file = os.path.join(
             APPLICATION_DIR, "migrations/data/sql/up/%s.sql" % migration_no)
         with open(migration_file, 'r') as sql_file:
             sql_content = sql_file.read()
-        glow.db["cursor"].execute(sql_content)
-        glow.db["conn"].commit()
+        try:
+            glow.db["cursor"].execute(sql_content)
+            glow.db["conn"].commit()
+        except Exception as e:
+            logging.critical(f"Migration {migration_no} failed: {e}")
+            this_migration.success = False
+            self.this_migration.save()
+            exit(1)
         logging.info("Applied Migration Up: %s" % migration_no)
+        this_migration.success = True
+        this_migration.save()
         return True
 
-    def create_options(self):
+    def create_options(self) -> bool:
         """Create the Options and set their defaults."""
         logging.info("Creating Options")
-        DataOptions().create()
+        return DataOptions().create()
 
-    def create_rbac(self):
+    def create_rbac(self) -> bool:
         """Create the Rbac roles/role perms and perms."""
         logging.info("Creating Roles")
         db.connect()
         self.rbac = DataRbac().create()
+        return True
 
-    def create_users(self):
+    def create_users(self) -> bool:
         """Create the users and api keys."""
         logging.info("Creating Users and Keys")
-        DataUsers().create()
+        return DataUsers().create()
 
     # def create_test_data(self) -> bool:
     #     """Create the test data if we're in a test environment."""
@@ -160,4 +167,4 @@ if __name__ == "__main__":
     Migrate().run()
 
 
-# End File: politeauthority/bookmarky/src/bookmarky/migrations/migrate.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/migrations/migrate.py

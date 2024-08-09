@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 """
-    Cver Api
-    Glow
-    Global variables for the Cver Api.
+    Bookmarky Api
+    Utils - Glow
+    Global variables for the Bookmarky Api.
 
 """
 import os
 import uuid
 
-# from cver.api.version import version
+from bookmarky.api.version import version
 
 global db
 db = {
@@ -29,7 +29,7 @@ options = {}
 global general
 general = {
     "LOG_LEVEL": os.environ.get("CVER_LOG_LEVEL", "INFO"),
-    "VERSION": "dev",
+    "VERSION": version,
     "CVER_BUILD": os.environ.get("CVER_BUILD"),
     "CVER_BUILD_SHORT": "",
     "ENV": os.environ.get("BOOKMARKY_ENV"),
@@ -72,4 +72,4 @@ def start_session():
     return True
 
 
-# End File: cver/src/cver/api/utils/glow.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/api/utils/glow.py

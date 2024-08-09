@@ -52,4 +52,4 @@ jobs:
           chmod 600 ~/.kube/config.yaml
           task stage-deploy
 
-# End File: politeauthority/bookmarky/.github/workflows/push-staging.yaml
+# End File: politeauthority/bookmarky-api/.github/workflows/push-staging.yaml

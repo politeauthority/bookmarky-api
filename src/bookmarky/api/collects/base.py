@@ -1,10 +1,10 @@
 """
-    Cver Api
+    Bookmarky Api
     Collects - Base
 
     Testing:
-        Unit test file  cver/tests/unit/api/collects/test_base.py
-        Unit tested     11/29
+        Unit test file  bookmarky/tests/unit/api/collects/test_base.py
+        Unit tested     10/25
 
 """
 
@@ -35,7 +35,7 @@ class Base:
             self.field_map = self.collect_model().field_map
 
     def build_from_lists(self, raws: list) -> list:
-        """Creates list of hydrated collection objects. """
+        """Creates list of hydrated collection objects."""
         prestines = []
         for raw_item in raws:
             new_object = self.collect_model(self.conn, self.cursor)
@@ -43,7 +43,13 @@ class Base:
             prestines.append(new_object)
         return prestines
 
-    def get_all(self):
+    def get_all(self) -> list:
+        """Get all units.
+        @note: This should be used sparingly as it has no limits.
+        """
+        msg = "Use this method: collect_base.basebase().get_all() sparingling as it hasno limit"
+        msg += "on the query"
+        logging.warning(msg)
         sql = """SELECT * FROM %s;""" % self.table_name
         self.cursor.execute(sql)
         raws = self.cursor.fetchall()
@@ -156,11 +162,12 @@ class Base:
         """
         if limit == 0:
             limit = per_page
-        sql = self._generate_paginated_sql(page, where_and, order_by, limit)
-        # logging.debug("\nPAGINATIED SQL\n")
-        # logging.debug("WHERE AND: %s" % where_and)
-        # logging.debug("%s\n\n" % sql)
-        self.cursor.execute(sql)
+        query = self._generate_paginated_sql(page, where_and, order_by, limit)
+        log_msg = "\nPAGINATIED SQL\n \nMETHOD:get_paginatd\n"
+        log_msg += f"PARAMS:\n\tWHERE AND:{where_and}"
+        log_msg += f"{query['sql']}\n{query['params']}\n\n"
+        logging.debug(log_msg)
+        self.cursor.execute(query["sql"], query["params"])
         raw = self.cursor.fetchall()
         prestines = []
         for raw_item in raw:
@@ -175,7 +182,7 @@ class Base:
 
         ret = {
             'objects': prestines,
-            'info': self.get_pagination_info(sql, page, limit, user_limit)
+            'info': self.get_pagination_info(query, page, limit, user_limit)
         }
         if get_json:
             ret["info"]["object_type"] = self.collect_model.model_name
@@ -183,7 +190,7 @@ class Base:
 
     def get_pagination_info(
             self,
-            sql: str,
+            query: dict,
             current_page: int,
             per_page: int,
             user_limit: int = None
@@ -191,8 +198,10 @@ class Base:
         """Get pagination details, supplementary info from the get_paginated method. This contains
         details like total_objects, next_page, previous page and other details needed for properly
         drawing pagination info on a GUI.
+        :param query: A diction containing the SQL parameterized and key of "values" that contains
+            the query values
         """
-        total_objects = self._pagination_total(sql, user_limit)
+        total_objects = self._pagination_total(query, user_limit)
         last_page = math.ceil(total_objects / per_page)
         if last_page == 0:
             last_page = 1
@@ -210,13 +219,14 @@ class Base:
         where_and: list,
         order_by: dict,
         limit: int,
-    ) -> str:
+    ) -> dict:
         """Generate the SQL query for the paginated request.
         :unit-test: TestApiCollectsBase::test___generate_paginated_sql()
         """
+        where = self._pagination_where_and(where_and)
         sql_vars = {
             "table_name": self.table_name,
-            "where": self._pagination_where_and(where_and),
+            "where": where["sql"],
             "order": self._pagination_order(order_by),
             "limit": self._gen_pagination_limit_sql(limit),
             "offset": ""
@@ -229,14 +239,21 @@ class Base:
             %(where)s
             %(order)s
             %(limit)s%(offset)s;""" % sql_vars
+        ret = {
+            "sql": sql,
+            "params": tuple(where["params"])
+        }
         # logging.info("\n\nRaw SQL\n%s\n" % sql)
-        return sql
+        return ret
 
-    def _pagination_total(self, sql: str, user_limit: int = None) -> int:
-        """Get the total number of pages for a pagination query."""
-        total_sql = self._edit_pagination_sql_for_info(sql, user_limit)
+    def _pagination_total(self, query: dict, user_limit: int = None) -> int:
+        """Get the total number of pages for a pagination query.
+        :param query: A diction containing the SQL parameterized and key of "values" that contains
+            the query values
+        """
+        total_sql = self._edit_pagination_sql_for_info(query, user_limit)
         # logging.info("PAGINATION INFO SQL:\n%s" % total_sql)
-        self.cursor.execute(total_sql)
+        self.cursor.execute(total_sql, query["params"])
         raw = self.cursor.fetchone()
         if not raw:
             return 0
@@ -247,11 +264,14 @@ class Base:
             return user_limit
         return count
 
-    def _edit_pagination_sql_for_info(self, original_sql: str, user_limit: int = None):
+    def _edit_pagination_sql_for_info(self, query: dict, user_limit: int = None):
         """Edit the original pagination query to get the total number of results for pagination
         details.
+        :param query: A diction containing the SQL parameterized and key of "values" that contains
+            the query values
         :unit-test: TestBase::test___edit_pagination_sql_for_info
         """
+        original_sql = query["sql"]
         sql = original_sql[original_sql.find("FROM"):]
         sql = "%s %s" % ("SELECT COUNT(*)", sql)
         end_sql = sql.find(" ORDER BY")
@@ -261,7 +281,7 @@ class Base:
         sql += ";"
         return sql
 
-    def _pagination_where_and(self, where_and: list) -> str:
+    def _pagination_where_and(self, where_and: list) -> dict:
         """Create the where clause for pagination when where and clauses are supplied.
         Note: We append multiple statements with an AND in the sql statement.
         :param where_and:
@@ -277,24 +297,28 @@ class Base:
         where = False
         where_and_sql = ""
 
+        params = []
         for where_a in where_and:
-            one_sql = self._pagination_where_and_one(where_a)
-            if one_sql:
+            one_where_a_sql = self._pagination_where_and_one(where_a)
+            if one_where_a_sql:
                 where = True
-            where_and_sql += one_sql
+            where_and_sql += one_where_a_sql["sql"]
+            params.append(one_where_a_sql["param"])
 
         if where:
             where_and_sql = "WHERE " + where_and_sql
             where_and_sql = where_and_sql[:-4]
+        ret = {
+            "sql": where_and_sql,
+            "params": params
+        }
+        return ret
 
-        return where_and_sql
-
-    def _pagination_where_and_one(self, where_a: dict) -> str:
+    def _pagination_where_and_one(self, where_a: dict) -> dict:
         """Handles a single field's where and SQL statemnt portion.
         Note: We append multiple statements with an AND in the sql statement.
         @todo: This should be more parameterized
         """
-        field_info = self.field_map[where_a["field"]]
         where_and_sql = ""
         if not where_a["field"]:
             logging.warning("Collections - Invalid where option: %s" % where_a)
@@ -315,25 +339,12 @@ class Base:
             raise AttributeError("Model %s does not have field: %s" % (
                 self,
                 where_a["field"]))
-        # field = self.collect_model().field_map[where_a["field"]]
-        # if field["type"] == "bool":
-
-        if field_info["type"] == "str":
-            where_a["value"] = '"%s"' % sql_tools.sql_safe(where_a["value"])
-        elif field_info["type"] == "bool":
-            value = where_a["value"]
-            if value == True:
-                value = 1
-            elif value == False:
-                value = 0
-            else:
-                value = 0
-            where_a["value"] = '%s' % sql_tools.sql_safe(value)
-        where_and_sql += '%s %s %s AND ' % (
-            sql_tools.sql_safe(where_a['field']),
-            op,
-            where_a['value'])
-        return where_and_sql
+        where_and_sql += f"{sql_tools.sql_safe(where_a['field'])} {op} %s AND "
+        ret = {
+            "sql": where_and_sql,
+            "param": where_a["value"]
+        }
+        return ret
 
     def _pagination_order(self, order: dict = None) -> str:
         """Create the order clause for pagination using user supplied arguments or defaulting to
@@ -424,17 +435,17 @@ class Base:
             LIMIT %s;"""
         return sql
 
-    def _gen_get_by_ids_sql(self) -> str:
-        """Generate the get_by_ids SQL statement.
-        :method: TestApiCollectsBase::test___gen_sql_get_last
-        @todo: fix what's using this as we've made it paramaterized. @tag: psql
-        """
-        # model_ids = list(set(model_ids))
-        # sql_ids = self._int_list_to_sql(model_ids)
-        sql = f"""
-            SELECT *
-            FROM {self.table_name}
-            WHERE id IN %s;"""
-        return sql
+    # def _gen_get_by_ids_sql(self) -> str:
+    #     """Generate the get_by_ids SQL statement.
+    #     :method: TestApiCollectsBase::test___gen_sql_get_last
+    #     @todo: fix what's using this as we've made it paramaterized. @tag: psql
+    #     """
+    #     # model_ids = list(set(model_ids))
+    #     # sql_ids = self._int_list_to_sql(model_ids)
+    #     sql = f"""
+    #         SELECT *
+    #         FROM {self.table_name}
+    #         WHERE id IN %s;"""
+    #     return sql
 
-# End File: cver/src/api/collections/base.py
+# End File: politeauthority/bookmarky/src/bookmarky/api/collections/base.py

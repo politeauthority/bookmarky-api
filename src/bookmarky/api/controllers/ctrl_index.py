@@ -1,14 +1,16 @@
 """
     Bookmarky Api
     Controller - Index
-    {API_URL}/
+    /
 
 """
 import logging
 
 from flask import Blueprint, jsonify, request, Response
 
-from bookmarky.shared.utils import date_utils
+
+from polite_lib.utils import date_utils
+
 # from bookmarky.api.stats import totals
 # from bookmarky.api.stats import tasks as tasks_stats
 from bookmarky.api.utils import auth
@@ -25,7 +27,7 @@ def index() -> Response:
     logging.info("Serving /")
     data = {
         "info": "Bookmarky",
-        "version": version,
+        "version": glow.general["VERSION"],
         "env": glow.general["ENV"],
         "build": glow.general["CVER_BUILD"],
         "build_short": glow.general["CVER_BUILD_SHORT"],
@@ -84,8 +86,8 @@ def info() -> Response:
     # model_totals = totals.get_model_totals()
     # task_totals = tasks_stats.get_task_totals()
     data = {
-        "info": "Cver Api",
-        "version": glow.general["VERSION"],
+        "info": "Bookmarky Api",
+        "version": version,
         "env": glow.general["ENV"],
         "build": glow.general["CVER_BUILD"],
         "build_short": glow.general["CVER_BUILD_SHORT"],
