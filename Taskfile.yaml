@@ -91,11 +91,6 @@ tasks:
         echo "Execing to pod $POD"
         kubectl exec -n ${NS} -it ${POD} -- sh
 
-  prod-deploy:
-    cmds:
-      - |
-        kustomize build kubernetes-manifests/envs/prod | kubectl apply -f -
-
   prod-exec-api:
     cmds:
       - |
