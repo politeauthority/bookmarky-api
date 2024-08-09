@@ -19,7 +19,7 @@ from bookmarky.api.models.migration import Migration
 # from bookmarky.migrate.data.data_misc import DataMisc
 
 
-CURRENT_MIGRATION = 5
+CURRENT_MIGRATION = 4
 
 dictConfig({
     'version': 1,
@@ -52,7 +52,6 @@ class Migrate:
             logging.critical("Failed database connection, exiting")
             exit(1)
         self.last_migration = self.get_migration_info()
-        self.this_migration = Migration()
         self.run_migrations()
         self.create_rbac()
         self.create_users()
@@ -104,8 +103,10 @@ class Migrate:
         @todo: This is broken right now, needs to be updated for PSQL
         """
         logging.info("Running Migration #%s" % migration_no)
+        this_migration = Migration()
+        this_migration.number = migration_no
         if glow.general["ENV"] == "dev":
-            APPLICATION_DIR = "/app/src/bookmarky/"
+            APPLICATION_DIR = "/work/src/bookmarky/"
             logging.warning("Using Dev Migrations location: %s" % APPLICATION_DIR)
 
         else:
@@ -116,9 +117,17 @@ class Migrate:
             APPLICATION_DIR, "migrations/data/sql/up/%s.sql" % migration_no)
         with open(migration_file, 'r') as sql_file:
             sql_content = sql_file.read()
-        glow.db["cursor"].execute(sql_content)
-        glow.db["conn"].commit()
+        try:
+            glow.db["cursor"].execute(sql_content)
+            glow.db["conn"].commit()
+        except Exception as e:
+            logging.critical(f"Migration {migration_no} failed: {e}")
+            this_migration.success = False
+            self.this_migration.save()
+            exit(1)
         logging.info("Applied Migration Up: %s" % migration_no)
+        this_migration.success = True
+        this_migration.save()
         return True
 
     def create_options(self):

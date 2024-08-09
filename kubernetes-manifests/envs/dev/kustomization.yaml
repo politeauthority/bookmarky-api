@@ -29,12 +29,5 @@ patches:
         value:
           name: BOOKMARKY_ENV
           value: "dev"
-      # - op: remove
-      #   path: /spec/template/spec/containers/0/startupProbe
-      # - op: add
-      #   path: /spec/template/spec/containers/0/env/-
-      #   value:
-      #     name: QUIGLEY_CONFIG
-      #     value: "/dev/config-dev.yaml"
-      # - op: remove
-      #   path: /spec/template/spec/containers/0/resources
+      - op: remove
+        path: /spec/template/spec/initContainers

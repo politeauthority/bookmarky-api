@@ -3,7 +3,7 @@
     Collects - Base
 
     Testing:
-        Unit test file  bookmarkys/tests/unit/api/collects/test_base.py
+        Unit test file  bookmarky/tests/unit/api/collects/test_base.py
         Unit tested     10/25
 
 """

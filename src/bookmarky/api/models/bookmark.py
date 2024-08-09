@@ -22,6 +22,7 @@ class Bookmark(BaseEntityMeta):
         self.immutable = False
         self.createable = True
         self.setup()
+        self.rw_only_own = True
 
     def __repr__(self):
         """Bookmark model representation."""

@@ -15,7 +15,7 @@ dependencies = [
     "psycopg2==2.9.9",
     "PyJWT==2.8.0",
     "sqlescapy==1.0.1",
-    "ipdb==0.13.13"
+    "tldextract==5.1.2",
 ]
 
 [tool.hatch.build.targets.sdist]
