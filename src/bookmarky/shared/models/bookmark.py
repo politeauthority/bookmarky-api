@@ -30,6 +30,7 @@ FIELD_MAP = {
     "tags": {
         "name": "tags",
         "type": "list",
+        "list_values": "int",
         "api_writeable": True,
         "api_searchable": True,
     },

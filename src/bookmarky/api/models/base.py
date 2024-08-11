@@ -350,9 +350,10 @@ class Base:
             # Handle the list field type.
             elif field['type'] == 'list':
                 if field_value:
+                    field_value = self._expand_list_values(field, field_value)
                     setattr(self, field_name, field_value)
                 else:
-                    setattr(self, field_name, None)
+                    setattr(self, field_name, [])
 
             # elif field["type"] == "json":
             #     import ipdb; ipdb.set_trace()
@@ -930,5 +931,25 @@ class Base:
             except arrow.parser.ParserError:
                 logging.error("Couldnt parse date str: %s" % date_string)
                 return None
+
+    def _expand_list_values(self, field: dict, field_value: list) -> list:
+        """Expand a list from the database so the list values are properly typed.
+        :unit-test: TestApiModelBase:test___expand_list_values
+        """
+        # Exapand list values to the propper python type
+        if "list_values" not in field:
+            return field_value
+
+        ret_value = []
+        if field["list_values"] == "int":
+            for val in field_value:
+                try:
+                    ret_value.append(int(val))
+                except Exception as e:
+                    error_msg = "Failed to cast list value from postgres to int: %s for model %s"
+                    logging.error(error_msg % (e, self))
+                    ret_value.append(val)
+                    continue
+        return ret_value
 
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/models/base.py

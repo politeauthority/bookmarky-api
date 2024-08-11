@@ -22,7 +22,7 @@ spec:
                   number: 80
             path: /
             pathType: Prefix
-  tls:
-    - hosts:
-        - api-bookmark.alix.lol
-      secretName: api-bookmarky-alix-lol
+  # tls:
+  #   - hosts:
+  #       - api-bookmark.alix.lol
+  #     secretName: api-bookmarky-alix-lol

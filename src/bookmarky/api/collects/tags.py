@@ -21,4 +21,16 @@ class Tags(Base):
         self.field_map = self.collect_model().field_map
         self.per_page = 20
 
+    def get_by_user_id(self, user_id: int) -> list:
+        """Get all Tags for a User by user_id."""
+        sql = f"""
+            SELECT *
+            FROM {self.table_name}
+            WHERE
+                user_id = %s;
+        """
+        self.cursor.execute(sql, (user_id,))
+        raws = self.cursor.fetchall()
+        return self.load_presiteines(raws)
+
 # End File: politeauthority/bookmarky/src/bookmarky/api/collects/tags.py

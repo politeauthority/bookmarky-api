@@ -21,9 +21,9 @@ tasks:
         NS=$"{{.K8S_NS_DEV}}"
         POD=$(kubectl get pods -l app=bookmarky-api -n ${NS} --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
         echo "Copying to pod $NS/$POD"
-        kubectl cp -n ${NS} ./src ${POD}:/work
-        kubectl cp -n ${NS} ./pyproject.toml ${POD}:/work/src/
-        kubectl cp -n ${NS} ./tests ${POD}:/work
+        kubectl cp -n ${NS} -c bookmarky-api ./src ${POD}:/work
+        kubectl cp -n ${NS} -c bookmarky-api ./pyproject.toml ${POD}:/work/src/
+        kubectl cp -n ${NS} -c bookmarky-api ./tests ${POD}:/work
         echo "Coppied source and tests"
         echo "Building"
         kubectl exec -it -n ${NS} ${POD} -- sh -c "cd /work/src && pip install ."
@@ -127,10 +127,18 @@ tasks:
   ci-new-stage:
     cmds:
       - |
-        git config --global --add safe.directory /__w/bookmarky/bookmarky
+        # git config --global --add safe.directory /__w/bookmarky/bookmarky
         git stash
         git fetch origin main
         git checkout main
         git checkout -b stage
         git push origin stage
+        git stash pop
     silent: True
+
+  ci-new-stage-pr:
+    cmds:
+      - |
+        git checkout stage
+        git push origin stage
+        gh pr create --title 0.0.1.10
