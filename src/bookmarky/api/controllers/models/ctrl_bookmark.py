@@ -56,4 +56,4 @@ def delete_model(bookmark_id: int = None):
     return ctrl_base.delete_model(Bookmark, bookmark_id)
 
 
-# End File: bookmarky/src/bookmarky/api/controllers/ctrl_models/ctrl_bookmark.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/api/controllers/ctrl_models/ctrl_bookmark.py

@@ -4,8 +4,8 @@
 
 """
 
-from flask import Blueprint, jsonify, request
-# from flask import Blueprint, jsonify
+# from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 
 from bookmarky.api.collects.bookmarks import Bookmarks
 # from bookmarky.api.collects.tags import Tags
@@ -34,7 +34,7 @@ def index():
     #         "op": "in"
     #     }
 
-    data = ctrl_collection_base.get(Bookmarks, extra_args)
+    data = ctrl_collection_base.get(Bookmarks)
     return jsonify(data)
 
 

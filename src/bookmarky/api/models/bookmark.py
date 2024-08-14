@@ -3,6 +3,8 @@
     Model Bookmark
 
 """
+import logging
+
 from bookmarky.shared.models.bookmark import FIELD_MAP, FIELD_META
 from bookmarky.api.models.base_entity_meta import BaseEntityMeta
 
@@ -23,6 +25,7 @@ class Bookmark(BaseEntityMeta):
         self.createable = True
         self.setup()
         self.rw_only_own = True
+        self.tags = {}
 
     def __repr__(self):
         """Bookmark model representation."""
@@ -34,5 +37,19 @@ class Bookmark(BaseEntityMeta):
             return "<%s: %s>" % (self.__class__.__name__, self.id)
         return "<%s>" % self.__class__.__name__
 
+    def get_tags(self):
+        """Get all Tags for a Bookmark"""
+        if not self.id:
+            logging.warning("Cannot get Bookmark Tags without a bookmark.id")
+            return False
+        sql = """
+            SELECT t.id
+            FROM bookmark_tags bt
+                JOIN tags t
+                    ON bt.tag_id = t.id
+            WHERE
+                bookmark_id = %s
+        """
+        print(sql)
 
-# End File: politeauthority/bookmarky/src/bookmarky/api/models/bookmark.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/api/models/bookmark.py

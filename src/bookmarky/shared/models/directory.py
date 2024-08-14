@@ -33,9 +33,9 @@ FIELD_MAP = {
         "api_display": True,
         "api_writeable": True,
     },
-    "path": {
-        "name": "url",
-        "type": "path",
+    "parent_id": {
+        "name": "parent_id",
+        "type": "str",
         "api_display": True,
         "api_writeable": True,
     },
@@ -48,7 +48,7 @@ FIELD_MAP = {
 }
 
 FIELD_META = {
-    "ux_key": ["user_id", "path"]
+    "ux_key": ["user_id", "name", "parent_id"]
 }
 
 
