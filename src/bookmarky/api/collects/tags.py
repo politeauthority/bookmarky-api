@@ -33,4 +33,22 @@ class Tags(Base):
         raws = self.cursor.fetchall()
         return self.load_presiteines(raws)
 
+    def get_tag_ids_by_user_and_name(self, user_id: int, tags: list) -> list:
+        """Get tags where the tags supplied match the User.id"""
+        sql = f"""
+            SELECT id
+            FROM {self.table_name}
+            WHERE
+                user_id = %s AND
+                name IN %s;
+        """
+        self.cursor.execute(sql, (user_id, tuple(tags)))
+        # print(self.cursor.mogrify(sql, tuple(tags),))
+        the_ids = []
+        raws = self.cursor.fetchall()
+        for raw in raws:
+            the_ids.append(raw[0])
+        return the_ids
+
+
 # End File: politeauthority/bookmarky/src/bookmarky/api/collects/tags.py

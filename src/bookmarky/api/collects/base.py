@@ -167,6 +167,8 @@ class Base:
         log_msg += f"PARAMS:\n\tWHERE AND:{where_and}"
         log_msg += f"{query['sql']}\n{query['params']}\n\n"
         logging.debug(log_msg)
+        # if len(query["params"]) == 1:
+        #     query["params"] = query["params"][0]
         self.cursor.execute(query["sql"], query["params"])
         raw = self.cursor.fetchall()
         prestines = []
@@ -241,7 +243,7 @@ class Base:
             %(limit)s%(offset)s;""" % sql_vars
         ret = {
             "sql": sql,
-            "params": tuple(where["params"])
+            "params": where["params"]
         }
         # logging.info("\n\nRaw SQL\n%s\n" % sql)
         return ret
@@ -310,7 +312,7 @@ class Base:
             where_and_sql = where_and_sql[:-4]
         ret = {
             "sql": where_and_sql,
-            "params": params
+            "params": tuple(params)
         }
         return ret
 
@@ -327,6 +329,10 @@ class Base:
         op = "="
         if "op" in where_a:
             op = where_a["op"]
+        # if where_a["op"] == "IN":
+        #     if isinstance(where_a["value"], list):
+        #         # where_a["value"] = self.prepare_psql_where_in(where_a["value"])
+        #         where_and_sql = self._prepare_psql_where_in(where_a["value"])
         # if "op" not in ["=", "<", ">"]:
         #     op = "="
         if not self.collect_model:

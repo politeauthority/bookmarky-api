@@ -21,7 +21,7 @@ log_config = {
         }
     },
     "root": {
-        "level": LOG_LEVEL,
+        "level": "DEBUG",
         "handlers": ["wsgi"]
     },
     "requests": {

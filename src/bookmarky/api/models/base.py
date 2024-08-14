@@ -1,5 +1,5 @@
 """
-    Cver Api
+    Bookmarky Api
     Base Model v. 0.4.0
     Parent class for all models to inherit, providing methods for creating tables, inserting, updating,
     selecting and deleting data.

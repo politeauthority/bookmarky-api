@@ -32,4 +32,17 @@ CREATE TABLE IF NOT EXISTS tags (
     UNIQUE (user_id, slug)
 );
 
+---
+--- Create bookmark tags
+---
+CREATE TABLE IF NOT EXISTS bookmark_tags (
+    id SERIAL PRIMARY KEY,
+    created_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    bookmark_id INTEGER NOT NULL,
+    tag_id INTEGER NOT NULL,
+    UNIQUE (bookmark_id, tag_id)
+);
+
+
 -- End file: politeauthority/bookmarky-api/src/bookmarky/migrations/data/sql/up/2.sql

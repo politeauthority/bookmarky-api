@@ -134,7 +134,7 @@ class TestCtrlCollectionBase:
 
     def test___query_direct(self):
         """
-        ctrl_collection_base._query_direct
+        :method: ctrl_collection_base._query_direct
         """
         result = ctrl_collection_base._query_direct(
             "image_name",
@@ -146,6 +146,9 @@ class TestCtrlCollectionBase:
         assert "=" == result["op"]
 
     def test___get_operation(self):
+        """
+        :method:ctrl_collection_base::_get_operation
+        """
         query_data = {
             "op": "=",
             "value": "hello-world"

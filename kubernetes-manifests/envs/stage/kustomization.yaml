@@ -7,7 +7,7 @@ resources:
   # - secret.yaml
 images:
   - name: harbor.squid-ink.us/politeauthority/bookmarky
-    newTag: stage-0.0.1.15
+    newTag: stage-0.0.1.16
 patches:
   - target:
       kind: Deployment

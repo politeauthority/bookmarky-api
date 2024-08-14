@@ -10,7 +10,7 @@ from bookmarky.api.utils import api_util
 from bookmarky.shared.utils import xlate
 
 
-def get(collection) -> dict:
+def get(collection, extra_args: dict = {}) -> dict:
     """Base collections getter."""
     request_args = api_util.get_params()
     data = {
@@ -24,10 +24,11 @@ def get(collection) -> dict:
     if "page" in request_args:
         page = request_args["page"]
     field_map = collection().collect_model().field_map
-    parsed_body = _parse_body(request_args["clean_args"], field_map)
-    logging.debug("\nRaw Args:\n%s" % request_args["raw_args"])
-    logging.debug("\nClean Args:\n%s" % request_args["clean_args"])
-    logging.debug("\nGET:\n%s" % parsed_body)
+    parsed_body = _parse_body(request_args["clean_args"], field_map, extra_args)
+    logging.debug("\nRaw Args:\n%s\n\n" % request_args["raw_args"])
+    logging.debug("\nExtra Args:\n%s\n\n" % extra_args)
+    logging.debug("\nClean Args:\n%s\n\n" % request_args["clean_args"])
+    logging.debug("\nParsed Args:\n%s\n\n" % parsed_body)
 
     limit = parsed_body["limit"]
     collection_limit = collection().per_page
@@ -62,7 +63,7 @@ def get(collection) -> dict:
     return data
 
 
-def _parse_body(raw_args: dict, field_map: dict) -> dict:
+def _parse_body(raw_args: dict, field_map: dict, extra_args: dict = None) -> dict:
     """Gets the where_and value to be sent to collection paginationation search from the raw_args
     submitted in the requset
     :param raw_args: Raw arguments coming in from the api body request
@@ -80,6 +81,12 @@ def _parse_body(raw_args: dict, field_map: dict) -> dict:
                 },
                 "limit": 5
             }
+    :returns: {
+        "where_and": [],
+        "order_by": "field_name",
+        "limit": 5,
+        "page": 1
+    }
     :unit-test: TestCtrlCollectionBase::test___parse_body
     """
     ret = {
@@ -88,8 +95,12 @@ def _parse_body(raw_args: dict, field_map: dict) -> dict:
         "limit": None,
         "page": None
     }
-    if not raw_args:
+    if not raw_args or not extra_args:
         return ret
+    extra_arg_field_keys = extra_args["fields"].keys()
+    for extra_arg_field_key in extra_arg_field_keys:
+        if extra_arg_field_key in raw_args["fields"]:
+            raw_args["fields"].pop(extra_arg_field_key)
 
     for raw_arg_key, raw_arg_data in raw_args.items():
         if raw_arg_key == "fields":
@@ -105,7 +116,10 @@ def _parse_body(raw_args: dict, field_map: dict) -> dict:
                 logging.warning("limit is not int, dropping.")
                 continue
             ret["limit"] = raw_arg_data
-
+    if extra_args["fields"]:
+        for extra_arg_key, extra_arg_data in extra_args.items():
+            if extra_arg_key == "fields":
+                ret["where_and"] += _get_fields(extra_arg_data, field_map)
     return ret
 
 
@@ -132,6 +146,7 @@ def _get_api_hidden_fields(field_map: dict) -> list:
 
 def _get_fields(field_data: dict, field_map: dict) -> list:
     """Extract fields from the api request.
+    For field in field_data determine if the request is valid.
 
     :returns:
         example: [
@@ -143,6 +158,7 @@ def _get_fields(field_data: dict, field_map: dict) -> list:
         ]
     :unit-test: TestCtrlCollectionBase.test___get_fields
     """
+    print("get_fields")
     where_and_fields = []
     for fn, query_data in field_data.items():
 
@@ -155,23 +171,20 @@ def _get_fields(field_data: dict, field_map: dict) -> list:
             "value": None,
             "op": None
         }
-
         # If the field is a direct query, ie {"name": "hello-world"}
         if not isinstance(query_data, dict):
             field_data = _query_direct(fn, query_data, field_map[fn])
             where_and_fields.append(field_data)
             continue
-
         else:
             field_data["value"] = query_data["value"]
             if "op" not in query_data or not query_data["op"]:
-                print("no hit")
                 field_data["op"] = "="
             else:
-                print("we hit the get operation")
                 field_data["op"] = _get_operation(query_data, field_map[fn])
 
         where_and_fields.append(field_data)
+
     return where_and_fields
 
 
@@ -240,7 +253,7 @@ def _get_operation(query_data: dict, field_map_field: dict) -> str:
     if not isinstance(query_data["op"], str):
         logging.warning("Operation query is not string, replacing with =")
         return "="
-    if query_data["op"].lower() not in ["=", ">", "<", "like", "gt", "lt"]:
+    if query_data["op"].lower() not in ["=", ">", "<", "like", "gt", "lt", "in"]:
         logging.error(
             'Unknown operation "%s" will be ignored and replaced with =' % (
                 query_data["op"]))
@@ -249,6 +262,8 @@ def _get_operation(query_data: dict, field_map_field: dict) -> str:
         operation = ">"
     elif query_data["op"].lower() == "lt":
         operation = "<"
+    elif query_data["op"].lower() == "in":
+        operation = "IN"
     else:
         operation = query_data["op"].lower()
     if operation in ["<", ">"]:

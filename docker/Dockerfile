@@ -43,4 +43,4 @@ RUN pip install -r /app/requirements-dev.txt && mkdir /work
 WORKDIR /work/
 
 ADD build-files/tests /work/tests
-# RUN cd /work/tests/ python3 /work/tests/setup.py build && python3 /work/tests/setup.py install
+RUN cd /work/tests/ && python3 /work/tests/setup.py install

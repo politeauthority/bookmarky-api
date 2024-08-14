@@ -1,5 +1,5 @@
 """
-    Bookmarky Shared
+    Bookmark Tag Shared
     Model - Bookmark
 
 """
@@ -21,36 +21,23 @@ FIELD_MAP = {
         "type": "datetime",
         "api_searchable": True,
     },
-    "user_id": {
-        "name": "user_id",
+    "bookmark_id": {
+        "name": "bookmark_id",
         "type": "int",
         "api_writeable": True,
         "api_searchable": True,
     },
-    "name": {
-        "name": "name",
-        "type": "str",
-        "api_searchable": True,
-        "api_display": True,
+    "tag_id": {
+        "name": "tag_id",
+        "type": "int",
         "api_writeable": True,
-    },
-    "url": {
-        "name": "url",
-        "type": "str",
-        "api_display": True,
-        "api_writeable": True,
-    },
-    "deleted": {
-        "name": "deleted",
-        "type": "datetime",
         "api_searchable": True,
-        "api_display": False,
-    }
+    },
 }
 
 FIELD_META = {
-    "ux_key": ["user_id", "url"]
+    "ux_key": ["bookmark_id", "tag_id"]
 }
 
 
-# End File: politeauthority/bookmarky/src/bookmarky/shared/models/bookmark.py
+# End File: politeauthority/bookmarky/src/bookmarky/shared/models/bookmark_tag.py
