@@ -45,6 +45,12 @@ FIELD_MAP = {
         "type": "datetime",
         "api_searchable": True,
         "api_display": False,
+    },
+    "directory_id": {
+        "name": "directory_id",
+        "type": "int",
+        "api_searchable": True,
+        "api_display": True,
     }
 }
 

@@ -13,7 +13,7 @@ class Bookmarks(Base):
 
     def __init__(self, conn=None, cursor=None):
         """Store database conn/connection and model table_name as well as the model obj for the
-           collections target model.
+        collections target model.
         """
         super(Bookmarks, self).__init__(conn, cursor)
         self.table_name = Bookmark().table_name

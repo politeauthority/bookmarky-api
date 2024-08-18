@@ -1,6 +1,7 @@
 """
     Bookmarky Introspect
-    Introspect - Add Reddit Tags
+    Introspect
+    Add Domain Tags
 
 """
 import logging
@@ -10,7 +11,7 @@ from bookmarky.api.models.tag import Tag
 from bookmarky.shared.utils import xlate
 
 
-class AddRedditTags:
+class AddDomainTags:
 
     def __init__(self):
         self.tags = []
@@ -51,4 +52,4 @@ class AddRedditTags:
             logging.debug(f"Found Tag {tag.name}")
             return tag.id
 
-# End File: politeauthority/bookmarky/src/bookmarky/introspect/modules/add_reddit_tags.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/introspect/modules/add_domain_tags.py

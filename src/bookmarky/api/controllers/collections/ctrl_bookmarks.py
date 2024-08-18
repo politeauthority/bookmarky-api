@@ -1,10 +1,10 @@
 """
     Bookmark Api
-    Controller Collection - Bookmarks
+    Controller Collection
+    Bookmarks
 
 """
 
-# from flask import Blueprint, jsonify, request
 from flask import Blueprint, jsonify
 
 from bookmarky.api.collects.bookmarks import Bookmarks

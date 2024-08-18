@@ -1,6 +1,7 @@
 """
     Bookmarky Introspect
-    Introspect - Add Tags
+    Introspect
+    Add Directories
 
 """
 import tldextract
@@ -12,15 +13,13 @@ from bookmarky.api.models.bookmark_tag import BookmarkTag
 from bookmarky.api.utils import db
 from bookmarky.introspect.modules.add_reddit_tags import AddRedditTags
 
-
-# logging.config.dictConfig(log_config)
-# logger = logging.getLogger(__name__)
-# logger.propagate = True
-
-USER_IDS = [1]
+KNOWN_DOMAINS = {
+    "reddit.com": "Reddit",
+    "github.com": "Development"
+}
 
 
-class AutoTag:
+class AutoDirs:
 
     def __init__(self):
         if not db.connect():
@@ -67,7 +66,7 @@ class AutoTag:
 
 
 if __name__ == "__main__":
-    AutoTag().run()
+    AutoDirs().run()
 
 
-# End File: politeauthority/bookmarky/src/bookmarky/introspect/auto_tags.py
+# End File: politeauthority/bookmarky/src/bookmarky/introspect/auto_dirs.py

@@ -59,6 +59,21 @@ def get_params() -> dict:
     return ret_args
 
 
+def get_param(param_name: str):
+    """Extract a single parameter from a request
+    @todo: Right now this is just looking at POST data
+    """
+    # @todo: clean this part up, make a better response and handling
+    try:
+        request_data = request.get_json()
+    except json.decoder.JSONDecodeError as e:
+        logging.warning(f"Recieved data that cant be decoded to JSON: {e}")
+        return make_response("ERROR", 401)
+    if param_name not in request_data:
+        return None
+    return request_data[param_name]
+
+
 def _get_search_field_args(raw_args: dict) -> dict:
     """Get query paramaters from the url, mapping them as fields if they dont appear to be specific
     key words.

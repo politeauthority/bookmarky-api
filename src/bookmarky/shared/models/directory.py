@@ -27,14 +27,20 @@ FIELD_MAP = {
         "api_writeable": True,
         "api_searchable": True,
     },
+    "parent_id": {
+        "name": "parent_id",
+        "type": "str",
+        "api_display": True,
+        "api_writeable": True,
+    },
     "name": {
         "name": "name",
         "type": "str",
         "api_display": True,
         "api_writeable": True,
     },
-    "parent_id": {
-        "name": "parent_id",
+    "slug": {
+        "name": "slug",
         "type": "str",
         "api_display": True,
         "api_writeable": True,

@@ -10,14 +10,14 @@ from bookmarky.api.models.directory import Directory
 
 class Directories(Base):
 
-    collection_name = "bookmarks"
+    collection_name = "directories"
 
     def __init__(self, conn=None, cursor=None):
         """Store database conn/connection and model table_name as well as the model obj for the
-           collections target model.
+        collections target model.
         """
         super(Directories, self).__init__(conn, cursor)
-        self.table_name = Directories().table_name
+        self.table_name = Directory().table_name
         self.collect_model = Directory
         self.field_map = self.collect_model().field_map
         self.per_page = 20
