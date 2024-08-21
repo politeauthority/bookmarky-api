@@ -27,8 +27,8 @@ FIELD_MAP = {
         "api_writeable": True,
         "api_searchable": True,
     },
-    "name": {
-        "name": "name",
+    "title": {
+        "name": "title",
         "type": "str",
         "api_searchable": True,
         "api_display": True,

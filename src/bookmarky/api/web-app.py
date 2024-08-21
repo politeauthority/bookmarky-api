@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
     Bookmarky Api
-    App
+    Web App
     Primary web app entrpoint
 
 """
@@ -139,7 +139,7 @@ if __name__ != "__main__":
     logging.info("Starting production webserver")
     app.logger.handlers = gunicorn_logger.handlers
     app.logger.setLevel(gunicorn_logger.level)
-    app.config['DEBUG'] = True
+    app.config['DEBUG'] = False
 
 
-# End File: bookmarky/src/bookmarky/api/app.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/api/app.py

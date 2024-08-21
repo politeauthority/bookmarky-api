@@ -29,8 +29,8 @@ class Bookmark(BaseEntityMeta):
 
     def __repr__(self):
         """Bookmark model representation."""
-        if self.url and self.name:
-            return "<%s: %s - %s %s>" % (self.__class__.__name__, self.id, self.url, self.name)
+        if self.url and self.title:
+            return "<%s: %s - %s %s>" % (self.__class__.__name__, self.id, self.url, self.title)
         elif self.url:
             return "<%s: %s - %s>" % (self.__class__.__name__, self.id, self.url)
         elif self.id:

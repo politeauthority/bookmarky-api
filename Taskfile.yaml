@@ -11,7 +11,6 @@ tasks:
       - |
         NS=$"{{.K8S_NS_DEV}}"
         POD=$(kubectl get pods -n ${NS} -l app=bookmarky-api --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
-        echo $POD
         echo "Execing to pod $POD"
         kubectl exec -n ${NS} -it ${POD} -- sh
 
@@ -52,15 +51,15 @@ tasks:
         file_path="pyproject.toml"
         sed -i "" "s/version = \"$current_version\"/version = \"$new_version\"/g" $file_path
 
-        # Update the newTag in the kustomization.yaml file
+        # Update the newTag in the kustomization.yaml file for prod
         file_path="kubernetes-manifests/envs/prod/kustomization.yaml"
         yq e ".images[0].newTag = \"prod-$new_version\"" -i $file_path
 
-        # Update the newTag in the kustomization.yaml file
+        # Update the newTag in the kustomization.yaml file for stage
         file_path="kubernetes-manifests/envs/stage/kustomization.yaml"
         yq e ".images[0].newTag = \"stage-$new_version\"" -i $file_path
 
-        # # Update the newTag in the kustomization.yaml file
+        # # Update the newTag in the kustomization.yaml file for dev
         # file_path="kubernetes-manifests/envs/dev/kustomization.yaml"
         # yq e ".images[0].newTag = \"stage-$new_version\"" -i $file_path
 
@@ -120,7 +119,10 @@ tasks:
         cp tox.ini docker/build-files
         cp -r src docker/build-files
         cp -r tests docker/build-files
-        docker build -t harbor.squid-ink.us/politeauthority/bookmarky --target ${BUILD_TARGET} --no-cache docker/
+        docker build -t harbor.squid-ink.us/politeauthority/bookmarky \
+          --target ${BUILD_TARGET} \
+          --build-arg="harbor.squid-ink.us/docker-hub" \
+          --no-cache docker/
         rm -rf docker/build-files
     silent: True
 
