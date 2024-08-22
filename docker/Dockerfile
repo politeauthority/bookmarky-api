@@ -14,6 +14,8 @@ ADD ./build-files/pyproject.toml /app/
 ADD ./build-files/tox.ini /app/
 ADD ./build-files/src /app/
 ADD ./scripts/install-polite-lib.sh /app
+ADD ./scripts/run-dev /bin
+ADD ./scripts/run-production /bin
 
 # Set environment variables
 ENV LIB_DIR="/root"

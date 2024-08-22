@@ -1,6 +1,7 @@
 """
     Bookmark Api
-    Collection - Tags
+    Collection
+    Tags
 
 """
 from bookmarky.api.collects.base import Base
@@ -50,5 +51,36 @@ class Tags(Base):
             the_ids.append(raw[0])
         return the_ids
 
+    def get_tags_for_bookmarks(self, bookmarks: list) -> list:
+        """Get all the Tags for list of Bookmarks."""
+        b_ids = self._get_bookmark_ids(bookmarks)
+        sql = """
+            SELECT t.id, t.name, t.slug, bt.bookmark_id
+            FROM tags t
+                JOIN bookmark_tags bt
+                    ON bt.tag_id = t.id
+            WHERE bt.bookmark_id IN %s
+        """
+        self.cursor.mogrify(sql, (b_ids,))
+        self.cursor.execute(sql, (b_ids,))
+        tag_matches = self.cursor.fetchall()
+        for tag_match in tag_matches:
+            for bookmark in bookmarks:
+                if bookmark["id"] == tag_match[3]:
+                    if "tags" not in bookmark:
+                        bookmark["tags"] = []
+                    tag = {
+                        "id": tag_match[0],
+                        "name": tag_match[1],
+                        "slug": tag_match[2],
+                    }
+                    bookmark["tags"].append(tag)
+        return bookmarks
 
-# End File: politeauthority/bookmarky/src/bookmarky/api/collects/tags.py
+    def _get_bookmark_ids(self, bookmarks: list) -> list:
+        b_ids = []
+        for bookmark in bookmarks:
+            b_ids.append(bookmark["id"])
+        return tuple(b_ids)
+
+# End File: politeauthority/bookmarky-api/src/bookmarky/api/collects/tags.py

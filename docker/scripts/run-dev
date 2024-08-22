@@ -1,0 +1,10 @@
+#!/bin/bash
+# Run the development web server
+set -e
+if [ "$BOOKMARKY_ENV" = "dev" ]; then
+    cd /work/src/bookmarky/api
+else
+	cd /app/bookmarky/api
+fi
+
+python3 web-app.py
