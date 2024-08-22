@@ -29,6 +29,9 @@ def get_params() -> dict:
     elif "page" in raw_args and raw_args["page"].isdigit():
         ret_args["page"] = int(raw_args["page"])
 
+    if "limit" in raw_args and raw_args["limit"].isdigit():
+        ret_args["clean_args"]["limit"] = int(raw_args["limit"])
+
     if raw_args:
         ret_args["raw_args"]["query_str"] = raw_args
         ret_args["clean_args"]["fields"] = _get_search_field_args(raw_args)

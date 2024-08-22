@@ -10,12 +10,38 @@ CREATE TABLE IF NOT EXISTS bookmarks (
     created_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     user_id INTEGER NOT NULL,
-    tags TEXT[],
-    name VARCHAR,
+    title VARCHAR,
     url VARCHAR,
-    directory VARCHAR,
+    directory_id INTEGER,
     deleted BOOLEAN DEFAULT False,
     UNIQUE (user_id, url)
+);
+
+---
+--- Create bookmark tags
+---
+CREATE TABLE IF NOT EXISTS bookmark_tags (
+    id SERIAL PRIMARY KEY,
+    created_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    bookmark_id INTEGER NOT NULL,
+    tag_id INTEGER NOT NULL,
+    UNIQUE (bookmark_id, tag_id)
+);
+
+--- 
+--- Create directories
+---
+CREATE TABLE IF NOT EXISTS directories (
+    id SERIAL PRIMARY KEY,
+    created_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    user_id INTEGER NOT NULL,
+    parent_id INTEGER,
+    name VARCHAR,
+    slug VARCHAR,
+    deleted BOOLEAN DEFAULT False,
+    UNIQUE (user_id, name, parent_id)
 );
 
 ---
@@ -30,18 +56,6 @@ CREATE TABLE IF NOT EXISTS tags (
     slug VARCHAR NOT NULL,
     deleted BOOLEAN DEFAULT False,
     UNIQUE (user_id, slug)
-);
-
----
---- Create bookmark tags
----
-CREATE TABLE IF NOT EXISTS bookmark_tags (
-    id SERIAL PRIMARY KEY,
-    created_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    bookmark_id INTEGER NOT NULL,
-    tag_id INTEGER NOT NULL,
-    UNIQUE (bookmark_id, tag_id)
 );
 
 

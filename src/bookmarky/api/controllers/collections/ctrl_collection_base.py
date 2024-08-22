@@ -120,6 +120,7 @@ def _parse_body(raw_args: dict, field_map: dict, extra_args: dict = None) -> dic
         for extra_arg_key, extra_arg_data in extra_args.items():
             if extra_arg_key == "fields":
                 ret["where_and"] += _get_fields(extra_arg_data, field_map)
+    
     return ret
 
 

@@ -6,8 +6,8 @@ resources:
   - network.yaml
   # - secrets.yaml
 images:
-  - name: harbor.squid-ink.us/politeauthority/bookmarky
-    newTag: "prod-0.0.1.20"
+  - name: harbor.squid-ink.us/politeauthority/bookmarky-api
+    newTag: "prod-0.0.1.21"
 # patches:
 #   - target:
 #       kind: Deployment

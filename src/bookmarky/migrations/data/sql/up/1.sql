@@ -17,6 +17,20 @@ CREATE TABLE IF NOT EXISTS api_keys (
     UNIQUE (user_id, client_id)
 );
 
+---
+--- Create entity_metas
+---
+CREATE TABLE IF NOT EXISTS entity_metas (
+    id SERIAL PRIMARY KEY,
+    created_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_ts TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    entity_type VARCHAR,
+    entity_id INTEGER,
+    name VARCHAR,
+    type VARCHAR,
+    value VARCHAR
+);
+
 --- 
 --- Create users
 ---

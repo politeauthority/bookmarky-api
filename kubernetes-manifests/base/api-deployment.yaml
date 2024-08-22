@@ -16,7 +16,7 @@ spec:
         - name: harbor-registry
       initContainers:
         - name: bookmarky-migrations
-          image: harbor.squid-ink.us/politeauthority/bookmarky:latest
+          image: politeauthority/bookmarky-api:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80

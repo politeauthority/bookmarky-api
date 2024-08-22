@@ -25,7 +25,8 @@ def index():
         "fields": {
             "user_id": {
                 "value": glow.user["user_id"],
-                "op": "eq"
+                "op": "=",
+                "overrideable": False
             }
         },
         "order_by": {},

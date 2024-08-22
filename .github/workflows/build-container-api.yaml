@@ -51,15 +51,15 @@ jobs:
           fi
 
           # Tag
-          docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky:${TAG_NAMED}
-          docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky:${TAG_VERSION}
+          docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky-api:${TAG_NAMED}
+          docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky-api:${TAG_VERSION}
 
           # Push
-          docker push harbor.squid-ink.us/politeauthority/bookmarky:${TAG_NAMED}
-          docker push harbor.squid-ink.us/politeauthority/bookmarky:${TAG_VERSION}
+          docker push harbor.squid-ink.us/politeauthority/bookmarky-api:${TAG_NAMED}
+          docker push harbor.squid-ink.us/politeauthority/bookmarky-api:${TAG_VERSION}
 
           echo "# Docker Build" >> $GITHUB_STEP_SUMMARY
-          echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky:${TAG_NAMED}" >> $GITHUB_STEP_SUMMARY
-          echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky:${TAG_VERSION}" >> $GITHUB_STEP_SUMMARY
+          echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky-api:${TAG_NAMED}" >> $GITHUB_STEP_SUMMARY
+          echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky-api:${TAG_VERSION}" >> $GITHUB_STEP_SUMMARY
 
 # End File: politeauthority/bookmarky-api/.github/workflows/build-container-api.yaml
