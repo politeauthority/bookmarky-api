@@ -16,8 +16,8 @@ spec:
         - name: harbor-registry
       initContainers:
         - name: bookmarky-migrations
-          image: politeauthority/bookmarky-api:latest
-          imagePullPolicy: Always
+          image: harbor.squid-ink.us/politeauthority/bookmarky-api:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
           env:
@@ -48,8 +48,8 @@ spec:
           command: ["python3", "/app/bookmarky/migrations/migrate.py"]
       containers:
         - name: bookmarky-api
-          image: harbor.squid-ink.us/politeauthority/bookmarky:latest
-          imagePullPolicy: Always
+          image: harbor.squid-ink.us/politeauthority/bookmarky-api:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
           env:
