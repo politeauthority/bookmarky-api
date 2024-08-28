@@ -22,12 +22,12 @@ ctrl_bookmark = Blueprint("bookmark", __name__, url_prefix="/bookmark")
 @ctrl_bookmark.route("/")
 @ctrl_bookmark.route("/<bookmark_id>", methods=["GET"])
 @auth.auth_request
-def get_model(user_id: int = None) -> Response:
+def get_model(bookmark_id: int = None) -> Response:
     """GET operation for a bookmark.
     GET /user
     """
     logging.info("GET - /bookmark")
-    data = ctrl_base.get_model(Bookmark, user_id)
+    data = ctrl_base.get_model(Bookmark, bookmark_id)
     if not isinstance(data, dict):
         return data
     return jsonify(data)
@@ -38,7 +38,7 @@ def get_model(user_id: int = None) -> Response:
 @ctrl_bookmark.route("/<bookmark_id>", methods=["POST"])
 @auth.auth_request
 def post_model(bookmark_id: int = None):
-    """POST operation for a User model.
+    """POST operation for a Bookmark model.
     POST /bookmark
     @todo: This needs to be locked down to only allow users to delete their own Tag relationships
     """

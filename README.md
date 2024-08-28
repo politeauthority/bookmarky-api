@@ -1,4 +1,4 @@
-# Bookmarky Api v0.0.1.23
+# Bookmarky Api v0.0.1.24
 Self hosted open source bookmark tool
 
 ## Features

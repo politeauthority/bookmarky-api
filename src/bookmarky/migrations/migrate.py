@@ -19,7 +19,7 @@ from bookmarky.api.models.migration import Migration
 # from bookmarky.migrate.data.data_misc import DataMisc
 
 
-CURRENT_MIGRATION = 2
+CURRENT_MIGRATION = 3
 
 dictConfig({
     'version': 1,

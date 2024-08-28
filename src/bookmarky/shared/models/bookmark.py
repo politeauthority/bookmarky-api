@@ -1,6 +1,7 @@
 """
     Bookmarky Shared
-    Model - Bookmark
+    Model
+    Bookmark
 
 """
 
@@ -51,6 +52,12 @@ FIELD_MAP = {
         "type": "int",
         "api_searchable": True,
         "api_display": True,
+    },
+    "notes": {
+        "name": "notes",
+        "type": "test",
+        "api_searchable": False,
+        "api_display": True,
     }
 }
 
@@ -59,4 +66,4 @@ FIELD_META = {
 }
 
 
-# End File: politeauthority/bookmarky/src/bookmarky/shared/models/bookmark.py
+# End File: politeauthority/bookmark-apiy/src/bookmarky/shared/models/bookmark.py
