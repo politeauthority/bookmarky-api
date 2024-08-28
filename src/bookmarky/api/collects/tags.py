@@ -6,6 +6,7 @@
 """
 from bookmarky.api.collects.base import Base
 from bookmarky.api.models.tag import Tag
+from bookmarky.api.models.bookmark import Bookmark
 
 
 class Tags(Base):
@@ -77,10 +78,16 @@ class Tags(Base):
                     bookmark["tags"].append(tag)
         return bookmarks
 
-    def _get_bookmark_ids(self, bookmarks: list) -> list:
+    def _get_bookmark_ids(self, bookmarks: list) -> tuple:
+        """Unpack a Bookmarks, getting their Ids as a tuple. We'll unpack a list of dicts or a list
+        of Bookmark entities.
+        """
         b_ids = []
         for bookmark in bookmarks:
-            b_ids.append(bookmark["id"])
+            if isinstance(bookmark, Bookmark):
+                b_ids.append(bookmark.id)
+            elif isinstance(bookmark, dict):
+                b_ids.append(bookmark["id"])
         return tuple(b_ids)
 
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/collects/tags.py

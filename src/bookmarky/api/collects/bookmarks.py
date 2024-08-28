@@ -22,4 +22,31 @@ class Bookmarks(Base):
         self.field_map = self.collect_model().field_map
         self.per_page = 20
 
+    def get_by_tag_id(self, tag_id: int) -> list:
+        """Get a collection of Bookmarks that have the given Tag ID."""
+        bookmark_fields = self._gen_fields_for_join_sql()
+        sql = f"""
+            SELECT {bookmark_fields}
+            FROM bookmarks b
+                JOIN bookmark_tags bt
+                    ON b.id = bt.bookmark_id
+            WHERE
+                bt.tag_id = %s
+            LIMIT 20;
+        """
+        self.cursor.execute(sql, (tag_id,))
+        rows = self.cursor.fetchall()
+        if not rows:
+            return []
+        return self.build_from_lists(rows)
+
+    def _gen_fields_for_join_sql(self) -> str:
+        """
+        """
+        sql_fields = ""
+        for field, info in self.field_map.items():
+            sql_fields += f"b.{field},"
+        sql_fields = sql_fields[:-1]
+        return sql_fields
+
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/collects/bookmarks.py

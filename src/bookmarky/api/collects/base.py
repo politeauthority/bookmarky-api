@@ -338,14 +338,15 @@ class Base:
             logging.warning("Collections - Invalid where option: %s" % where_a)
             return ""
 
-        op = "="
-        if where_a["op"].upper() == "LIKE":
-            where_a["op"] = "LIKE"
+        if where_a["op"] in ["=", "eq"]:
+            op = "="
+        elif where_a["op"].upper() == "LIKE":
             logging.debug("Running a LIKE query")
+            where_a["op"] = "LIKE"
             op = where_a["op"]
         elif where_a["op"].upper() == "ILIKE":
-            where_a["op"] = "ILIKE"
             logging.debug("Running a ILIKE query")
+            where_a["op"] = "ILIKE"
             op = where_a["op"]
         else:
             raise AttributeError(f"Unknown Operation type: {where_a['op']}")
@@ -460,6 +461,13 @@ class Base:
             ORDER BY created_ts DESC
             LIMIT %s;"""
         return sql
+
+    def _make_json(self, entities: list) -> list:
+        """Transform a list of entities into a JSON friendly list of entities."""
+        rets = []
+        for entity in entities:
+            rets.append(entity.json())
+        return rets
 
     # def _gen_get_by_ids_sql(self) -> str:
     #     """Generate the get_by_ids SQL statement.

@@ -45,6 +45,13 @@ spec:
               value: "DEBUG"
             - name: BOOKMARKY_ENV
               value: "prod"
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "250m"
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
           command: ["python3", "/app/bookmarky/migrations/migrate.py"]
       containers:
         - name: bookmarky-api

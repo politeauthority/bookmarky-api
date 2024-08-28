@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: bookmarky-public
   annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/upstream-vhost: $host
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "Access-Control-Allow-Origin: localhost";
@@ -27,7 +28,7 @@ spec:
                   number: 80
             path: /
             pathType: Prefix
-  # tls:
-  #   - hosts:
-  #       - api-bookmarky-stage.alix.lol
-  #     secretName: api-bookmarky-stage-alix-lol
+  tls:
+    - hosts:
+        - api-bookmarky-stage.alix.lol
+      secretName: api-bookmarky-stage-alix-lol

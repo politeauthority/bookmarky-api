@@ -31,5 +31,8 @@ class Tag(BaseEntityMeta):
             return "<%s: %s>" % (self.__class__.__name__, self.id)
         return "<%s>" % self.__class__.__name__
 
+    def get_by_slug(self, slug: str) -> bool:
+        """Get a Tag by the slug."""
+        return self.get_by_field("slug", slug)
 
-# End File: politeauthority/bookmarky/src/bookmarky/api/models/ctrl_tag.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/api/models/tag.py

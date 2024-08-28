@@ -10,6 +10,7 @@ from flask import Blueprint, jsonify, request
 
 from bookmarky.api.collects.bookmarks import Bookmarks
 from bookmarky.api.collects.tags import Tags
+from bookmarky.api.models.tag import Tag
 from bookmarky.api.controllers.collections import ctrl_collection_base
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import glow
@@ -65,6 +66,32 @@ def search():
     data = ctrl_collection_base.get(Bookmarks, extra_args)
     if data["objects"]:
         data["objects"] = Tags().get_tags_for_bookmarks(data["objects"])
+    return jsonify(data)
+
+
+@ctrl_bookmarks.route("/by-tag")
+@auth.auth_request
+def by_tag():
+    """Get Bookmarks by a Tag.
+    @todo: This feels lazy, this should be done better probably.
+    """
+    data = {
+        "info": {
+            "current_page": 1,
+        },
+        "objects": []
+    }
+    search_args = request.args
+    tag = Tag()
+    tag.get_by_slug(search_args["tag_slug"])
+    # logging.debug(f"\n\nSEARCHING\n{search_args}\n\n")
+    # logging.debug("\n\nBOOKMARK BY TAG\n")
+    # logging.debug("\nEND BOOKMARK BY TAG\n\n")
+    bookmarks_col = Bookmarks()
+    bookmarks = bookmarks_col.get_by_tag_id(tag.id)
+    bookmarks_json = bookmarks_col._make_json(bookmarks)
+    data["objects"] = Tags().get_tags_for_bookmarks(bookmarks_json)
+    data["info"]["total_objects"] = len(data["objects"])
     return jsonify(data)
 
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/controllers/collections/
