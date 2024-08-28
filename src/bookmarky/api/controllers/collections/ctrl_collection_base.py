@@ -120,7 +120,7 @@ def _parse_body(raw_args: dict, field_map: dict, extra_args: dict = None) -> dic
         for extra_arg_key, extra_arg_data in extra_args.items():
             if extra_arg_key == "fields":
                 ret["where_and"] += _get_fields(extra_arg_data, field_map)
-    
+
     return ret
 
 
@@ -254,7 +254,7 @@ def _get_operation(query_data: dict, field_map_field: dict) -> str:
     if not isinstance(query_data["op"], str):
         logging.warning("Operation query is not string, replacing with =")
         return "="
-    if query_data["op"].lower() not in ["=", ">", "<", "like", "gt", "lt", "in"]:
+    if query_data["op"].lower() not in ["=", ">", "<", "like", "ilike", "gt", "lt", "in"]:
         logging.error(
             'Unknown operation "%s" will be ignored and replaced with =' % (
                 query_data["op"]))
@@ -265,6 +265,8 @@ def _get_operation(query_data: dict, field_map_field: dict) -> str:
         operation = "<"
     elif query_data["op"].lower() == "in":
         operation = "IN"
+    elif query_data["op"].lower() in ["in", "like", "ilike"]:
+        operation = query_data["op"].upper()
     else:
         operation = query_data["op"].lower()
     if operation in ["<", ">"]:

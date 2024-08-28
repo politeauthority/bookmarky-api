@@ -41,25 +41,30 @@ def index():
 @ctrl_bookmarks.route("/search")
 @auth.auth_request
 def search():
-    """Get Bookmarks from a wide variety of input.
-    """
+    """Search through Bookmarks from a wide variety of input."""
     extra_args = {
         "fields": {},
         "order_by": {},
         "limit": None
     }
-
     search_args = request.args
+
+    logging.debug(f"\n\nSEARCHING\n{search_args}\n\n")
     if "title" in search_args:
         extra_args["fields"]["title"] = {
-            "value": glow.user["user_id"],
-            "op": "LIKE",
+            "value": f'%{search_args["title"]}%',
+            "op": "ilike",
         }
+        # extra_args["fields"]["title"] = {
+        #     "value": glow.user["user_id"],
+        #     "op": "LIKE",
+        # }
     logging.debug("\n\nBOOKMARK SEARCH\n")
     logging.debug(extra_args)
     logging.debug("\nEND SEARCH\n\n")
     data = ctrl_collection_base.get(Bookmarks, extra_args)
-    data["objects"] = Tags().get_tags_for_bookmarks(data["objects"])
+    if data["objects"]:
+        data["objects"] = Tags().get_tags_for_bookmarks(data["objects"])
     return jsonify(data)
 
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/controllers/collections/

@@ -1,9 +1,10 @@
 """
     Bookmarky Api
-    Collects - Base
+    Collects
+    Base
 
     Testing:
-        Unit test file  bookmarky/tests/unit/api/collects/test_base.py
+        Unit test file  bookmarky-api/tests/unit/api/collects/test_base.py
         Unit tested     10/25
 
 """
@@ -291,7 +292,7 @@ class Base:
                 {
                     "field": "name",
                     "value": "test",
-                    "op": "="
+                    "op": "="               # ILIKE/ LIKE
                 }
             ]
         :unit-test: TestBase::test___pagination_where_and()
@@ -317,8 +318,19 @@ class Base:
         return ret
 
     def _pagination_where_and_one(self, where_a: dict) -> dict:
-        """Handles a single field's where and SQL statemnt portion.
+        """Handles a single field's "where and" SQL statemnt portion.
         Note: We append multiple statements with an AND in the sql statement.
+        :param where_a: dict 
+            {
+                "field": "name",
+                "value": "hello world",
+                "op" = "=",
+            }
+        :returns: dict
+            {
+                "sql": "",
+                "param: 
+            }
         @todo: This should be more parameterized
         """
         where_and_sql = ""
@@ -327,8 +339,16 @@ class Base:
             return ""
 
         op = "="
-        if "op" in where_a:
+        if where_a["op"].upper() == "LIKE":
+            where_a["op"] = "LIKE"
+            logging.debug("Running a LIKE query")
             op = where_a["op"]
+        elif where_a["op"].upper() == "ILIKE":
+            where_a["op"] = "ILIKE"
+            logging.debug("Running a ILIKE query")
+            op = where_a["op"]
+        else:
+            raise AttributeError(f"Unknown Operation type: {where_a['op']}")
         # if where_a["op"] == "IN":
         #     if isinstance(where_a["value"], list):
         #         # where_a["value"] = self.prepare_psql_where_in(where_a["value"])
