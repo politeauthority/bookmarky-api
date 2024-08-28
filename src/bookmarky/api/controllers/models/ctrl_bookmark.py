@@ -40,6 +40,7 @@ def get_model(user_id: int = None) -> Response:
 def post_model(bookmark_id: int = None):
     """POST operation for a User model.
     POST /bookmark
+    @todo: This needs to be locked down to only allow users to delete their own Tag relationships
     """
     data = {
         "user_id": glow.user["user_id"]
@@ -48,6 +49,8 @@ def post_model(bookmark_id: int = None):
     r_args = api_util.get_post_data()
     if r_args and "tag_id" in r_args:
         BookmarkTag().create(bookmark_id, r_args["tag_id"])
+    if r_args and "tag_id_remove" in r_args:
+        BookmarkTag().remove(bookmark_id, r_args["tag_id_remove"])
     return ctrl_base.post_model(Bookmark, bookmark_id, data)
 
 

@@ -513,6 +513,14 @@ class Base:
         sql = sql[:-2]
         return sql
 
+    def _gen_all_sql_fields(self) -> str:
+        """Creates a string containing all SQL table fields for a given model."""
+        ret_sql_fields = ""
+        for field_name, info in self.field_map.items():
+            ret_sql_fields += f"{field_name},"
+        ret_sql_fields = ret_sql_fields[:-1]
+        return ret_sql_fields
+
     def _gen_insert_statement(self) -> dict:
         """Generate the insert SQL statement, returning the new generated row's id."""
         insert_segments = self._sql_values()
@@ -578,7 +586,7 @@ class Base:
                 logging.error("Unanticipated operation value: %s for model: %s" % (
                     field["op"],
                     self))
-                
+
             field_qry = f"{field['field']} {operation} %s AND "
             sql_fields["sql"] += field_qry
 
@@ -635,7 +643,7 @@ class Base:
         return value
 
     def _sql_fields(self) -> str:
-        """Get all the required SQL fields for a given SQL operation.
+        """Get all the model fields for a model SQL operation.
         :unit-test: TestApiModelBase::test___sql_fields
         """
         fields = ""
