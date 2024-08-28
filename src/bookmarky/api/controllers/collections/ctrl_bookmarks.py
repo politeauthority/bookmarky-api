@@ -51,9 +51,14 @@ def search():
     search_args = request.args
 
     logging.debug(f"\n\nSEARCHING\n{search_args}\n\n")
-    if "title" in search_args:
+    if "query" in search_args:
+        extra_args["concat_type"] = "where_or"
         extra_args["fields"]["title"] = {
-            "value": f'%{search_args["title"]}%',
+            "value": f'%{search_args["query"]}%',
+            "op": "ilike",
+        }
+        extra_args["fields"]["url"] = {
+            "value": f'%{search_args["query"]}%',
             "op": "ilike",
         }
         # extra_args["fields"]["title"] = {

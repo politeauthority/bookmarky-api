@@ -134,6 +134,7 @@ class Base:
         user_limit: int = None,
         order_by: dict = {},
         where_and: list = [],
+        where_or: list = [],
         per_page: int = 20,
         get_json: bool = False,
         get_api: bool = False

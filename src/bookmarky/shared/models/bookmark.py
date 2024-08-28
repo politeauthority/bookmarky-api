@@ -52,12 +52,14 @@ FIELD_MAP = {
         "type": "int",
         "api_searchable": True,
         "api_display": True,
+        "api_writeable": True,
     },
     "notes": {
         "name": "notes",
         "type": "test",
         "api_searchable": False,
         "api_display": True,
+        "api_writeable": True,
     }
 }
 
