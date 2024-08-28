@@ -77,6 +77,16 @@ def get_param(param_name: str):
     return request_data[param_name]
 
 
+def get_post_data() -> dict:
+    """Attempt to decode a JSON payload from the user returning a native dictionary."""
+    try:
+        data = json.loads(request.data)
+        return data
+    except Exception as e:
+        logging.error("Could not decode JSON data: %s" % e)
+        return False
+
+
 def _get_search_field_args(raw_args: dict) -> dict:
     """Get query paramaters from the url, mapping them as fields if they dont appear to be specific
     key words.
@@ -169,4 +179,4 @@ def _validate_args(raw_args: dict):
         return make_response(json.dumps(errors), 400)
 
 
-# End File: cver/src/api/utils/api_util.py
+# End File: politeauthority/bookmark-api/src/api/utils/api_util.py

@@ -144,3 +144,11 @@ tasks:
         git checkout stage
         git push origin stage
         gh pr create --title 0.0.1.10
+
+  pre-commit:
+    cmds:
+      - |
+        kustomize build kubernetes-manifests/base >> /dev/null
+        kustomize build kubernetes-manifests/envs/prod >> /dev/null
+        kustomize build kubernetes-manifests/envs/stage >> /dev/null
+        kustomize build kubernetes-manifests/envs/dev >> /dev/null

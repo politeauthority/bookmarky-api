@@ -10,7 +10,9 @@ from flask import Blueprint, jsonify, Response
 
 from bookmarky.api.controllers.models import ctrl_base
 from bookmarky.api.models.bookmark import Bookmark
+from bookmarky.api.models.bookmark_tag import BookmarkTag
 from bookmarky.api.utils import auth
+from bookmarky.api.utils import api_util
 from bookmarky.api.utils import glow
 
 ctrl_bookmark = Blueprint("bookmark", __name__, url_prefix="/bookmark")
@@ -33,7 +35,7 @@ def get_model(user_id: int = None) -> Response:
 
 @ctrl_bookmark.route("", methods=["POST"])
 @ctrl_bookmark.route("/", methods=["POST"])
-@ctrl_bookmark.route("/<user_id>", methods=["POST"])
+@ctrl_bookmark.route("/<bookmark_id>", methods=["POST"])
 @auth.auth_request
 def post_model(bookmark_id: int = None):
     """POST operation for a User model.
@@ -43,6 +45,9 @@ def post_model(bookmark_id: int = None):
         "user_id": glow.user["user_id"]
     }
     logging.info("POST Bookmark")
+    r_args = api_util.get_post_data()
+    if r_args and "tag_id" in r_args:
+        BookmarkTag().create(bookmark_id, r_args["tag_id"])
     return ctrl_base.post_model(Bookmark, bookmark_id, data)
 
 

@@ -123,8 +123,9 @@ def post_model(model, entity_id: int = None, generated_data: dict = {}):
     elif search_type == "by-id":
         logging.debug(f"Getting {entity.model_name} by ID.")
         entity_found = entity.get_by_id(entity_id)
-        not_found_msg = f"{entity.model_name.title()} not found by id {entity_id}"
-        return make_response(jsonify(data), 404)
+        if not entity_found:
+            not_found_msg = f"{entity.model_name.title()} not found by id {entity_id}"
+            return make_response(jsonify(data), 404)
 
     # Get the entity by it's UX field
     elif search_type == "by-ux-field":
