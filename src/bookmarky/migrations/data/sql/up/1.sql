@@ -28,7 +28,9 @@ CREATE TABLE IF NOT EXISTS entity_metas (
     entity_id INTEGER,
     name VARCHAR,
     type VARCHAR,
-    value VARCHAR
+    value VARCHAR,
+	user_id INTEGER,
+    UNIQUE (entity_id, entity_type, user_id)
 );
 
 --- 

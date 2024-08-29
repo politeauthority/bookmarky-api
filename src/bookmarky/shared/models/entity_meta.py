@@ -1,6 +1,8 @@
 """
-    Cver Shared
-    Model - EntityMeta
+    Bookmarky Api
+    Shared
+    Model
+    EntityMeta
 """
 
 
@@ -38,6 +40,10 @@ FIELD_MAP = {
         "name": "value",
         "type": "str"
     },
+    "user_id": {
+        "name": "user_id",
+        "type": "int"
+    },
 }
 
-# End File: cver/src/shared/models/entity_meta.py
+# End File: politeauthority/bookmarky-api/src/shared/models/entity_meta.py

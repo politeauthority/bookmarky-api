@@ -43,6 +43,9 @@ from bookmarky.api.controllers.collections.ctrl_directories import ctrl_director
 from bookmarky.api.controllers.models.ctrl_tag import ctrl_tag
 from bookmarky.api.controllers.collections.ctrl_tags import ctrl_tags
 
+from bookmarky.api.controllers.ctrl_stats import ctrl_stats
+
+
 logging.config.dictConfig(log_config)
 logger = logging.getLogger(__name__)
 logger.propagate = True
@@ -69,6 +72,8 @@ def register_blueprints(app: Flask) -> bool:
     app.register_blueprint(ctrl_directories)
     app.register_blueprint(ctrl_tag)
     app.register_blueprint(ctrl_tags)
+
+    app.register_blueprint(ctrl_stats)
 
     return True
 
