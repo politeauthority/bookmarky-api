@@ -103,6 +103,11 @@ tasks:
       - |
         stern -n bookmarky deployment/bookmarky-api
 
+  prod-deploy:
+    cmds:
+      - |
+        kustomize build kubernetes-manifests/envs/prod | kubectl apply -f -
+
   build-docker:
     cmds:
       - |
