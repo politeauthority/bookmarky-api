@@ -6,7 +6,7 @@ resources:
   # - secrets.yaml
 images:
   - name: harbor.squid-ink.us/politeauthority/bookmarky-api
-    newTag: prod-0.0.1.30
+    newTag: 0.0.1.30
 patches:
   - target:
       kind: Ingress
@@ -22,5 +22,5 @@ patches:
         path: /spec/rules/0/host
         value: api.bookmarky.alix.lol
       - op: replace
-        path: /spec/tls/0/hosts
+        path: /spec/tls/0/hosts/0
         value: api.bookmarky.alix.lol
