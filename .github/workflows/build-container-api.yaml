@@ -30,7 +30,11 @@ jobs:
       - name: Build Container
         run: |
           echo "Run Task: Build"
-          task build-docker -- dev
+          if [ "$TAG_PREFIX" = "prod" ]; then
+            task build-docker -- base
+          else
+            task build-docker -- dev
+          fi
       - name: Push Container
         run: |
           TAG_PREFIX="${{ inputs.tag-prefix }}"

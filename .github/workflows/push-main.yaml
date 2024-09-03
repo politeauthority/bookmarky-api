@@ -48,6 +48,6 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config.yaml
           export KUBECONFIG=~/.kube/config.yaml
           chmod 600 ~/.kube/config.yaml
-          kustomize build kubernetes-manifests/envs/prod | kubectl apply -f -
+          task prod-deploy
 
 # End File: politeauthority/bookmarky-api/.github/workflows/push-main.yaml
