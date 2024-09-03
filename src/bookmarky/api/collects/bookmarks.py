@@ -4,11 +4,11 @@
     Bookmarks
 
 """
-from bookmarky.api.collects.base import Base
+from bookmarky.api.collects.base_entity_metas import BaseEntityMetas
 from bookmarky.api.models.bookmark import Bookmark
 
 
-class Bookmarks(Base):
+class Bookmarks(BaseEntityMetas):
 
     collection_name = "bookmarks"
 
@@ -38,7 +38,9 @@ class Bookmarks(Base):
         rows = self.cursor.fetchall()
         if not rows:
             return []
-        return self.build_from_lists(rows)
+        entities = self.build_from_lists(rows)
+        entities = self.get_metas_for_entities("bookmark", entities)
+        return entities
 
     def _gen_fields_for_join_sql(self) -> str:
         """

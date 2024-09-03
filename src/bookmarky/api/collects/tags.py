@@ -21,7 +21,7 @@ class Tags(Base):
         self.table_name = Tag().table_name
         self.collect_model = Tag
         self.field_map = self.collect_model().field_map
-        self.per_page = 20
+        self.per_page = 50
 
     def get_by_user_id(self, user_id: int) -> list:
         """Get all Tags for a User by user_id."""

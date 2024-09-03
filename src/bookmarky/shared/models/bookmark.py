@@ -67,5 +67,12 @@ FIELD_META = {
     "ux_key": ["user_id", "url"]
 }
 
+FIELD_MAP_METAS = {
+    "favorite": {
+        "name": "favorite",
+        "type": "bool"
+    }
+}
+
 
 # End File: politeauthority/bookmark-apiy/src/bookmarky/shared/models/bookmark.py

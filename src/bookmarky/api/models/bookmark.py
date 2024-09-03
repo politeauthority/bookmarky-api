@@ -5,7 +5,7 @@
 """
 import logging
 
-from bookmarky.shared.models.bookmark import FIELD_MAP, FIELD_META
+from bookmarky.shared.models.bookmark import FIELD_MAP, FIELD_META, FIELD_MAP_METAS
 from bookmarky.api.models.base_entity_meta import BaseEntityMeta
 
 
@@ -20,12 +20,14 @@ class Bookmark(BaseEntityMeta):
         super(Bookmark, self).__init__(conn, cursor)
         self.field_map = FIELD_MAP
         self.ux_key = FIELD_META["ux_key"]
+        self.field_map_metas = FIELD_MAP_METAS
         self.table_name = "bookmarks"
         self.immutable = False
         self.createable = True
         self.setup()
         self.rw_only_own = True
         self.tags = {}
+        self.metas = {}
 
     def __repr__(self):
         """Bookmark model representation."""

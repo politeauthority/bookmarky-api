@@ -14,8 +14,7 @@ ADD ./build-files/pyproject.toml /app/
 ADD ./build-files/tox.ini /app/
 ADD ./build-files/src /app/
 ADD ./scripts/install-polite-lib.sh /app
-ADD ./scripts/run-dev /bin
-ADD ./scripts/run-production /bin
+
 
 # Set environment variables
 ENV LIB_DIR="/root"
@@ -40,6 +39,10 @@ CMD ["gunicorn", "web-app:app", "--chdir", "/app/bookmarky/api", "--bind=0.0.0.0
 FROM base as dev
 
 RUN apk add bash curl vim
+
+ADD ./scripts/run-dev /bin
+ADD ./scripts/run-production /bin
+ADD ./scripts/run-kill /bin
 
 RUN pip install -r /app/requirements-dev.txt && mkdir /work
 WORKDIR /work/

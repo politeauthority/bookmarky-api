@@ -1,16 +1,16 @@
 """
-    Cver Api
-    Model - Image
+    Bookmark Api
+    Model
+    Entity Meta
 
 How to use:
-    The Device model is a good example to follow.
+    The Bookmark model is a good example to follow.
 
     To give a model the ability to use EntityMetas the class must:
         - extend the BaseEntityMeta
         - define a `self.metas = {}` in the init
 
     To set a new EntityMeta value for an object which may or may not have the EntityMeta yet.
-
         if 'notes' not in device.metas:
             # Create the notes meta if it doesn't exist
             device.metas['notes'] = EntityMeta()
@@ -51,10 +51,12 @@ class EntityMeta(Base):
     def build_from_list(self, raw: list):
         """Build a model from an ordered list, converting data types to their desired type where
         possible.
+        :param raw: A list of raw results from the database.
         """
         count = 0
-        for field in self.total_map:
-            setattr(self, field['name'], raw[count])
+        print("Building from list")
+        for field, info in self.field_map.items():
+            setattr(self, info['name'], raw[count])
             count += 1
             if self.type == 'bool':
                 self.value = xlate.convert_int_to_bool(self.value)

@@ -1,0 +1,18 @@
+#!/bin/bash
+# Run Kill
+# Kills any running environment for Development
+set -e
+
+
+# Set the list of entries to match here
+entries=("gunicorn web-app:app" "gunicorn" "entry3")
+
+# Iterate through the entries and kill the matching processes
+for entry in "${entries[@]}"; do
+    pids=$(ps aux | grep "$entry" | grep -v grep | awk '{print $1}')
+    if [ -n "$pids" ]; then
+        echo "Killing processes matching $entry..."
+        echo "$pids" | xargs kill -9
+    fi
+done
+
