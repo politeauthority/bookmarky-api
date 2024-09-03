@@ -123,8 +123,9 @@ def post_model(model, entity_id: int = None, generated_data: dict = {}):
     elif search_type == "by-id":
         logging.debug(f"Getting {entity.model_name} by ID.")
         entity_found = entity.get_by_id(entity_id)
-        not_found_msg = f"{entity.model_name.title()} not found by id {entity_id}"
-        return make_response(jsonify(data), 404)
+        if not entity_found:
+            not_found_msg = f"{entity.model_name.title()} not found by id {entity_id}"
+            return make_response(jsonify(data), 404)
 
     # Get the entity by it's UX field
     elif search_type == "by-ux-field":
@@ -143,9 +144,13 @@ def post_model(model, entity_id: int = None, generated_data: dict = {}):
         request_args.update(generated_data)
 
     if not entity_found:
-        logging.warning(
+        logging.debug(
             "Entity was not found, attempting to create a new entity of type: {entity.model_name}"
         )
+
+    # Handle getting entity meta data from the requst
+    if hasattr(entity, "metas") and "metas" in request_args:
+        entity.metas = _get_metas(entity, request_args["metas"])
 
     # logging.info("\nREQUEST:\n%s\n%s" % (request.url, request_data))
     entity = _post_update_entity(entity, request_args, generated_data)
@@ -280,6 +285,20 @@ def _post_update_entity(entity, request_data, generated_data):
                 field_value))
             setattr(entity, field_name, field_value)
     return entity
+
+
+def _get_metas(entity, metas: dict) -> dict:
+    """Get the EntityMetas values from the entity and validate them."""
+    logging.debug("Handing metas for: %s" % entity)
+    logging.debug("Getting from meta")
+    logging.debug(entity)
+    logging.debug(metas)
+    ret = {}
+    for meta_key, meta_val in metas.items():
+        if meta_key in entity.field_map_metas:
+            ret[meta_key] = meta_val
+    logging.debug(ret)
+    return ret
 
 
 def _determine_entity_search_type(entity, entity_id=None, request_args: dict = None) -> str:

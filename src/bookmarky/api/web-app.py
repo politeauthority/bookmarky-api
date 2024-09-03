@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 """
     Bookmarky Api
-    App
+    Web App
     Primary web app entrpoint
 
 """
 import logging
+import os
 import traceback
 import sys
 
@@ -34,8 +35,16 @@ from bookmarky.api.controllers.collections.ctrl_options import ctrl_options
 
 from bookmarky.api.controllers.models.ctrl_bookmark import ctrl_bookmark
 from bookmarky.api.controllers.collections.ctrl_bookmarks import ctrl_bookmarks
+
+from bookmarky.api.controllers.models.ctrl_bookmark_tag import ctrl_bookmark_tag
+
+from bookmarky.api.controllers.models.ctrl_directory import ctrl_directory
+from bookmarky.api.controllers.collections.ctrl_directories import ctrl_directories
 from bookmarky.api.controllers.models.ctrl_tag import ctrl_tag
 from bookmarky.api.controllers.collections.ctrl_tags import ctrl_tags
+
+from bookmarky.api.controllers.ctrl_stats import ctrl_stats
+
 
 logging.config.dictConfig(log_config)
 logger = logging.getLogger(__name__)
@@ -55,10 +64,16 @@ def register_blueprints(app: Flask) -> bool:
     app.register_blueprint(ctrl_users)
     app.register_blueprint(ctrl_option)
     app.register_blueprint(ctrl_options)
+
     app.register_blueprint(ctrl_bookmark)
     app.register_blueprint(ctrl_bookmarks)
+    app.register_blueprint(ctrl_bookmark_tag)
+    app.register_blueprint(ctrl_directory)
+    app.register_blueprint(ctrl_directories)
     app.register_blueprint(ctrl_tag)
     app.register_blueprint(ctrl_tags)
+
+    app.register_blueprint(ctrl_stats)
 
     return True
 
@@ -75,13 +90,16 @@ def handle_exception(e):
     }
     RESPONSE_CODE = 500
     # pass through HTTP errors
+    exc_type, exc_obj, exc_tb = sys.exc_info()
+    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+    print(exc_type, fname, exc_tb.tb_lineno)
     if isinstance(e, HTTPException):
         data["message"] = e.description
         return jsonify(data), RESPONSE_CODE
 
     traceback.print_exc(file=sys.stdout)
     logging.error(traceback)
-    if glow.general["CVER_TEST"]:
+    if glow.general["TEST"]:
         data["message"] = traceback
         return jsonify(data), 500
     else:
@@ -129,7 +147,7 @@ if __name__ != "__main__":
     logging.info("Starting production webserver")
     app.logger.handlers = gunicorn_logger.handlers
     app.logger.setLevel(gunicorn_logger.level)
-    app.config['DEBUG'] = True
+    app.config['DEBUG'] = False
 
 
-# End File: bookmarky/src/bookmarky/api/app.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/api/app.py

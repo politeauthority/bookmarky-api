@@ -28,27 +28,27 @@ options = {}
 # Collect General Details
 global general
 general = {
-    "LOG_LEVEL": os.environ.get("CVER_LOG_LEVEL", "INFO"),
+    "LOG_LEVEL": os.environ.get("LOG_LEVEL", "INFO"),
     "VERSION": version,
-    "CVER_BUILD": os.environ.get("CVER_BUILD"),
-    "CVER_BUILD_SHORT": "",
+    "BUILD": os.environ.get("BUILD"),
+    "BUILD_SHORT": "",
     "ENV": os.environ.get("BOOKMARKY_ENV"),
     "JWT_EXPIRE_MINUTES": os.environ.get("JWT_EXPIRE_MINUTES", 60),
     "SECRET_KEY": os.environ.get("SECRET_KEY", "hello-world123"),
-    "CVER_TEST": os.environ.get("CVER_TEST", False),
-    "CVER_LOG_HEALTH_CHECKS": os.environ.get("CVER_LOG_HEALTH_CHECKS", False),
-    "CVER_DEPLOYED_AT": os.environ.get("CVER_DEPLOYED_AT", None)
+    "TEST": os.environ.get("TEST", False),
+    "LOG_HEALTH_CHECKS": os.environ.get("LOG_HEALTH_CHECKS", True),
+    "DEPLOYED_AT": os.environ.get("DEPLOYED_AT", None)
 }
-if general["CVER_BUILD"]:
-    general["CVER_BUILD_SHORT"] = general["CVER_BUILD"][:12]
-if general["CVER_TEST"] == "true":
-    general["CVER_TEST"] = True
+if general["BUILD"]:
+    general["BUILD_SHORT"] = general["BUILD"][:12]
+if general["TEST"] == "true":
+    general["TEST"] = True
 else:
-    general["CVER_TEST"] = False
-if general["CVER_LOG_HEALTH_CHECKS"] == "true":
-    general["CVER_LOG_HEALTH_CHECKS"] = True
+    general["TEST"] = False
+if general["LOG_HEALTH_CHECKS"] == "true":
+    general["LOG_HEALTH_CHECKS"] = True
 else:
-    general["CVER_LOG_HEALTH_CHECKS"] = False
+    general["LOG_HEALTH_CHECKS"] = False
 
 # Store Current User Info
 global user

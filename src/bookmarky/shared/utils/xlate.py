@@ -292,12 +292,29 @@ def snake_to_camel_case(snake: str) -> str:
 
 
 def slugify(butterfly: str) -> str:
-    """Convert a pretty name into a url safe slug name for easier manipulation and keying."""
+    """Convert a pretty name into a url safe slug name for easier manipulation and keying.
+    @todo: This method lives in PoliteLib, and should be called from there.
+    """
     if not butterfly:
         return ""
     slug = butterfly.lower()
     if " " in slug:
         slug = slug.replace(" ", "-")
     return slug
+
+
+def merge_unqiue(list_a: list, list_b: list) -> list:
+    """Merge Unique list values into a single list.
+    @todo: This method lives in PoliteLib, and should be called from there.
+    :unit-test: TestListTools::test__merge_unique
+    """
+    new_list = []
+    for item in list_a:
+        if item not in new_list:
+            new_list.append(item)
+    for item in list_b:
+        if item not in new_list:
+            new_list.append(item)
+    return new_list
 
 # End File: politeauthority/bookmarky/src/bookmarky/shared/utils/xlate.py

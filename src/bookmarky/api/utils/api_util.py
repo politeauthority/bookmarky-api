@@ -29,6 +29,9 @@ def get_params() -> dict:
     elif "page" in raw_args and raw_args["page"].isdigit():
         ret_args["page"] = int(raw_args["page"])
 
+    if "limit" in raw_args and raw_args["limit"].isdigit():
+        ret_args["clean_args"]["limit"] = int(raw_args["limit"])
+
     if raw_args:
         ret_args["raw_args"]["query_str"] = raw_args
         ret_args["clean_args"]["fields"] = _get_search_field_args(raw_args)
@@ -57,6 +60,31 @@ def get_params() -> dict:
     ret_args["clean_args"]["limit"] = _post_search_limit_args(request_data)
 
     return ret_args
+
+
+def get_param(param_name: str):
+    """Extract a single parameter from a request
+    @todo: Right now this is just looking at POST data
+    """
+    # @todo: clean this part up, make a better response and handling
+    try:
+        request_data = request.get_json()
+    except json.decoder.JSONDecodeError as e:
+        logging.warning(f"Recieved data that cant be decoded to JSON: {e}")
+        return make_response("ERROR", 401)
+    if param_name not in request_data:
+        return None
+    return request_data[param_name]
+
+
+def get_post_data() -> dict:
+    """Attempt to decode a JSON payload from the user returning a native dictionary."""
+    try:
+        data = json.loads(request.data)
+        return data
+    except Exception as e:
+        logging.error("Could not decode JSON data: %s" % e)
+        return False
 
 
 def _get_search_field_args(raw_args: dict) -> dict:
@@ -151,4 +179,4 @@ def _validate_args(raw_args: dict):
         return make_response(json.dumps(errors), 400)
 
 
-# End File: cver/src/api/utils/api_util.py
+# End File: politeauthority/bookmark-api/src/api/utils/api_util.py

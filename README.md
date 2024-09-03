@@ -1,4 +1,4 @@
-# Bookmarky Api v0.0.1.9
+# Bookmarky Api v0.0.1.30
 Self hosted open source bookmark tool
 
 ## Features
@@ -23,5 +23,6 @@ Self hosted open source bookmark tool
  - Learn how to store credentials and fetch token on request
 
 #### Api
+ - Fix bug on POST updates to ALL models
  - Add better logging, and better understanding of logging
  

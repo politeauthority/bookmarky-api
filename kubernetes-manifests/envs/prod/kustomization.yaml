@@ -3,16 +3,24 @@ kind: Kustomization
 namespace: bookmarky
 resources:
   - ../../base
-  - network.yaml
   # - secrets.yaml
 images:
-  - name: harbor.squid-ink.us/politeauthority/bookmarky
-    newTag: prod-0.0.1.9
-# patches:
-#   - target:
-#       kind: Deployment
-#       name: bookmarky-api
-#     patch: |-
-#       - op: add
-#         path: /spec/template/spec/containers/0/command
-#         value: ["tail", "-f", "/dev/null"]
+  - name: harbor.squid-ink.us/politeauthority/bookmarky-api
+    newTag: prod-0.0.1.30
+patches:
+  - target:
+      kind: Ingress
+      name: bookmarky-api
+    patch: |-
+      - op: add
+        path: /metadata/annotations/cert-manager.io~1cluster-issuer
+        value: letsencrypt-prod
+      - op: replace
+        path: /spec/ingressClassName
+        value: nginx-public
+      - op: replace
+        path: /spec/rules/0/host
+        value: api.bookmarky.alix.lol
+      - op: replace
+        path: /spec/tls/0/hosts
+        value: api.bookmarky.alix.lol

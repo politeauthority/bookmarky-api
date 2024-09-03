@@ -5,11 +5,14 @@
 """
 import logging
 
-from flask import Blueprint, jsonify, Response
+from flask import Blueprint, jsonify, Response, request
 
 from bookmarky.api.controllers.models import ctrl_base
 from bookmarky.api.models.tag import Tag
 from bookmarky.api.utils import auth
+from bookmarky.api.utils import glow
+from bookmarky.api.utils import api_util
+from bookmarky.shared.utils import xlate
 
 ctrl_tag = Blueprint("tag", __name__, url_prefix="/tag")
 
@@ -38,7 +41,13 @@ def post_model(tag_id: int = None):
     POST /tag
     """
     logging.info("POST Tag")
-    return ctrl_base.post_model(Tag, tag_id)
+    data = {
+        "user_id": glow.user["user_id"]
+    }
+    request_args = api_util.get_params()
+    if "slug" not in request_args["raw_args"] and "name" in request_args["raw_args"]:
+        data["slug"] = xlate.slugify(request_args["raw_args"]["name"])
+    return ctrl_base.post_model(Tag, tag_id, data)
 
 
 @ctrl_tag.route("/<tag_id>", methods=["DELETE"])

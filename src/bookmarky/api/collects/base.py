@@ -1,9 +1,10 @@
 """
     Bookmarky Api
-    Collects - Base
+    Collects
+    Base
 
     Testing:
-        Unit test file  bookmarky/tests/unit/api/collects/test_base.py
+        Unit test file  bookmarky-api/tests/unit/api/collects/test_base.py
         Unit tested     10/25
 
 """
@@ -133,6 +134,7 @@ class Base:
         user_limit: int = None,
         order_by: dict = {},
         where_and: list = [],
+        where_or: list = [],
         per_page: int = 20,
         get_json: bool = False,
         get_api: bool = False
@@ -167,6 +169,8 @@ class Base:
         log_msg += f"PARAMS:\n\tWHERE AND:{where_and}"
         log_msg += f"{query['sql']}\n{query['params']}\n\n"
         logging.debug(log_msg)
+        # if len(query["params"]) == 1:
+        #     query["params"] = query["params"][0]
         self.cursor.execute(query["sql"], query["params"])
         raw = self.cursor.fetchall()
         prestines = []
@@ -241,7 +245,7 @@ class Base:
             %(limit)s%(offset)s;""" % sql_vars
         ret = {
             "sql": sql,
-            "params": tuple(where["params"])
+            "params": where["params"]
         }
         # logging.info("\n\nRaw SQL\n%s\n" % sql)
         return ret
@@ -289,7 +293,7 @@ class Base:
                 {
                     "field": "name",
                     "value": "test",
-                    "op": "="
+                    "op": "="               # ILIKE/ LIKE
                 }
             ]
         :unit-test: TestBase::test___pagination_where_and()
@@ -310,13 +314,24 @@ class Base:
             where_and_sql = where_and_sql[:-4]
         ret = {
             "sql": where_and_sql,
-            "params": params
+            "params": tuple(params)
         }
         return ret
 
     def _pagination_where_and_one(self, where_a: dict) -> dict:
-        """Handles a single field's where and SQL statemnt portion.
+        """Handles a single field's "where and" SQL statemnt portion.
         Note: We append multiple statements with an AND in the sql statement.
+        :param where_a: dict 
+            {
+                "field": "name",
+                "value": "hello world",
+                "op" = "=",
+            }
+        :returns: dict
+            {
+                "sql": "",
+                "param: 
+            }
         @todo: This should be more parameterized
         """
         where_and_sql = ""
@@ -324,9 +339,22 @@ class Base:
             logging.warning("Collections - Invalid where option: %s" % where_a)
             return ""
 
-        op = "="
-        if "op" in where_a:
+        if where_a["op"] in ["=", "eq"]:
+            op = "="
+        elif where_a["op"].upper() == "LIKE":
+            logging.debug("Running a LIKE query")
+            where_a["op"] = "LIKE"
             op = where_a["op"]
+        elif where_a["op"].upper() == "ILIKE":
+            logging.debug("Running a ILIKE query")
+            where_a["op"] = "ILIKE"
+            op = where_a["op"]
+        else:
+            raise AttributeError(f"Unknown Operation type: {where_a['op']}")
+        # if where_a["op"] == "IN":
+        #     if isinstance(where_a["value"], list):
+        #         # where_a["value"] = self.prepare_psql_where_in(where_a["value"])
+        #         where_and_sql = self._prepare_psql_where_in(where_a["value"])
         # if "op" not in ["=", "<", ">"]:
         #     op = "="
         if not self.collect_model:
@@ -434,6 +462,13 @@ class Base:
             ORDER BY created_ts DESC
             LIMIT %s;"""
         return sql
+
+    def _make_json(self, entities: list) -> list:
+        """Transform a list of entities into a JSON friendly list of entities."""
+        rets = []
+        for entity in entities:
+            rets.append(entity.json())
+        return rets
 
     # def _gen_get_by_ids_sql(self) -> str:
     #     """Generate the get_by_ids SQL statement.

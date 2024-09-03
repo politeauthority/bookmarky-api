@@ -32,7 +32,7 @@ class DataUsers:
 
     def create(self) -> bool:
         """Create the first user, and test users if this is a test environment."""
-        if not glow.general["CVER_TEST"]:
+        if not glow.general["TEST"]:
             logging.info("")
             self.create_first_admin()
         else:
@@ -59,14 +59,14 @@ class DataUsers:
         already exist.
         """
         logging.info("Creating First Admin User")
-        client_id = os.environ.get("CVER_TEST_ADMIN_CLIENT_ID")
-        api_key = os.environ.get("CVER_TEST_ADMIN_API_KEY")
+        client_id = os.environ.get("TEST_ADMIN_CLIENT_ID")
+        api_key = os.environ.get("TEST_ADMIN_API_KEY")
         self.create_user("admin", "admin@example.com", self.roles["admin"].id, client_id, api_key)
         return True
 
     def create_test_users(self) -> bool:
         """Create the test users for Ingestion and Engine."""
-        if not glow.general["CVER_TEST"]:
+        if not glow.general["TEST"]:
             logging.info("Not creating test users")
             return True
 

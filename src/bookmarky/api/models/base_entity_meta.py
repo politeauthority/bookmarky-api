@@ -115,6 +115,7 @@ class BaseEntityMeta(Base):
             """
         self.cursor.execute(sql, (self.id, self.table_name))
         meta_raws = self.cursor.fetchall()
+        print("Loading meta data")
         self._load_from_meta_raw(meta_raws)
         return True
 

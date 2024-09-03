@@ -29,8 +29,8 @@ def index() -> Response:
         "info": "Bookmarky",
         "version": glow.general["VERSION"],
         "env": glow.general["ENV"],
-        "build": glow.general["CVER_BUILD"],
-        "build_short": glow.general["CVER_BUILD_SHORT"],
+        "build": glow.general["BUILD"],
+        "build_short": glow.general["BUILD_SHORT"],
     }
     return jsonify(data)
 
@@ -89,12 +89,12 @@ def info() -> Response:
         "info": "Bookmarky Api",
         "version": version,
         "env": glow.general["ENV"],
-        "build": glow.general["CVER_BUILD"],
-        "build_short": glow.general["CVER_BUILD_SHORT"],
+        "build": glow.general["BUILD"],
+        "build_short": glow.general["BUILD_SHORT"],
         "migration": CURRENT_MIGRATION,
         # "tasks": task_totals,
         # "model_totals": model_totals,
-        "deployed_at": glow.general["CVER_DEPLOYED_AT"]
+        "deployed_at": glow.general["DEPLOYED_AT"]
     }
     return jsonify(data)
 
@@ -124,7 +124,7 @@ def healthz() -> Response:
         "status": "Success",
         "message": "Healthy"
     }
-    if glow.general["CVER_LOG_HEALTH_CHECKS"]:
+    if glow.general["LOG_HEALTH_CHECKS"]:
         logging.info("Helath check, reporting healthy")
     return jsonify(data)
 
@@ -135,9 +135,9 @@ def debug() -> Response:
         "info": "Cver Api",
         "version": glow.general["VERSION"],
         "env": glow.general["ENV"],
-        "build": glow.general["CVER_BUILD"]
+        "build": glow.general["BUILD"]
     }
-    if glow.general["CVER_TEST"]:
+    if glow.general["TEST"]:
         data["test"] = True
     return jsonify(data)
 

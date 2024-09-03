@@ -19,7 +19,7 @@ from bookmarky.api.models.migration import Migration
 # from bookmarky.migrate.data.data_misc import DataMisc
 
 
-CURRENT_MIGRATION = 4
+CURRENT_MIGRATION = 3
 
 dictConfig({
     'version': 1,
@@ -47,7 +47,7 @@ class Migrate:
         """Primary entry point for migrations."""
         # self.create_table_sql()
         logging.info("Working with database %s" % glow.db["NAME"])
-    # self.create_database()
+        # self.create_database()
         if not db.connect():
             logging.critical("Failed database connection, exiting")
             exit(1)

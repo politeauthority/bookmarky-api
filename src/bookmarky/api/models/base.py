@@ -1,5 +1,5 @@
 """
-    Cver Api
+    Bookmarky Api
     Base Model v. 0.4.0
     Parent class for all models to inherit, providing methods for creating tables, inserting, updating,
     selecting and deleting data.
@@ -350,9 +350,10 @@ class Base:
             # Handle the list field type.
             elif field['type'] == 'list':
                 if field_value:
+                    field_value = self._expand_list_values(field, field_value)
                     setattr(self, field_name, field_value)
                 else:
-                    setattr(self, field_name, None)
+                    setattr(self, field_name, [])
 
             # elif field["type"] == "json":
             #     import ipdb; ipdb.set_trace()
@@ -512,6 +513,14 @@ class Base:
         sql = sql[:-2]
         return sql
 
+    def _gen_all_sql_fields(self) -> str:
+        """Creates a string containing all SQL table fields for a given model."""
+        ret_sql_fields = ""
+        for field_name, info in self.field_map.items():
+            ret_sql_fields += f"{field_name},"
+        ret_sql_fields = ret_sql_fields[:-1]
+        return ret_sql_fields
+
     def _gen_insert_statement(self) -> dict:
         """Generate the insert SQL statement, returning the new generated row's id."""
         insert_segments = self._sql_values()
@@ -577,7 +586,7 @@ class Base:
                 logging.error("Unanticipated operation value: %s for model: %s" % (
                     field["op"],
                     self))
-                
+
             field_qry = f"{field['field']} {operation} %s AND "
             sql_fields["sql"] += field_qry
 
@@ -634,7 +643,7 @@ class Base:
         return value
 
     def _sql_fields(self) -> str:
-        """Get all the required SQL fields for a given SQL operation.
+        """Get all the model fields for a model SQL operation.
         :unit-test: TestApiModelBase::test___sql_fields
         """
         fields = ""
@@ -930,5 +939,25 @@ class Base:
             except arrow.parser.ParserError:
                 logging.error("Couldnt parse date str: %s" % date_string)
                 return None
+
+    def _expand_list_values(self, field: dict, field_value: list) -> list:
+        """Expand a list from the database so the list values are properly typed.
+        :unit-test: TestApiModelBase:test___expand_list_values
+        """
+        # Exapand list values to the propper python type
+        if "list_values" not in field:
+            return field_value
+
+        ret_value = []
+        if field["list_values"] == "int":
+            for val in field_value:
+                try:
+                    ret_value.append(int(val))
+                except Exception as e:
+                    error_msg = "Failed to cast list value from postgres to int: %s for model %s"
+                    logging.error(error_msg % (e, self))
+                    ret_value.append(val)
+                    continue
+        return ret_value
 
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/models/base.py

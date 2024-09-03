@@ -4,7 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "bookmarky"
-version = "0.0.1.9"
+version = "0.0.1.30"
+
 
 
 requires-python = ">=3.11"

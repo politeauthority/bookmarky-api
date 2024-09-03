@@ -989,5 +989,20 @@ class TestApiModelBase:
         assert isinstance(base._get_datetime(short_time), datetime)
         assert not base._get_datetime("nothing")
 
-
+    def test___expand_list_values(self):
+        """
+        :method: Base()._expand_list_values
+        """
+        field = {
+            "name": "tags",
+            "type": "list",
+            "list_values": "int",
+            "api_writeable": True,
+            "api_searchable": True,
+        }
+        field_value = ["1", "2", "3"]
+        base = Base()
+        result = base._expand_list_values(field, field_value)
+        expected = [1, 2, 3]
+        assert expected == result
 # End File: politeauthority/bookmarky-api/tests/unit/api/models/test_base.py

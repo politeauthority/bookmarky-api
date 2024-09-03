@@ -15,6 +15,7 @@ ADD ./build-files/tox.ini /app/
 ADD ./build-files/src /app/
 ADD ./scripts/install-polite-lib.sh /app
 
+
 # Set environment variables
 ENV LIB_DIR="/root"
 # ENV POLITE_LIB_BRANCH="main"
@@ -39,8 +40,12 @@ FROM base as dev
 
 RUN apk add bash curl vim
 
+ADD ./scripts/run-dev /bin
+ADD ./scripts/run-production /bin
+ADD ./scripts/run-kill /bin
+
 RUN pip install -r /app/requirements-dev.txt && mkdir /work
 WORKDIR /work/
 
 ADD build-files/tests /work/tests
-# RUN cd /work/tests/ python3 /work/tests/setup.py build && python3 /work/tests/setup.py install
+RUN cd /work/tests/ && python3 /work/tests/setup.py install

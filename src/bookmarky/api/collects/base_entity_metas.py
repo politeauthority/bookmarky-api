@@ -1,9 +1,13 @@
 """
     Bookmarky Api
-    Collection - Base Entity Metas
-    This class should be extended by all collections that collect models that have entity meta.
+    Collection
+    Base Entity Metas
+
+This class should be extended by all collections that collect models that have entity meta.
 
 """
+import logging
+
 from bookmarky.api.collects.base import Base
 from bookmarky.api.models.entity_meta import EntityMeta
 
@@ -70,5 +74,74 @@ class BaseEntityMetas(Base):
             prestines.append(model)
         return prestines
 
+    def get_paginated(
+        self,
+        page: int = 1,
+        limit: int = 0,
+        user_limit: int = None,
+        order_by: dict = {},
+        where_and: list = [],
+        where_or: list = [],
+        per_page: int = 20,
+        get_json: bool = False,
+        get_api: bool = False
+    ) -> list:
+        """
+        Get paginated collection of models.
+        This will also collect the Entity Metas for all results of the pagination query.
 
-# End File: politeauthority/bookmarky/src/bookmarky/api/collects/base_entity_metas.py
+        :param limit: The limit of results per page.
+        :param user_limit: A user imposed limit that sits outside of the api's limit restrictions.
+        :param offset: The offset to return pages from or the "page" to return.
+        :param order_by: A dict with the field to us, and the direction of the order.
+            example value for order_by:
+            {
+                'field': 'last_seen',
+                'op' : 'DESC'
+            }
+        :param where_and: a list of dictionaries, containing fields, values and the operator of AND
+            statements to concatenate for the query.
+            example value for where_and:
+            [
+                {
+                    'field': 'last_seen',
+                    'value': last_online,
+                    'op': '>='
+                }
+            ]
+        :returns: A list of model objects, hydrated to the default of the base.build_from_list()
+        """
+        logging.debug("\n\nHERES THE NEW META PAGINATION")
+        paginated = super(BaseEntityMetas, self).get_paginated(
+            page, limit, user_limit, order_by, where_and, where_or, per_page, get_json, get_api)
+        logging.debug("@note: Here's where we left off")
+        return paginated
+
+    def get_metas_for_entities(self, entity_type: str, entities: list) -> list:
+        """From a hydraded list of entities, get the EntityMeta data for each Entity and attatch it
+        to the returned result.
+        :param entity_type: 
+        """
+        if not entities:
+            return []
+        # entity_ids = self.gen_entity_ids(entities)
+        # sql = """
+        #     SELECT *
+        #     FROM entity_metas em
+        #     WHERE
+        #         em.entity_type = %s AND
+        #         em.entity_id IN %s;
+        # """
+        # logging.debug("Loading entity meta for a collection")
+        # logging.debug(self.cursor.mogrify(sql, (entity_type, entity_ids)))
+        # self.cursor.execute(sql, (entity_type, entity_ids))
+        # metas_raw = self.cursor.fetchall()
+        return entities
+
+    def gen_entity_ids(self, entities: list):
+        ret_ids = []
+        for entity in entities:
+            ret_ids.append(entity.id)
+        return tuple(ret_ids)
+
+# End File: politeauthority/bookmarky-api/src/bookmarky/api/collects/base_entity_metas.py

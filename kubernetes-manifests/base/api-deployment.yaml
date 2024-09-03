@@ -16,8 +16,8 @@ spec:
         - name: harbor-registry
       initContainers:
         - name: bookmarky-migrations
-          image: harbor.squid-ink.us/politeauthority/bookmarky:latest
-          imagePullPolicy: Always
+          image: harbor.squid-ink.us/politeauthority/bookmarky-api:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
           env:
@@ -45,11 +45,18 @@ spec:
               value: "DEBUG"
             - name: BOOKMARKY_ENV
               value: "prod"
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "250m"
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
           command: ["python3", "/app/bookmarky/migrations/migrate.py"]
       containers:
         - name: bookmarky-api
-          image: harbor.squid-ink.us/politeauthority/bookmarky:latest
-          imagePullPolicy: Always
+          image: harbor.squid-ink.us/politeauthority/bookmarky-api:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
           env:
@@ -82,3 +89,22 @@ spec:
                 secretKeyRef:
                   name: bookmarky-creds
                   key: SECRET_KEY
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "250m"
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
+
+          # livenessProbe:
+          #   httpGet:
+          #     path: /healthz
+          #     port: http
+          #   initialDelaySeconds: 60
+          # readinessProbe:
+          #   httpGet:
+          #     path: /healthz
+          #     port: http
+          #   initialDelaySeconds: 10
+          #   periodSeconds: 240

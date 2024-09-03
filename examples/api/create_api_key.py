@@ -12,7 +12,8 @@ import requests
 
 USER_ID = 1
 # THE_ENV = "STAGE
-THE_ENV = "DEV"
+# THE_ENV = "DEV"
+THE_ENV = "PROD"
 
 API_URL = os.environ.get(f"{THE_ENV}_BOOKMARKY_API_URL")
 API_CLIENT_ID = os.environ.get(f"{THE_ENV}_BOOKMARKY_CLIENT_ID")

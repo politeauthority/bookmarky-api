@@ -30,7 +30,11 @@ jobs:
       - name: Build Container
         run: |
           echo "Run Task: Build"
-          task build-docker -- dev
+          if [ "$TAG_PREFIX" = "prod" ]; then
+            task build-docker -- base
+          else
+            task build-docker -- dev
+          fi
       - name: Push Container
         run: |
           TAG_PREFIX="${{ inputs.tag-prefix }}"
@@ -42,19 +46,24 @@ jobs:
           # Get tag names
           VERSION_FILE="src/bookmarky/api/version.py"
           VERSION=$(grep -o 'version = "[^"]*"' ${VERSION_FILE} | cut -d '"' -f 2)
-          TAG_NAMED="${TAG_PREFIX}-latest"
-          TAG_VERSION="${TAG_PREFIX}-${VERSION}"
+          if [ "$TAG_PREFIX" = "prod" ]; then
+            TAG_NAMED="latest"
+            TAG_VERSION="${VERSION}"
+          else
+            TAG_NAMED="${TAG_PREFIX}-latest"
+            TAG_VERSION="${TAG_PREFIX}-${VERSION}"
+          fi
 
           # Tag
-          docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky:${TAG_NAMED}
-          docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky:${TAG_VERSION}
+          docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky-api:${TAG_NAMED}
+          docker tag ${IMAGE_ID} harbor.squid-ink.us/politeauthority/bookmarky-api:${TAG_VERSION}
 
           # Push
-          docker push harbor.squid-ink.us/politeauthority/bookmarky:${TAG_NAMED}
-          docker push harbor.squid-ink.us/politeauthority/bookmarky:${TAG_VERSION}
+          docker push harbor.squid-ink.us/politeauthority/bookmarky-api:${TAG_NAMED}
+          docker push harbor.squid-ink.us/politeauthority/bookmarky-api:${TAG_VERSION}
 
           echo "# Docker Build" >> $GITHUB_STEP_SUMMARY
-          echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky:${TAG_NAMED}" >> $GITHUB_STEP_SUMMARY
-          echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky:${TAG_VERSION}" >> $GITHUB_STEP_SUMMARY
+          echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky-api:${TAG_NAMED}" >> $GITHUB_STEP_SUMMARY
+          echo "**Built:** harbor.squid-ink.us/politeauthority/bookmarky-api:${TAG_VERSION}" >> $GITHUB_STEP_SUMMARY
 
 # End File: politeauthority/bookmarky-api/.github/workflows/build-container-api.yaml

@@ -1,6 +1,7 @@
 """
     Bookmarky Shared
-    Model - Bookmark
+    Model
+    Bookmark
 
 """
 
@@ -27,15 +28,10 @@ FIELD_MAP = {
         "api_writeable": True,
         "api_searchable": True,
     },
-    "tags": {
-        "name": "tags",
-        "type": "list",
-        "api_writeable": True,
-        "api_searchable": True,
-    },
-    "name": {
-        "name": "name",
+    "title": {
+        "name": "title",
         "type": "str",
+        "api_searchable": True,
         "api_display": True,
         "api_writeable": True,
     },
@@ -50,6 +46,20 @@ FIELD_MAP = {
         "type": "datetime",
         "api_searchable": True,
         "api_display": False,
+    },
+    "directory_id": {
+        "name": "directory_id",
+        "type": "int",
+        "api_searchable": True,
+        "api_display": True,
+        "api_writeable": True,
+    },
+    "notes": {
+        "name": "notes",
+        "type": "test",
+        "api_searchable": False,
+        "api_display": True,
+        "api_writeable": True,
     }
 }
 
@@ -57,5 +67,12 @@ FIELD_META = {
     "ux_key": ["user_id", "url"]
 }
 
+FIELD_MAP_METAS = {
+    "favorite": {
+        "name": "favorite",
+        "type": "bool"
+    }
+}
 
-# End File: politeauthority/bookmarky/src/bookmarky/shared/models/bookmark.py
+
+# End File: politeauthority/bookmark-apiy/src/bookmarky/shared/models/bookmark.py
