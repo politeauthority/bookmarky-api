@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: bookmarky-api
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    # cert-manager.io/cluster-issuer: example-issuer
     nginx.ingress.kubernetes.io/upstream-vhost: $host
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "Access-Control-Allow-Origin: $http_origin";
@@ -14,9 +14,9 @@ metadata:
     nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS, DELETE, PATCH
     nginx.ingress.kubernetes.io/enable-cors: "true"
 spec:
-  ingressClassName: nginx-public
+  ingressClassName: example-ingress-class
   rules:
-    - host: api.bookmarky-dev.alix.lol
+    - host: api.bookmarky.example.com
       http:
         paths:
           - backend:
@@ -28,5 +28,5 @@ spec:
             pathType: Prefix
   tls:
     - hosts:
-        - api.bookmarky-dev.alix.lol
-      secretName: api-bookmarky-alix-lol
+        - api.bookmarky.example.com
+      secretName: api-bookmarky
