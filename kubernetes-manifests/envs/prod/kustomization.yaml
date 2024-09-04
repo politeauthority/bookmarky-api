@@ -6,8 +6,17 @@ resources:
   # - secrets.yaml
 images:
   - name: harbor.squid-ink.us/politeauthority/bookmarky-api
-    newTag: 0.0.1.31
+    newTag: 0.0.1.32
 patches:
+  - target:
+      kind: Deployment
+      name: bookmarky-api
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: JWT_EXPIRE_MINUTES
+          value: "1440"
   - target:
       kind: Ingress
       name: bookmarky-api
