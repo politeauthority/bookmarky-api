@@ -138,6 +138,7 @@ tasks:
         git stash
         git fetch origin main
         git checkout main
+        git branch -D stage
         git checkout -b stage
         git push origin stage
         git stash pop

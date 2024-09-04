@@ -62,7 +62,8 @@ class Tags(Base):
                     ON bt.tag_id = t.id
             WHERE bt.bookmark_id IN %s
         """
-        self.cursor.mogrify(sql, (b_ids,))
+        if not bookmarks:
+            return []
         self.cursor.execute(sql, (b_ids,))
         tag_matches = self.cursor.fetchall()
         for tag_match in tag_matches:
