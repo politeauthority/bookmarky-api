@@ -31,5 +31,5 @@ patches:
         path: /spec/rules/0/host
         value: api.bookmarky.alix.lol
       - op: replace
-        path: /spec/tls/0/hosts
+        path: /spec/tls/0/hosts/0
         value: api.bookmarky.alix.lol
