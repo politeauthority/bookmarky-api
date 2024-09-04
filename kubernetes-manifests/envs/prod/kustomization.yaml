@@ -16,7 +16,7 @@ patches:
         path: /spec/template/spec/containers/0/env/-
         value:
           name: JWT_EXPIRE_MINUTES
-          value: "1440"
+          value: "5760"
   - target:
       kind: Ingress
       name: bookmarky-api
