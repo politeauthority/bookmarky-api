@@ -32,6 +32,24 @@ tasks:
       - |
         kustomize build kubernetes-manifests/envs/dev | kubectl apply -f -
 
+  semver-add:
+    cmds:
+      - |
+        # Read the current version from the file into a bash variable
+        current_version=$(awk -F\" '/version/ {print $2}' your_version_file.py)
+
+        # Extract the last segment of the version number
+        last_segment=$(awk -F. '{print $NF}' <<< "$current_version")
+
+        # Increment the last segment by 1
+        new_last_segment=$((last_segment + 1))
+
+        # Replace the last segment in the version number
+        new_version=$(awk -F. -v OFS=. '{$NF = $NF + 1} 1' <<< "$current_version")
+
+        # Print the new version
+        echo "New version: $new_version"
+
   update-version:
     cmds:
       - |
@@ -53,7 +71,7 @@ tasks:
 
         # Update the newTag in the kustomization.yaml file for prod
         file_path="kubernetes-manifests/envs/prod/kustomization.yaml"
-        yq e ".images[0].newTag = \"prod-$new_version\"" -i $file_path
+        yq e ".images[0].newTag = \"$new_version\"" -i $file_path
 
         # Update the newTag in the kustomization.yaml file for stage
         file_path="kubernetes-manifests/envs/stage/kustomization.yaml"
@@ -138,10 +156,16 @@ tasks:
         git stash
         git fetch origin main
         git checkout main
+        git br -D stage
         git checkout -b stage
         git push origin stage
         git stash pop
-    silent: True
+        # @todo: 
+        #  - crank out new sem-ver and commit that
+        #  - commit that
+        #  - push that
+        #  - Create PR with that sem ver
+    silent: False
 
   ci-new-stage-pr:
     cmds:
