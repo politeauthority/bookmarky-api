@@ -30,10 +30,10 @@ patches:
           value: "dev"
       - op: remove
         path: /spec/template/spec/initContainers
-      # - op: remove
-      #   path: /spec/template/spec/containers/0/livenessProbe
-      # - op: remove
-      #   path: /spec/template/spec/containers/0/readinessProbe
+      - op: remove
+        path: /spec/template/spec/containers/0/livenessProbe
+      - op: remove
+        path: /spec/template/spec/containers/0/readinessProbe
   - target:
       kind: Ingress
       name: bookmarky-api
