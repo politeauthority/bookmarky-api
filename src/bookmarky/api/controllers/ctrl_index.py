@@ -5,6 +5,7 @@
 
 """
 import logging
+import os
 
 from flask import Blueprint, jsonify, request, Response
 
@@ -94,7 +95,8 @@ def info() -> Response:
         "migration": CURRENT_MIGRATION,
         # "tasks": task_totals,
         # "model_totals": model_totals,
-        "deployed_at": glow.general["DEPLOYED_AT"]
+        "deployed_at": glow.general["DEPLOYED_AT"],
+        "jwt_expire_minutes": os.environ.get("JWT_EXPIRE_MINUTES")
     }
     return jsonify(data)
 

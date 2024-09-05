@@ -19,14 +19,21 @@ ctrl_tag = Blueprint("tag", __name__, url_prefix="/tag")
 
 @ctrl_tag.route("")
 @ctrl_tag.route("/")
-@ctrl_tag.route("/<bookmark_id>", methods=["GET"])
+@ctrl_tag.route("/<tag_search>", methods=["GET"])
 @auth.auth_request
-def get_model(user_id: int = None) -> Response:
+def get_model(tag_search: int = None) -> Response:
     """GET operation for a bookmark.
     GET /tag
     """
     logging.info("GET - /tag")
-    data = ctrl_base.get_model(Tag, user_id)
+    if tag_search:
+        if tag_search.isdigit():
+            tag_id = int(tag_search)
+            data = ctrl_base.get_model(Tag, tag_id)
+        else:
+            tag_slug = tag_search
+            logging.error("we dont know what we're doing here")
+
     if not isinstance(data, dict):
         return data
     return jsonify(data)
@@ -34,7 +41,7 @@ def get_model(user_id: int = None) -> Response:
 
 @ctrl_tag.route("", methods=["POST"])
 @ctrl_tag.route("/", methods=["POST"])
-@ctrl_tag.route("/<user_id>", methods=["POST"])
+@ctrl_tag.route("/<tag_id>", methods=["POST"])
 @auth.auth_request
 def post_model(tag_id: int = None):
     """POST operation for a User model.

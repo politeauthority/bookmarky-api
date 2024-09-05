@@ -37,6 +37,7 @@ Self hosted open source bookmark tool
  
  
  ### Web
+ - FIX UPDATE-VERSION task to touch README.md! 
  - Add back manual Bookmark creation
  - Add confirmation on Tag Add modal creation
  - Add keyboard focus for Tag Add modal
