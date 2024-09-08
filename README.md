@@ -10,13 +10,16 @@ Self hosted open source bookmark tool
  - Through recently clicked
  - Through folders
 
+## Bookmarky Parts
+ - [Bookmarky Api](https://github.com/politeauthority/bookmarky-api)
+ - [Bookmarky Web (Simple)](https://github.com/politeauthority/bookmarky-web-simple)
+ - [Bookmarky Extensions](https://github.com/politeauthority/bookmarky-extensions)
+
 ## Development
 ### Process
  - Branch from `stage` branch
  - Merge to `stage`
  - Merge `stage` to `main`
-
-
 
 ### To Dos
 

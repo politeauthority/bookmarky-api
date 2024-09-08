@@ -112,10 +112,15 @@ def who_am_i() -> Response:
         date_utils.from_epoch(token_details["iat"]))
     user = User()
     user.get_by_id(token_details["user_id"])
+    server = {
+        "version": version,
+        "migration": CURRENT_MIGRATION,
+    }
     data = {
         "status": "success",
         "token": token_details,
-        "user": user.json()
+        "user": user.json(),
+        "server": server,
     }
     return jsonify(data)
 
