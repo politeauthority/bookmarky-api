@@ -44,6 +44,7 @@ def index():
 def search():
     """Search through Bookmarks from a wide variety of input."""
     extra_args = {
+        "concat_type": "",
         "fields": {},
         "order_by": {},
         "limit": None
@@ -61,6 +62,10 @@ def search():
             "value": f'%{search_args["query"]}%',
             "op": "ilike",
         }
+        extra_args["fields"]["notes"] = {
+            "value": f'%{search_args["query"]}%',
+            "op": "ilike",
+        }
         # extra_args["fields"]["title"] = {
         #     "value": glow.user["user_id"],
         #     "op": "LIKE",
@@ -69,6 +74,7 @@ def search():
     logging.debug(extra_args)
     logging.debug("\nEND SEARCH\n\n")
     data = ctrl_collection_base.get(Bookmarks, extra_args)
+
     if data["objects"]:
         data["objects"] = Tags().get_tags_for_bookmarks(data["objects"])
     return jsonify(data)

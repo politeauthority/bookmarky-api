@@ -39,12 +39,13 @@ FIELD_MAP = {
         "name": "url",
         "type": "str",
         "api_display": True,
+        "api_searchable": True,
         "api_writeable": True,
     },
     "deleted": {
         "name": "deleted",
         "type": "datetime",
-        "api_searchable": True,
+        "api_searchable": False,
         "api_display": False,
     },
     "directory_id": {
@@ -57,7 +58,7 @@ FIELD_MAP = {
     "notes": {
         "name": "notes",
         "type": "test",
-        "api_searchable": False,
+        "api_searchable": True,
         "api_display": True,
         "api_writeable": True,
     }
