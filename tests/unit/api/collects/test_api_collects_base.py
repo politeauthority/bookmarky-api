@@ -7,9 +7,9 @@
 # from datetime import datetime
 
 from bookmarky.api.collects.base import Base as CollectBase
-from bookmarky.api.models.base import Base as ModelBase
+# from bookmarky.api.models.base import Base as ModelBase
 from bookmarky.api.collects.api_keys import ApiKeys
-from bookmarky_test_tools.fixtures import db
+# from bookmarky_test_tools.fixtures import db
 
 
 class TestApiCollectsBase:
@@ -119,11 +119,11 @@ class TestApiCollectsBase:
                 "op": "="
             }
         ]
-        
+
         result = collect_api_keys._pagination_where_and(where_and)
         expected_sql = "WHERE user_id = %s "
         assert expected_sql == result["sql"]
-        assert ["1"] == result["params"]
+        assert ("1",) == result["params"]
 
     def test__int_list_to_sql(self):
         """
