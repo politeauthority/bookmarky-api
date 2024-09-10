@@ -66,12 +66,10 @@ class Debug:
         thing = (sql.Literal(items[0]), sql.Literal(items[1]))
         glow.db["cursor"].execute(query, thing)
         x = glow.db["cursor"].fetchall()
-        import ipdb; ipdb.set_trace()
         
     def run_query_hack(self):
         """This works but is gross."""
         items = [2, 3]
-        import ipdb; ipdb.set_trace()
         sql = """
             SELECT *
             FROM bookmarks
@@ -97,7 +95,6 @@ class Debug:
         for result in x:
             print(result)
             print("")
-        import ipdb; ipdb.set_trace()
 
     def run_query_ai(self):
         items = ["2", "3"]
@@ -112,7 +109,6 @@ class Debug:
         print(results)
         for result in results:
             print(result)
-        import ipdb; ipdb.set_trace()
 
     def run_query(self):
         sql = """
@@ -125,7 +121,6 @@ class Debug:
         for result in x:
             print(result)
             print("")
-        import ipdb; ipdb.set_trace()
 
 
 if __name__ == "__main__":

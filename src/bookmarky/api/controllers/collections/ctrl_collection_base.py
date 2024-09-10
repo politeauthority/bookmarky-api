@@ -100,7 +100,6 @@ def _parse_body(raw_args: dict, field_map: dict, extra_args: dict = None) -> dic
     accepted_contact_type = ["where_and", "where_or"]
     if "concat_type" in extra_args and extra_args["concat_type"] in accepted_contact_type:
         concat_type = extra_args["concat_type"]
-    import ipdb; ipdb.set_trace()
     if not raw_args or not extra_args:
         return ret
     extra_arg_field_keys = extra_args["fields"].keys()
