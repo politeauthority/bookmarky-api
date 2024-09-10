@@ -109,6 +109,9 @@ def handle_exception(e):
 @app.before_request
 def before_request():
     """Before we route the request log some info about the request."""
+    url_requested = request.base_url[request.base_url.rfind("/"):]
+    if url_requested == "/healthz":
+        return
     glow.start_session()
     logging.info(
         "[Start Request] %s\tpath: %s | method: %s" % (
@@ -121,6 +124,9 @@ def before_request():
 
 @app.after_request
 def after_request(response):
+    url_requested = request.base_url[request.base_url.rfind("/"):]
+    if url_requested == "/healthz":
+        return response
     logging.info(
         "[End Request] %s\tpath: %s | method: %s | status: %s | size: %s",
         glow.session["short_id"],
