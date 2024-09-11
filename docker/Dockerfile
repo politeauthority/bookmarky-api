@@ -38,7 +38,7 @@ CMD ["gunicorn", "web-app:app", "--chdir", "/app/bookmarky/api", "--bind=0.0.0.0
 # Development container tools
 FROM base as dev
 
-RUN apk add bash curl vim
+RUN apk add bash curl vim screen
 
 ADD ./scripts/run-dev /bin
 ADD ./scripts/run-production /bin
