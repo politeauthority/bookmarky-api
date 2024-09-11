@@ -15,7 +15,6 @@ from bookmarky.api.controllers.collections import ctrl_collection_base
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import glow
 
-
 ctrl_bookmarks = Blueprint("bookmarks", __name__, url_prefix="/bookmarks")
 
 PER_PAGE = 20
@@ -70,7 +69,7 @@ def search() -> Response:
     query = _gen_search_query(search_phrase, current_page)
     logging.debug(f"\n\nSEARCHING\n{search_args}\n\n")
     bookmarks_col = Bookmarks()
-# Get the Bookmarks
+    # Get the Bookmarks
     data["objects"] = bookmarks_col.get_query(query["sql"], query["params"])
     data["objects"] = bookmarks_col.make_json(data["objects"])
     if data["objects"]:
