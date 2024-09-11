@@ -99,6 +99,7 @@ class Base:
         return presitines
 
     def get_count_all(self) -> int:
+        """Get the count of all entities."""
         sql = """SELECT count(*) FROM %s;""" % self.table_name
         self.cursor.execute(sql)
         raw = self.cursor.fetchone()
@@ -106,7 +107,16 @@ class Base:
             return 0
         return raw[0]
 
+    def get_query(self, sql: str, params: tuple) -> list:
+        """Get results for any given query. Returning a list of entities."""
+        self.cursor.execute(sql, params)
+        raws = self.cursor.fetchall()
+        return self.build_from_lists(raws)
+
     def load_presiteines(self, raws: list) -> list:
+        """
+        @todo: This should be dropped for build_from_lists all by it's self.
+        """
         if not raws:
             return []
         return self.build_from_lists(raws)
@@ -217,6 +227,13 @@ class Base:
         }
         return ret
 
+    def make_json(self, entities: list) -> list:
+        """Transform a list of entities into a JSON friendly list of entities."""
+        rets = []
+        for entity in entities:
+            rets.append(entity.json())
+        return rets
+
     def _generate_paginated_sql(
         self,
         page: int,
@@ -254,6 +271,9 @@ class Base:
         """Get the total number of pages for a pagination query.
         :param query: A diction containing the SQL parameterized and key of "values" that contains
             the query values
+            example: {
+                "sql"
+            }
         """
         total_sql = self._edit_pagination_sql_for_info(query, user_limit)
         # logging.info("PAGINATION INFO SQL:\n%s" % total_sql)
@@ -463,13 +483,6 @@ class Base:
             LIMIT %s;"""
         return sql
 
-    def _make_json(self, entities: list) -> list:
-        """Transform a list of entities into a JSON friendly list of entities."""
-        rets = []
-        for entity in entities:
-            rets.append(entity.json())
-        return rets
-
     # def _gen_get_by_ids_sql(self) -> str:
     #     """Generate the get_by_ids SQL statement.
     #     :method: TestApiCollectsBase::test___gen_sql_get_last
@@ -483,4 +496,4 @@ class Base:
     #         WHERE id IN %s;"""
     #     return sql
 
-# End File: politeauthority/bookmarky/src/bookmarky/api/collections/base.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/api/collections/base.py

@@ -27,10 +27,40 @@ tasks:
         echo "Building"
         kubectl exec -it -n ${NS} ${POD} -- sh -c "cd /work/src && pip install ."
 
+  dev-cp-api-src-fast:
+    cmds:
+      - |
+        NS=$"{{.K8S_NS_DEV}}"
+        POD=$(kubectl get pods -l app=bookmarky-api -n ${NS} --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
+        echo "Copying to pod $NS/$POD"
+        kubectl cp -n ${NS} -c bookmarky-api ./src ${POD}:/work
+        kubectl cp -n ${NS} -c bookmarky-api ./pyproject.toml ${POD}:/work/src/
+        echo "Coppied source"
+        echo "Building"
+        kubectl exec -it -n ${NS} ${POD} -- sh -c "cd /work/src && pip install . --ignore-requires-python" && ls /bin/
+
+  dev-cp-api-tests-fast:
+    cmds:
+      - |
+        NS=$"{{.K8S_NS_DEV}}"
+        POD=$(kubectl get pods -l app=bookmarky-api -n ${NS} --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
+        echo "Copying to pod $NS/$POD"
+        kubectl cp -n ${NS} -c bookmarky-api ./tests ${POD}:/work
+        echo "Coppied tests"
+        echo "Building"
+        kubectl exec -it -n ${NS} ${POD} -- sh -c "cd /work/tests && pip install . --ignore-requires-python"
+
   dev-deploy:
     cmds:
       - |
         kustomize build kubernetes-manifests/envs/dev | kubectl apply -f -
+
+  dev-destroy:
+    cmds:
+      - |
+        NS=$"{{.K8S_NS_DEV}}"
+        kustomize delete deployment bookmarky-api -n ${NS}
+        kustomize delete deployment bookmarky-stage -n ${NS}
 
   semver-add:
     cmds:
@@ -107,6 +137,13 @@ tasks:
         POD=$(kubectl get pods -n ${NS} -l app=bookmarky-api --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
         echo "Execing to pod $POD"
         kubectl exec -n ${NS} -it ${POD} -- sh
+
+  stage-destroy:
+    cmds:
+      - |
+        NS=$"{{.K8S_NS_STAGE}}"
+        kustomize delete deployment bookmarky-api -n ${NS}
+        kustomize delete deployment bookmarky-stage -n ${NS}
 
   prod-exec-api:
     cmds:

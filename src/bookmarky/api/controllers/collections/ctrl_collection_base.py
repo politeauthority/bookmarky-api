@@ -81,6 +81,8 @@ def _parse_body(raw_args: dict, field_map: dict, extra_args: dict = None) -> dic
                 },
                 "limit": 5
             }
+    :param field_map: (dict)
+    :param extra_args: (dict)
     :returns: {
         "where_and": [],
         "order_by": "field_name",
@@ -102,6 +104,7 @@ def _parse_body(raw_args: dict, field_map: dict, extra_args: dict = None) -> dic
         concat_type = extra_args["concat_type"]
     if not raw_args or not extra_args:
         return ret
+
     extra_arg_field_keys = extra_args["fields"].keys()
     for extra_arg_field_key in extra_arg_field_keys:
         if extra_arg_field_key in raw_args["fields"]:
@@ -109,7 +112,10 @@ def _parse_body(raw_args: dict, field_map: dict, extra_args: dict = None) -> dic
 
     for raw_arg_key, raw_arg_data in raw_args.items():
         if raw_arg_key == "fields":
-            ret["where_and"] = _get_fields(raw_arg_data, field_map)
+            if concat_type == "where_and":
+                ret["where_and"] = _get_fields(raw_arg_data, field_map)
+            else:
+                ret["where_or"] = _get_fields(raw_arg_data, field_map)
         elif raw_arg_key == "order_by":
             ret["order_by"] = _get_order_by(raw_arg_data)
             if not isinstance(raw_arg_data, dict):
@@ -124,8 +130,10 @@ def _parse_body(raw_args: dict, field_map: dict, extra_args: dict = None) -> dic
     if extra_args["fields"]:
         for extra_arg_key, extra_arg_data in extra_args.items():
             if extra_arg_key == "fields":
-                ret["where_and"] += _get_fields(extra_arg_data, field_map)
-
+                if concat_type == "where_and":
+                    ret["where_and"] += _get_fields(extra_arg_data, field_map)
+                else:
+                    ret["where_or"] += _get_fields(extra_arg_data, field_map)
     return ret
 
 
