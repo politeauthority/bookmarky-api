@@ -41,10 +41,27 @@ def top_tags() -> Response:
     print(rows)
     tag_ids = _get_ids(rows)
     tag_col = Tags()
-    tags = tag_col.get_by_ids(tag_ids)
-    for tag in tags:
-        data["objects"].append(tag.json())
+    tags_select = tag_col.get_by_ids(tag_ids)
+    tags_select = tag_col.make_json(tags_select)
+    tags = []
+    for tag in tags_select:
+        tags.append(_get_tag_stat(tag, rows))
+    data["objects"] = sorted(tags, key=lambda x: x["metas"]["count"])
+    data["objects"].reverse()
+
     return jsonify(data)
+
+
+def _get_tag_stat(tag: dict, tag_stats: list) -> dict:
+    """
+    """
+    for stat in tag_stats:
+        if stat[0] == tag["id"]:
+            tag["metas"] = {
+                "count": stat[1]
+            }
+            return tag
+    return tag
 
 
 def _get_ids(rows) -> list:
