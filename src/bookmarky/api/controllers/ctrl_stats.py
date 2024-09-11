@@ -24,7 +24,7 @@ def top_tags() -> Response:
     @todo: restrict this to user_id
     """
     RESULTS = 20
-    logging.info("Serving /")
+    logging.info("Serving /top-tags")
     data = {
         "info": "Bookmarky",
         "objects": []
