@@ -15,7 +15,6 @@ from bookmarky.api.controllers.collections import ctrl_collection_base
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import glow
 
-
 ctrl_bookmarks = Blueprint("bookmarks", __name__, url_prefix="/bookmarks")
 
 PER_PAGE = 20
@@ -103,36 +102,14 @@ def _gen_search_query(search_phrase: str, page: int) -> dict:
             user_id = %s AND
             (
                 url ILIKE %s OR
-                title ILIKE %s
+                title ILIKE %s OR
+                notes ILIKE %s
             )
         ORDER BY created_ts DESC
         LIMIT 20 OFFSET {offset};
     """
-    query["params"] = (glow.user["user_id"], search_phrase, search_phrase)
+    query["params"] = (glow.user["user_id"], search_phrase, search_phrase, search_phrase)
     return query
-
-
-# def _gen_search_query_totals(search_phrase) -> dict:
-#     """Generate the search query to get total number of entities and pages for the search query.
-#     @todo: this is modelded off of collections base,.get_pagination_info(). Ideally it would use the
-#     same method, however that method isn't quite ready for that.
-#     """
-#     query = {
-#         "sql": "",
-#         "params": tuple(glow.user["user_id"], search_phrase, search_phrase),
-#     }
-#     query["sql"] = """
-#         SELECT count(*)
-#         FROM bookmarks
-#         WHERE
-#             user_id = %s AND
-#             (
-#                 url ILIKE %s OR
-#                 title ILIKE %s
-#             )
-#         ;
-#     """
-#     return query
 
 
 @ctrl_bookmarks.route("/by-tag")

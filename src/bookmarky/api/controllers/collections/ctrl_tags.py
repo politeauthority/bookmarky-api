@@ -11,6 +11,7 @@ from flask import Blueprint, jsonify, request, Response
 from bookmarky.api.collects.tags import Tags
 from bookmarky.api.controllers.collections import ctrl_collection_base
 from bookmarky.api.utils import auth
+from bookmarky.api.utils import glow
 
 ctrl_tags = Blueprint("tags", __name__, url_prefix="/tags")
 
@@ -19,7 +20,18 @@ ctrl_tags = Blueprint("tags", __name__, url_prefix="/tags")
 @auth.auth_request
 def index() -> Response:
     """Get Tags."""
-    data = ctrl_collection_base.get(Tags)
+    extra_args = {
+        "fields": {
+            "user_id": {
+                "value": glow.user["user_id"],
+                "op": "=",
+                "overrideable": False
+            }
+        },
+        "order_by": {},
+        "limit": None
+    }
+    data = ctrl_collection_base.get(Tags, extra_args)
     return jsonify(data)
 
 

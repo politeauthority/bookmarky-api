@@ -483,17 +483,4 @@ class Base:
             LIMIT %s;"""
         return sql
 
-    # def _gen_get_by_ids_sql(self) -> str:
-    #     """Generate the get_by_ids SQL statement.
-    #     :method: TestApiCollectsBase::test___gen_sql_get_last
-    #     @todo: fix what's using this as we've made it paramaterized. @tag: psql
-    #     """
-    #     # model_ids = list(set(model_ids))
-    #     # sql_ids = self._int_list_to_sql(model_ids)
-    #     sql = f"""
-    #         SELECT *
-    #         FROM {self.table_name}
-    #         WHERE id IN %s;"""
-    #     return sql
-
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/collections/base.py
