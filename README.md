@@ -1,4 +1,4 @@
-# Bookmarky Api v0.0.1.42
+# Bookmarky Api v0.0.1.43
 
 Self hosted open source bookmark tool
 
@@ -14,6 +14,7 @@ Self hosted open source bookmark tool
  - [Bookmarky Api](https://github.com/politeauthority/bookmarky-api)
  - [Bookmarky Web (Simple)](https://github.com/politeauthority/bookmarky-web-simple)
  - [Bookmarky Extensions](https://github.com/politeauthority/bookmarky-extensions)
+ - [Polite Lib](https://github.com/politeauthority/polite-lib)
 
 ## Development
 ### Process

@@ -5,7 +5,7 @@
 """
 import logging
 
-from flask import Blueprint, jsonify, Response, request
+from flask import Blueprint, jsonify, Response
 
 from bookmarky.api.controllers.models import ctrl_base
 from bookmarky.api.models.tag import Tag
@@ -31,8 +31,9 @@ def get_model(tag_search: int = None) -> Response:
             tag_id = int(tag_search)
             data = ctrl_base.get_model(Tag, tag_id)
         else:
-            tag_slug = tag_search
+            # tag_slug = tag_search
             logging.error("we dont know what we're doing here")
+            return jsonify({}), 400
 
     if not isinstance(data, dict):
         return data
