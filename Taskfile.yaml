@@ -59,8 +59,22 @@ tasks:
     cmds:
       - |
         NS=$"{{.K8S_NS_DEV}}"
-        kustomize delete deployment bookmarky-api -n ${NS}
-        kustomize delete deployment bookmarky-stage -n ${NS}
+        kubectl delete deployment bookmarky-api -n ${NS}
+        kubectl delete deployment bookmarky-stage -n ${NS}
+
+        NS=$"{{.K8S_NS_STAGE}}"
+        kubectl delete deployment bookmarky-api -n ${NS}
+        kubectl delete deployment bookmarky-stage -n ${NS}
+
+        gha-runners bookmarky-api 0
+        gha-runners bookmarky-web 0
+
+  # done-working:
+  #     cmds:
+  #     - |
+  #       NS=$"{{.K8S_NS_DEV}}"
+  #       kustomize delete deployment bookmarky-api -n ${NS}
+  #       kustomize delete deployment bookmarky-stage -n ${NS}
 
   semver-add:
     cmds:
