@@ -101,6 +101,5 @@ def _gen_search_query(search_phrase: str, page: int) -> dict:
     return query
 
 
-
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/controllers/ctrl_collections/
 #           ctrl_tags.py

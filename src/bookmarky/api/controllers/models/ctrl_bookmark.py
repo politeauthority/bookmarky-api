@@ -8,10 +8,10 @@ import logging
 
 from flask import Blueprint, jsonify, Response
 
-from bookmarky.api.collects.bookmark_tags import BookmarkTags
 from bookmarky.api.controllers.models import ctrl_base
 from bookmarky.api.models.bookmark import Bookmark
 from bookmarky.api.models.bookmark_tag import BookmarkTag
+from bookmarky.api.collects.bookmark_tags import BookmarkTags
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import api_util
 from bookmarky.api.utils import glow
@@ -80,7 +80,7 @@ def post_model_meta(bookmark_id: int = None):
 def delete_model(bookmark_id: int = None):
     """DELETE operation for a Bookmark model.
     DELETE /bookmark
-    Dont let a user delete a bookmark they do not own, however we will send back a 404 in that
+    Dont let a user delete a Bookmark they do not own, however we will send back a 404 in that
     event.
     """
     data = {
@@ -94,7 +94,7 @@ def delete_model(bookmark_id: int = None):
     if bookmark.user_id != glow.user["user_id"]:
         logging.warning("User %s tried to delete Bookmark beloning to User: %s" % (
             glow.user["user_id"],
-            glow.user["user_id"]
+            bookmark.user_id
         ))
         return jsonify(data), 404
     bts_col = BookmarkTags()
