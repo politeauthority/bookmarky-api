@@ -57,7 +57,14 @@ FIELD_MAP = {
     },
     "notes": {
         "name": "notes",
-        "type": "test",
+        "type": "text",
+        "api_searchable": True,
+        "api_display": True,
+        "api_writeable": True,
+    },
+    "hidden": {
+        "name": "hidden",
+        "type": "bool",
         "api_searchable": True,
         "api_display": True,
         "api_writeable": True,

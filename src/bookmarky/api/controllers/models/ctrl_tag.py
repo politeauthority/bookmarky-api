@@ -66,6 +66,8 @@ def delete_model(tag_id: int = None):
     DELETE /tag
     Dont let a user delete a Tag they do not own, however we will send back a 404 in that
     event.
+    @todo: Move BookmarkTag deletion logic down to the Tag model level, not the controller level so
+    that it works outside of just API requests and is more encompassing
     - Delete the tag
     - Delete the Bookmark Tags associations
     """

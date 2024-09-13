@@ -82,6 +82,8 @@ def delete_model(bookmark_id: int = None):
     DELETE /bookmark
     Dont let a user delete a Bookmark they do not own, however we will send back a 404 in that
     event.
+    @todo: Move BookmarkTag deletion logic down to the Tag model level, not the controller level so
+    that it works outside of just API requests and is more encompassing
     """
     data = {
         "status": "Error",

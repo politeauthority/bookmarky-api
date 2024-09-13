@@ -4,10 +4,10 @@
 
 """
 from bookmarky.shared.models.user import FIELD_MAP
-from bookmarky.api.models.base import Base
+from bookmarky.api.models.base_entity_meta import BaseEntityMeta
 
 
-class User(Base):
+class User(BaseEntityMeta):
 
     model_name = "user"
 
