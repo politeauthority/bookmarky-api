@@ -43,6 +43,13 @@ FIELD_MAP = {
         "name": "deleted",
         "type": "datetime",
         "api_searchable": True,
+    },
+    "hidden": {
+        "name": "hidden",
+        "type": "bool",
+        "api_searchable": True,
+        "api_display": True,
+        "api_writeable": True,
     }
 }
 
