@@ -9,6 +9,7 @@ from flask import Blueprint, jsonify, Response
 
 from bookmarky.api.controllers.models import ctrl_base
 from bookmarky.api.models.tag import Tag
+from bookmarky.api.collects.bookmark_tags import BookmarkTags
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import glow
 from bookmarky.api.utils import api_util
@@ -63,8 +64,27 @@ def post_model(tag_id: int = None):
 def delete_model(tag_id: int = None):
     """DELETE operation for a Tag model.
     DELETE /tag
+    Dont let a user delete a Tag they do not own, however we will send back a 404 in that
+    event.
+    - Delete the tag
+    - Delete the Bookmark Tags associations
     """
-    logging.debug("DELETE Bookmark")
+    data = {
+        "status": "Error",
+        "message": "Could not find Tag ID: %s" % tag_id
+    }
+    logging.debug("DELETE Tag")
+    tag = Tag()
+    if not tag.get_by_id(tag_id):
+        return jsonify(data), 404
+    if tag.user_id != glow.user["user_id"]:
+        logging.warning("User %s tried to delete Bookmark beloning to User: %s" % (
+            glow.user["user_id"],
+            tag.user_id
+        ))
+        return jsonify(data), 404
+    bts_col = BookmarkTags()
+    bts_col.delete_for_tag(tag.id)
     return ctrl_base.delete_model(Tag, tag_id)
 
 

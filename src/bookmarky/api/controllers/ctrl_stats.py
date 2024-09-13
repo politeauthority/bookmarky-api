@@ -23,7 +23,7 @@ def top_tags() -> Response:
     """Get the Tags which have the most relationships.
     @todo: restrict this to user_id
     """
-    RESULTS = 20
+    # RESULTS = 20
     logging.info("Serving /top-tags")
     data = {
         "info": "Bookmarky",
@@ -34,9 +34,11 @@ def top_tags() -> Response:
         FROM bookmark_tags
         GROUP BY tag_id
         ORDER BY tag_count DESC
-        LIMIT %s;
+
     """
-    glow.db["cursor"].execute(sql, (RESULTS,))
+    #         -- LIMIT %s;
+    # glow.db["cursor"].execute(sql, (RESULTS,))
+    glow.db["cursor"].execute(sql)
     rows = glow.db["cursor"].fetchall()
     print(rows)
     tag_ids = _get_ids(rows)
