@@ -45,5 +45,8 @@ FIELD_MAP = {
         "type": "int"
     },
 }
+FIELD_META = {
+    "ux_key": ["entity_id", "entity_type", "user_id"]
+}
 
 # End File: politeauthority/bookmarky-api/src/shared/models/entity_meta.py

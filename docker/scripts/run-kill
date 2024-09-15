@@ -5,7 +5,7 @@ set -e
 
 
 # Set the list of entries to match here
-entries=("gunicorn web-app:app" "gunicorn" "entry3")
+entries=("gunicorn web-app:app" "gunicorn" "/bin/run-dev", "web-app")
 
 # Iterate through the entries and kill the matching processes
 for entry in "${entries[@]}"; do

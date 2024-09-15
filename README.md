@@ -1,4 +1,4 @@
-# Bookmarky Api v0.0.1.45
+# Bookmarky Api v0.0.1.46
 
 Self hosted open source bookmark tool
 
@@ -33,11 +33,7 @@ Self hosted open source bookmark tool
  - Figuee out why https://www.youtube.com/watch?v=lhlRHOxMNys&t=1s wont save
 
 #### Api
- - Fix bug on POST updates to ALL models
- - Add better logging, and better understanding of logging
- - Create export functionality
- - ERROR with tag slug searching
- - BUG - order search results by created_ts
+ - User Settings Meta update and loadb
  
  
  ### Web
