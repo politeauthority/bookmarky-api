@@ -17,6 +17,7 @@ class User(BaseEntityMeta):
         self.table_name = "users"
         self.field_map = FIELD_MAP
         self.createable = True
+        self.metas = {}
         self.setup()
 
     def __repr__(self):

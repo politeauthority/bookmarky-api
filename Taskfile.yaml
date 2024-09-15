@@ -111,7 +111,7 @@ tasks:
 
         #Update pyproject
         file_path="pyproject.toml"
-        sed -i "" "s/version = \" Bookmarky Web Simple $current_version\"/version = \"$new_version\"/g" $file_path
+        sed -i "" "s/version = \"$current_version\"/version = \"$new_version\"/g" $file_path
 
         # Update the newTag in the kustomization.yaml file for prod
         file_path="kubernetes-manifests/envs/prod/kustomization.yaml"

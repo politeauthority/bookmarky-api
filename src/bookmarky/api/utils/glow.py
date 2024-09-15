@@ -57,6 +57,7 @@ user = {
     "org_id": None,
     "role_id": None,
     "role_perms": None,
+    "obj": None,
 }
 
 global session

@@ -65,6 +65,7 @@ FIELD_MAP = {
     "hidden": {
         "name": "hidden",
         "type": "bool",
+        "default": False,
         "api_searchable": True,
         "api_display": True,
         "api_writeable": True,

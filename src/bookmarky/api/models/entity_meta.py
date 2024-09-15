@@ -26,7 +26,7 @@ How to use:
 from polite_lib.utils import xlate
 from polite_lib.utils import date_utils
 
-from bookmarky.shared.models.entity_meta import FIELD_MAP
+from bookmarky.shared.models.entity_meta import FIELD_MAP, FIELD_META
 from bookmarky.api.models.base import Base
 
 
@@ -37,6 +37,7 @@ class EntityMeta(Base):
 
         self.table_name = 'entity_metas'
         self.field_map = FIELD_MAP
+        self.ux_key = FIELD_META["ux_key"]
         self.createable = True
         self.setup()
 
