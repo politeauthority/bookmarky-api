@@ -4,6 +4,8 @@
     Base model class for all models requiring meta storage.
 
 """
+import logging
+
 from bookmarky.api.models.base import Base
 from bookmarky.api.models.entity_meta import EntityMeta
 
@@ -52,7 +54,9 @@ class BaseEntityMeta(Base):
         return True
 
     def save(self) -> bool:
-        """Extend the Base model save, settings saves for all model self.metas objects."""
+        """Extend the Base model save, settings saves for all model self.metas objects.
+        @todo: This needs some work, we're having trouble getting the correct value stored.
+        """
         super(BaseEntityMeta, self).save()
         if not self.metas:
             return True
@@ -60,17 +64,28 @@ class BaseEntityMeta(Base):
         if not self.id:
             raise AttributeError('Model %s cant save entity metas with out id' % self)
 
-        for meta_name, meta in self.metas.items():
-            if not isinstance(meta, EntityMeta):
-                meta_value = meta
+        existing_meta = self.load_meta(set_values=False)
+        for meta_name, meta_value in self.metas.items():
+            if not isinstance(meta_value, EntityMeta):
                 meta = EntityMeta()
                 meta.name = meta_name
                 meta.value = str(meta_value)
+            else:
+                meta.value = meta_value
+            if hasattr(self, "user_id"):
+                meta.user_id = self.user_id
+            else:
+                logging.error("Model {self} does not have a user_id attribute!")
+
+            if existing_meta and meta_name in existing_meta:
+                meta.id = existing_meta[meta_name].id
+                meta.user_id = existing_meta[meta_name].user_id
 
             meta.entity_type = self.table_name
             meta.entity_id = self.id
             if not meta.type:
                 meta.type = 'str'
+
             meta.save()
             self.metas[meta_name] = meta
         return True
@@ -104,8 +119,10 @@ class BaseEntityMeta(Base):
         self.metas[meta_name].value = meta_value
         return True
 
-    def load_meta(self) -> bool:
-        """Load the model's meta data."""
+    def load_meta(self, set_values: bool = True) -> dict:
+        """Load the model's meta data. Setting the meta values to the instance if requested, and
+        returning the meta values as a dict.
+        """
         sql = f"""
             SELECT *
             FROM {self.table_name_meta}
@@ -113,21 +130,27 @@ class BaseEntityMeta(Base):
                 entity_id = %s AND
                 entity_type = %s;
             """
+        logging.debug("\nLOADED METAS")
+
         self.cursor.execute(sql, (self.id, self.table_name))
         meta_raws = self.cursor.fetchall()
+        print(meta_raws)
+        logging.debug("\nEND LOADED METAS\m")
         print("Loading meta data")
-        self._load_from_meta_raw(meta_raws)
-        return True
+        metas = self._load_from_meta_raw(meta_raws)
+        if set_values:
+            self.metas = metas
+        return metas
 
-    def _load_from_meta_raw(self, meta_raws) -> bool:
+    def _load_from_meta_raw(self, meta_raws) -> dict:
         """Create self.metas for an object from raw_metas data."""
         ret_metas = {}
         for meta_raw in meta_raws:
             em = EntityMeta(self.conn, self.cursor)
             em.build_from_list(meta_raw)
             ret_metas[em.name] = em
-        self.metas = ret_metas
-        return True
+        return ret_metas
+        # self.metas = ret_metas
 
 
 # End File: pignus/src/pignus_api/models/base_entity_meta.py
