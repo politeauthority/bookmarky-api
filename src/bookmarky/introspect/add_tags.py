@@ -19,6 +19,16 @@ from bookmarky.introspect.modules.add_reddit_tags import AddRedditTags
 
 USER_IDS = [1]
 
+KNOWN_DOMAINS = {
+    "google.com": "Google",
+    "reddit.com": "Reddit",
+    "github.com": "Github",
+    "wikipedia.com": "Wikipedia",
+}
+TAG_DOMAINS = {
+    "News": "cnbc.com"
+}
+
 
 class AutoTag:
 
