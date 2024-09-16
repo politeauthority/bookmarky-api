@@ -66,29 +66,28 @@ class BaseEntityMeta(Base):
 
         existing_meta = self.load_meta(set_values=False)
         for meta_name, meta_value in self.metas.items():
-            if not isinstance(meta_value, EntityMeta):
-                meta = EntityMeta()
-                meta.name = meta_name
-                meta.value = str(meta_value)
-            else:
-                meta.value = meta_value
-            if hasattr(self, "user_id"):
-                meta.user_id = self.user_id
-            else:
-                logging.error("Model {self} does not have a user_id attribute!")
+            self.metas[meta_name] = self._save_single_meta(existing_meta, meta_name, meta_value)
 
-            if existing_meta and meta_name in existing_meta:
-                meta.id = existing_meta[meta_name].id
-                meta.user_id = existing_meta[meta_name].user_id
-
-            meta.entity_type = self.table_name
-            meta.entity_id = self.id
-            if not meta.type:
-                meta.type = 'str'
-
-            meta.save()
-            self.metas[meta_name] = meta
         return True
+
+    def json(self, get_api: bool = False) -> dict:
+        """Create a JSON friendly output of the model, converting types to friendlies. If get_api
+        is specified and a model doesnt have api_display=False, it will export in the output.
+        We extend the Base model's json method and make sure that we also turn the meta fields into
+        json friendly output.
+        """
+        json_out = super(BaseEntityMeta, self).json()
+        if not self.metas:
+            return json_out
+        for meta_key, meta in self.metas.items():
+            if isinstance(meta, EntityMeta):
+                if "metas" not in json_out:
+                    json_out["metas"] = {}
+                json_out["metas"][meta_key] = meta.json()
+            else:
+                logging.error("Entity {self} meta key {meta_key} not not instance of EntityMeta")
+                continue
+        return json_out
 
     def delete(self) -> bool:
         """Delete a model item and it's meta."""
@@ -130,20 +129,16 @@ class BaseEntityMeta(Base):
                 entity_id = %s AND
                 entity_type = %s;
             """
-        logging.debug("\nLOADED METAS")
-
         self.cursor.execute(sql, (self.id, self.table_name))
         meta_raws = self.cursor.fetchall()
-        print(meta_raws)
-        logging.debug("\nEND LOADED METAS\m")
-        print("Loading meta data")
+        logging.debug("Loading meta data for {self}")
         metas = self._load_from_meta_raw(meta_raws)
         if set_values:
             self.metas = metas
         return metas
 
     def _load_from_meta_raw(self, meta_raws) -> dict:
-        """Create self.metas for an object from raw_metas data."""
+        """Load meta data from the database, returning it as a dictionary"""
         ret_metas = {}
         for meta_raw in meta_raws:
             em = EntityMeta(self.conn, self.cursor)
@@ -152,5 +147,39 @@ class BaseEntityMeta(Base):
         return ret_metas
         # self.metas = ret_metas
 
+    def _save_single_meta(self, existing_meta, meta_name, meta_value) -> EntityMeta:
+        """Save a single meta field."""
+        if meta_name not in self.field_map_metas:
+            logging.error(f"Model {self} does not allow meta key {meta_name}")
+            return False
+        meta_desc = self.field_map_metas[meta_name]
+        if not isinstance(meta_value, EntityMeta):
+            meta = EntityMeta()
+            meta.name = meta_name
+            meta.value = str(meta_value)
+        else:
+            meta.value = meta_value
+        if hasattr(self, "user_id"):
+            meta.user_id = self.user_id
+        elif hasattr(self, "user_id_field"):
+            meta.user_id = getattr(self, "user_id_field")
+        else:
+            error_msg = f"Model {self} does not have a user identification attribute! Failed to "
+            error_msg += f"save meta key: {meta_name}"
+            logging.error(error_msg)
 
-# End File: pignus/src/pignus_api/models/base_entity_meta.py
+        if existing_meta and meta_name in existing_meta:
+            meta.id = existing_meta[meta_name].id
+            meta.user_id = existing_meta[meta_name].user_id
+
+        meta.entity_type = self.table_name
+        meta.entity_id = self.id
+        meta.type = meta_desc["type"]
+
+        if meta.save():
+            return meta
+        else:
+            logging.error("Failed to save meta")
+            return False
+
+# End File: politeauthority/bookmarky-api/src/bookmarky/models/base_entity_meta.py
