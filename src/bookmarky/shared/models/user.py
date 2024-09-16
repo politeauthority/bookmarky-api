@@ -50,4 +50,11 @@ FIELD_MAP = {
     }
 }
 
-# End File: bookmarky/src/bookmarky/shared/models/user.py
+FIELD_MAP_METAS = {
+    "display_hidden": {
+        "name": "display_hidden",
+        "type": "bool"
+    }
+}
+
+# End File: politeauthority/bookmarky-api/src/bookmarky/shared/models/user.py

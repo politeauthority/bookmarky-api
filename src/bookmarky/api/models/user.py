@@ -3,7 +3,7 @@
     Model User
 
 """
-from bookmarky.shared.models.user import FIELD_MAP
+from bookmarky.shared.models.user import FIELD_MAP, FIELD_MAP_METAS
 from bookmarky.api.models.base_entity_meta import BaseEntityMeta
 
 
@@ -16,7 +16,9 @@ class User(BaseEntityMeta):
         super(User, self).__init__(conn, cursor)
         self.table_name = "users"
         self.field_map = FIELD_MAP
+        self.field_map_metas = FIELD_MAP_METAS
         self.createable = True
+        self.user_id_field = "id"
         self.metas = {}
         self.setup()
 
@@ -29,4 +31,4 @@ class User(BaseEntityMeta):
         return "<User>"
 
 
-# End File: bookmarky/src/bookmarky/api/models/user.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/api/models/user.py

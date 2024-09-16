@@ -53,15 +53,16 @@ class EntityMeta(Base):
         """Build a model from an ordered list, converting data types to their desired type where
         possible.
         :param raw: A list of raw results from the database.
+        @todo: This doesnt cover enough meta data type potentials
         """
         count = 0
-        print("Building from list")
         for field, info in self.field_map.items():
             setattr(self, info['name'], raw[count])
             count += 1
-            if self.type == 'bool':
-                self.value = xlate.convert_int_to_bool(self.value)
-
+        if self.type == "bool":
+            self.value = xlate.convert_str_to_bool(raw[7])
+        else:
+            self.value = raw[7]
         return True
 
     def create(
