@@ -21,9 +21,11 @@ PER_PAGE = 20
 
 
 @ctrl_bookmarks.route("")
+@ctrl_bookmarks.route("/")
 @auth.auth_request
 def index() -> Response:
     """Get Bookmarks, along with associated Tags where they exist."""
+    logging.info("\n\nStart Bookmarks Collection")
     extra_args = {
         "fields": {
             "user_id": {
@@ -35,8 +37,13 @@ def index() -> Response:
         "order_by": {},
         "limit": None
     }
+    user_display_hidden_search = _get_user_display_hidden()
+    if user_display_hidden_search:
+        extra_args["fields"].update(user_display_hidden_search)
+        logging.debug("\n\nEXTRA ARGS %s\n\n" % extra_args["fields"])
     data = ctrl_collection_base.get(Bookmarks, extra_args)
     data["objects"] = Tags().get_tags_for_bookmarks(data["objects"])
+    logging.info("END Bookmarks Collection\n\n")
     return jsonify(data)
 
 
@@ -133,6 +140,26 @@ def by_tag() -> Response:
     data["objects"] = Tags().get_tags_for_bookmarks(bookmarks_json)
     data["info"]["total_objects"] = len(data["objects"])
     return jsonify(data)
+
+
+def _get_user_display_hidden() -> dict:
+    """Get the argument for whether or not we display hidden bookmarks."""
+    user = glow.user["obj"]
+    if "display_hidden" not in user.metas:
+        return {}
+
+    if user.metas["display_hidden"].value == True:
+        return {}
+    else:
+        ret = {
+            "hidden": {
+                "value": False,
+                "op": "=",
+                "overrideable": False
+            }
+        }
+        logging.warning("Will display hidden Bookmarks with this query!")
+        return ret
 
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/controllers/collections/
 #           ctrl_bookmarks.py

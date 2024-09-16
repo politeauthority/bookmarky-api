@@ -12,13 +12,6 @@ from rich.console import Console
 
 USER_ID = 1
 
-THE_ENV = "STAGE"
-# THE_ENV = "DEV"
-
-API_URL = os.environ.get(f"{THE_ENV}_BOOKMARKY_API_URL")
-API_CLIENT_ID = os.environ.get(f"{THE_ENV}_BOOKMARKY_CLIENT_ID")
-API_API_KEY = os.environ.get(f"{THE_ENV}_BOOKMARKY_API_KEY")
-
 console = Console()
 
 
@@ -27,16 +20,20 @@ class GetBookmarks:
     def __init__(self, the_args):
         self.args = the_args
         self.token = ""
-        self.set_env(self.args.env)
+        if self.args.env:
+            self.env = self.args.env.upper()
+        else:
+            self.env = "STAGE"
+        self.set_env()
 
-    def set_env(self, env_name: str) -> bool:
-        self.api_url = os.environ.get(f"{env_name}_BOOKMARKY_API_URL")
-        self.api_client_id = os.environ.get(f"{env_name}_BOOKMARKY_CLIENT_ID")
-        self.api_key = os.environ.get(f"{env_name}_BOOKMARKY_API_KEY")
+    def set_env(self) -> bool:
+        self.api_url = os.environ.get(f"{self.env}_BOOKMARKY_API_URL")
+        self.api_client_id = os.environ.get(f"{self.env}_BOOKMARKY_CLIENT_ID")
+        self.api_key = os.environ.get(f"{self.env}_BOOKMARKY_API_KEY")
         return True
 
     def run(self) -> bool:
-        print("Using %s on %s" % (THE_ENV, API_URL))
+        print("Using %s on %s" % (self.env, self.api_url))
         token = self.get_token()
         if not token:
             print("Error: exitings")
@@ -49,11 +46,11 @@ class GetBookmarks:
     def get_token(self) -> bool:
         """Get a token to use against the api."""
         headers = {
-            "X-Api-Key": API_API_KEY,
-            "Client-Id": API_CLIENT_ID,
+            "X-Api-Key": self.api_key,
+            "Client-Id": self.api_client_id,
         }
         response = requests.post(
-            f"{API_URL}/auth",
+            f"{self.api_url}/auth",
             headers=headers,
             verify=False
         )
@@ -72,10 +69,11 @@ class GetBookmarks:
         }
         data = {
             "user_id": USER_ID,
+            "limit": 5
         }
         # data.update(the_args)
         response = requests.get(
-            f"{API_URL}/bookmarks",
+            f"{self.api_url}/bookmarks",
             headers=headers,
             params=data,
             verify=False

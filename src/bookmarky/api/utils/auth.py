@@ -44,6 +44,13 @@ def auth_request(f):
             glow.user["user_id"] = jwt_value["user_id"]
             glow.user["org_id"] = jwt_value["org_id"]
             glow.user["role_perms"] = jwt_value["role_perms"]
+            user = User()
+            if not user.get_by_id(glow.user["user_id"]):
+                logging.error("Could not find User ID: %s" % glow.user["user_id"])
+                data["message"] = "Could not find User: %s" % glow.user["user_id"]
+                return make_response(jsonify(data), 400)
+            user.load_meta()
+            glow.user["obj"] = user
             logging.info("Authenticated JWT for User ID: %s" % glow.user["user_id"])
             record_last_access_user(glow.user["user_id"])
             # Check if user has access to this resource
