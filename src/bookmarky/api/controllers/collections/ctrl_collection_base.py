@@ -111,6 +111,7 @@ def _parse_body(raw_args: dict, field_map: dict, extra_args: dict = None) -> dic
             raw_args["fields"].pop(extra_arg_field_key)
 
     for raw_arg_key, raw_arg_data in raw_args.items():
+        # Handle User Fields
         if raw_arg_key == "fields":
             if concat_type == "where_and":
                 ret["where_and"] = _get_fields(raw_arg_data, field_map)
@@ -127,9 +128,12 @@ def _parse_body(raw_args: dict, field_map: dict, extra_args: dict = None) -> dic
                 logging.warning("limit is not int, dropping.")
                 continue
             ret["limit"] = raw_arg_data
+
+    # Handle Extra Args
     if extra_args["fields"]:
         for extra_arg_key, extra_arg_data in extra_args.items():
             if extra_arg_key == "fields":
+                
                 if concat_type == "where_and":
                     ret["where_and"] += _get_fields(extra_arg_data, field_map)
                 else:
@@ -172,7 +176,7 @@ def _get_fields(field_data: dict, field_map: dict) -> list:
         ]
     :unit-test: TestCtrlCollectionBase.test___get_fields
     """
-    print("get_fields")
+    
     where_and_fields = []
     for fn, query_data in field_data.items():
 
