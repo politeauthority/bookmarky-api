@@ -7,7 +7,7 @@
 """
 from flask import Blueprint, jsonify, Response
 
-# from bookmarky.api.stats import totals
+from bookmarky.api.stats import entity_stats
 from bookmarky.api.collects.tags import Tags
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import glow
@@ -47,6 +47,18 @@ def top_tags() -> Response:
     data["objects"] = sorted(tags, key=lambda x: x["metas"]["count"])
     data["objects"].reverse()
 
+    return jsonify(data)
+
+
+@auth.auth_request
+@ctrl_stats.route("/entity-counts")
+def entity_counts() -> Response:
+    """Get all entity counts"""
+    data = {
+        "info": "Entity Counts",
+        "entities": {}
+    }
+    data["entities"] = entity_stats.get_all_entity_counts()
     return jsonify(data)
 
 

@@ -21,6 +21,8 @@ Self hosted open source bookmark tool
  - Branch from `stage` branch
  - Merge to `stage`
  - Merge `stage` to `main`
+ - Delete `stage` branch on Github
+ - Run `task ci-new-stage` locally
 
 ### To Dos
 
