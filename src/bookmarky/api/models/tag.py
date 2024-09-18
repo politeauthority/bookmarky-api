@@ -3,6 +3,8 @@
     Model - Tag
 
 """
+from polite_lib.utils import xlate
+
 from bookmarky.shared.models.tag import FIELD_MAP, FIELD_META
 from bookmarky.api.models.base_entity_meta import BaseEntityMeta
 
@@ -34,5 +36,10 @@ class Tag(BaseEntityMeta):
     def get_by_slug(self, slug: str) -> bool:
         """Get a Tag by the slug."""
         return self.get_by_field("slug", slug)
+
+    def save(self):
+        """Save a Tag, updating the slug to a URL safe value."""
+        self.slug = xlate.slugify(self.name)
+        super(Tag, self).save()
 
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/models/tag.py
