@@ -124,6 +124,7 @@ def _gen_search_query(search_phrase: str, page: int) -> dict:
 def by_tag() -> Response:
     """Get Bookmarks by a Tag.
     @todo: This feels lazy, this should be done better probably.
+        - If tag slug can't be found return a 404
     """
     data = {
         "info": {
