@@ -32,6 +32,8 @@ class Bookmarks(BaseEntityMetas):
                     ON b.id = bt.bookmark_id
             WHERE
                 bt.tag_id = %s
+            ORDER BY
+                b.created_ts DESC
             LIMIT 20;
         """
         self.cursor.execute(sql, (tag_id,))

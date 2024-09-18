@@ -5,8 +5,6 @@
     /stats
 
 """
-import logging
-
 from flask import Blueprint, jsonify, Response
 
 # from bookmarky.api.stats import totals
@@ -24,7 +22,6 @@ def top_tags() -> Response:
     @todo: restrict this to user_id
     """
     RESULTS = 20
-    logging.info("Serving /top-tags")
     data = {
         "info": "Bookmarky",
         "objects": []
@@ -40,7 +37,6 @@ def top_tags() -> Response:
     # glow.db["cursor"].execute(sql, (RESULTS,))
     glow.db["cursor"].execute(sql, (RESULTS,))
     rows = glow.db["cursor"].fetchall()
-    print(rows)
     tag_ids = _get_ids(rows)
     tag_col = Tags()
     tags_select = tag_col.get_by_ids(tag_ids)

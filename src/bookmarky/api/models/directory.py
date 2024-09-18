@@ -4,6 +4,7 @@
     Directory
 
 """
+from polite_lib.utils import xlate
 
 from bookmarky.shared.models.directory import FIELD_MAP, FIELD_META
 from bookmarky.api.models.base_entity_meta import BaseEntityMeta
@@ -23,5 +24,10 @@ class Directory(BaseEntityMeta):
         self.createable = True
         self.setup()
         self.rw_only_own = True
+
+    def save(self):
+        """Save a Directory, updating the slug to a URL safe value."""
+        self.slug = xlate.slugify(self.name)
+        super(Directory, self).save()
 
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/models/directory.py
