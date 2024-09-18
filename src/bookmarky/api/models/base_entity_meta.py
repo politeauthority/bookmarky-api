@@ -131,7 +131,7 @@ class BaseEntityMeta(Base):
             """
         self.cursor.execute(sql, (self.id, self.table_name))
         meta_raws = self.cursor.fetchall()
-        logging.debug("Loading meta data for {self}")
+        logging.debug(f"Loading meta data for {self}")
         metas = self._load_from_meta_raw(meta_raws)
         if set_values:
             self.metas = metas
@@ -158,6 +158,7 @@ class BaseEntityMeta(Base):
             meta.name = meta_name
             meta.value = str(meta_value)
         else:
+            meta = meta_value
             meta.value = meta_value
         if hasattr(self, "user_id"):
             meta.user_id = self.user_id
