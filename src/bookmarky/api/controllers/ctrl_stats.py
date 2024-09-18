@@ -7,9 +7,7 @@
 """
 from flask import Blueprint, jsonify, Response
 
-# from bookmarky.api.stats import totals
 from bookmarky.api.stats import entity_stats
-from bookmarky.api.collects.bookmarks import Bookmarks
 from bookmarky.api.collects.tags import Tags
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import glow

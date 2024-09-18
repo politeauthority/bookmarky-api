@@ -47,9 +47,15 @@ FIELD_MAP = {
     },
     "deleted": {
         "name": "deleted",
-        "type": "datetime",
+        "type": "bool",
         "api_searchable": True,
         "api_display": False,
+    },
+    "hidden": {
+        "name": "hidden",
+        "type": "datetime",
+        "api_searchable": True,
+        "api_display": True,
     }
 }
 
@@ -58,4 +64,4 @@ FIELD_META = {
 }
 
 
-# End File: politeauthority/bookmarky/src/bookmarky/shared/models/directory.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/shared/models/directory.py
