@@ -145,7 +145,7 @@ def post_model(model, entity_id: int = None, generated_data: dict = {}):
 
     if not entity_found:
         logging.debug(
-            "Entity was not found, attempting to create a new entity of type: {entity.model_name}"
+            f"Entity was not found, attempting to create a new entity of type: {entity.model_name}"
         )
 
     # Handle getting entity meta data from the requst
