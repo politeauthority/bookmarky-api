@@ -77,7 +77,7 @@ class Base:
         return True
 
     def save(self) -> bool:
-        """Saves a model instance in the model table.
+        """Saves a model instance in the model's table.
         :unit-test: TestApiModelBase::test__save
         """
         self.setup()

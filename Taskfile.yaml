@@ -27,6 +27,17 @@ tasks:
         echo "Building"
         kubectl exec -it -n ${NS} ${POD} -- sh -c "cd /work/src && pip install ."
 
+  dev-cp-api-plib:
+    cmds:
+      - |
+        NS=$"{{.K8S_NS_DEV}}"
+        POD=$(kubectl get pods -l app=bookmarky-api -n ${NS} --no-headers --field-selector=status.phase=Running | cut -d' ' -f1)
+        echo "Copying to pod $NS/$POD"
+        kubectl cp -n ${NS} -c bookmarky-api ../polite-lib/src ${POD}:/work/polite-lib
+        echo "Coppied Polite-Lib source"
+        echo "Building"
+        # kubectl exec -it -n ${NS} ${POD} -- sh -c "cd /work/src && pip install ."
+
   dev-cp-api-src-fast:
     cmds:
       - |

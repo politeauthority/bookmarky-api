@@ -54,6 +54,10 @@ FIELD_MAP_METAS = {
     "display_hidden": {
         "name": "display_hidden",
         "type": "bool"
+    },
+    "beta_features": {
+        "name": "beta_features",
+        "type": "bool"
     }
 }
 
