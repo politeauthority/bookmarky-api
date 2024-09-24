@@ -1005,4 +1005,5 @@ class TestApiModelBase:
         result = base._expand_list_values(field, field_value)
         expected = [1, 2, 3]
         assert expected == result
+
 # End File: politeauthority/bookmarky-api/tests/unit/api/models/test_base.py

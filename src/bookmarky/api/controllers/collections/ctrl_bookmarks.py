@@ -140,6 +140,7 @@ def by_tag() -> Response:
     bookmarks_json = bookmarks_col.make_json(bookmarks)
     data["objects"] = Tags().get_tags_for_bookmarks(bookmarks_json)
     data["info"]["total_objects"] = len(data["objects"])
+    data["info"]["tag"] = tag.json()
     return jsonify(data)
 
 

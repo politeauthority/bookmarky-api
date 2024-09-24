@@ -100,8 +100,11 @@ def _parse_body(raw_args: dict, field_map: dict, extra_args: dict = None) -> dic
     }
     concat_type = "where_and"
     accepted_contact_type = ["where_and", "where_or"]
-    if "concat_type" in extra_args and extra_args["concat_type"] in accepted_contact_type:
-        concat_type = extra_args["concat_type"]
+    if extra_args:
+        if "concat_type" in extra_args and extra_args["concat_type"] in accepted_contact_type:
+            concat_type = extra_args["concat_type"]
+    else:
+        concat_type = "where_and"
     if not raw_args or not extra_args:
         return ret
 
