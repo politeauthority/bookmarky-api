@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: bookmarky-dev
 resources:
   - ../../base
+  - storage.yaml
   # - secrets.yaml
 images:
   - name: harbor.squid-ink.us/politeauthority/bookmarky-api
@@ -34,6 +35,9 @@ patches:
         path: /spec/template/spec/containers/0/livenessProbe
       - op: remove
         path: /spec/template/spec/containers/0/readinessProbe
+      - op: replace
+        path: /spec/template/spec/volumes/0/persistentVolumeClaim/claimName
+        value: bookmarky-images-dev
   - target:
       kind: Ingress
       name: bookmarky-api

@@ -37,7 +37,9 @@ general = {
     "SECRET_KEY": os.environ.get("SECRET_KEY", "hello-world123"),
     "TEST": os.environ.get("TEST", False),
     "LOG_HEALTH_CHECKS": os.environ.get("LOG_HEALTH_CHECKS", True),
-    "DEPLOYED_AT": os.environ.get("DEPLOYED_AT", None)
+    "DEPLOYED_AT": os.environ.get("DEPLOYED_AT", None),
+    "IMAGE_DIR": os.environ.get("PUBLIC_IMAGES", "/images"),
+    # "IMAGE_DIR": "/work/src/bookmarky/public/images",
 }
 if general["BUILD"]:
     general["BUILD_SHORT"] = general["BUILD"][:12]

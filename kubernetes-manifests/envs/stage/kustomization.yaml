@@ -3,10 +3,10 @@ kind: Kustomization
 namespace: bookmarky-stage
 resources:
   - ../../base
-  # - secret.yaml
+  - storage.yaml
 images:
   - name: harbor.squid-ink.us/politeauthority/bookmarky-api
-    newTag: stage-0.0.1.58
+    newTag: stage-0.0.1.59
 patches:
   - target:
       kind: Deployment
@@ -22,6 +22,9 @@ patches:
         value:
           name: BOOKMARKY_ENV
           value: "stage"
+      - op: replace
+        path: /spec/template/spec/volumes/0/persistentVolumeClaim/claimName
+        value: bookmarky-images-stage
   - target:
       kind: Ingress
       name: bookmarky-api
