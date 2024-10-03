@@ -14,6 +14,8 @@ spec:
     spec:
       imagePullSecrets:
         - name: harbor-registry
+      securityContext:
+        fsGroup: 1003
       initContainers:
         - name: bookmarky-migrations
           image: harbor.squid-ink.us/politeauthority/bookmarky-api:latest
@@ -89,6 +91,11 @@ spec:
                 secretKeyRef:
                   name: bookmarky-creds
                   key: SECRET_KEY
+            - name: IMAGE_DIR
+              value: "/images"
+          volumeMounts:
+            - name: bookmarky-images
+              mountPath: /images
           resources:
             requests:
               memory: "250Mi"
@@ -107,3 +114,7 @@ spec:
               port: 80
             initialDelaySeconds: 10
             periodSeconds: 240
+      volumes:
+        - name: bookmarky-images
+          persistentVolumeClaim:
+            claimName: bookmarky-images-prod

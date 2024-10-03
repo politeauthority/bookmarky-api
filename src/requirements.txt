@@ -1,2 +1,4 @@
+beautifulsoup4==4.12.3
 Flask==3.0.3
 psycopg2-binary==2.9.9
+pillow==10.4.0

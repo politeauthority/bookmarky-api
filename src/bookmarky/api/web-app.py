@@ -38,6 +38,8 @@ from bookmarky.api.controllers.models.ctrl_bookmark import ctrl_bookmark
 from bookmarky.api.controllers.collections.ctrl_bookmarks import ctrl_bookmarks
 
 from bookmarky.api.controllers.models.ctrl_bookmark_tag import ctrl_bookmark_tag
+from bookmarky.api.controllers.models.ctrl_tag_feature import ctrl_tag_feature
+from bookmarky.api.controllers.collections.ctrl_tag_features import ctrl_tag_features
 
 from bookmarky.api.controllers.models.ctrl_directory import ctrl_directory
 from bookmarky.api.controllers.collections.ctrl_directories import ctrl_directories
@@ -45,6 +47,7 @@ from bookmarky.api.controllers.models.ctrl_tag import ctrl_tag
 from bookmarky.api.controllers.collections.ctrl_tags import ctrl_tags
 
 from bookmarky.api.controllers.ctrl_stats import ctrl_stats
+from bookmarky.api.controllers.ctrl_image import ctrl_image
 
 
 logging.config.dictConfig(log_config)
@@ -59,7 +62,6 @@ app.debugger = False
 def register_blueprints(app: Flask) -> bool:
     """Register controller blueprints to flask."""
     app.register_blueprint(ctrl_index)
-    app.register_blueprint(ctrl_interops)
     app.register_blueprint(ctrl_api_key)
     app.register_blueprint(ctrl_api_keys)
     app.register_blueprint(ctrl_user)
@@ -74,8 +76,12 @@ def register_blueprints(app: Flask) -> bool:
     app.register_blueprint(ctrl_directories)
     app.register_blueprint(ctrl_tag)
     app.register_blueprint(ctrl_tags)
+    app.register_blueprint(ctrl_tag_feature)
+    app.register_blueprint(ctrl_tag_features)
 
+    app.register_blueprint(ctrl_interops)
     app.register_blueprint(ctrl_stats)
+    app.register_blueprint(ctrl_image)
 
     return True
 
