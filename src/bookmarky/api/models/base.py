@@ -299,11 +299,17 @@ class Base:
         """
         return self.field_map.keys()
 
-    def _get_field_names_str(self) -> str:
+    def _get_field_names_str(self, prefix: str = None) -> str:
         """Get the model's fields in a lists.
         :unit-test: TestApiModelBase::test__get_field_names_str
         """
-        return ",".join(self.field_map.keys())
+        fields = []
+        for field_name, field_info in self.field_map.items():
+            if prefix:
+                fields.append(f"{prefix}.{field_name}")
+            else:
+                fields.append(field_name)
+        return ",".join(fields)
 
     def build_from_list(self, raw: list) -> bool:
         """Build a model from an ordered list, converting data types to their desired type where

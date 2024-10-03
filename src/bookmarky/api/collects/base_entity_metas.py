@@ -120,7 +120,7 @@ class BaseEntityMetas(Base):
     def get_metas_for_entities(self, entity_type: str, entities: list) -> list:
         """From a hydraded list of entities, get the EntityMeta data for each Entity and attatch it
         to the returned result.
-        :param entity_type: 
+        :param entity_type:
         """
         if not entities:
             return []

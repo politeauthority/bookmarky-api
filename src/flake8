@@ -5,4 +5,5 @@ exclude =
 	.git,
     __pycache__,
     build,
-    data
+    data,
+    introspect/debug.py
