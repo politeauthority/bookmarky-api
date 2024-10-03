@@ -21,6 +21,7 @@ from bookmarky.api.utils import glow
 from bookmarky.api.controllers.models.ctrl_api_key import ctrl_api_key
 from bookmarky.api.controllers.collections.ctrl_api_keys import ctrl_api_keys
 from bookmarky.api.controllers.ctrl_index import ctrl_index
+from bookmarky.api.controllers.ctrl_export import ctrl_export
 # from cver.api.controllers.ctrl_collections.ctrl_migrations import ctrl_migrations
 # from cver.api.controllers.ctrl_models.ctrl_role import ctrl_role
 # from cver.api.controllers.ctrl_collections.ctrl_roles import ctrl_roles
@@ -58,6 +59,7 @@ app.debugger = False
 def register_blueprints(app: Flask) -> bool:
     """Register controller blueprints to flask."""
     app.register_blueprint(ctrl_index)
+    app.register_blueprint(ctrl_export)
     app.register_blueprint(ctrl_api_key)
     app.register_blueprint(ctrl_api_keys)
     app.register_blueprint(ctrl_user)
