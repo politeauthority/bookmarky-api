@@ -1,7 +1,7 @@
 """
     Bookmarky Api
-    Controller - Export
-    /export
+    Controller - Inter Ops
+    /inter-ops
 
 """
 import logging
@@ -15,16 +15,19 @@ from bookmarky.api.utils.export import Export
 from bookmarky.api.utils import auth
 
 
-ctrl_export = Blueprint("export", __name__, url_prefix="/export")
+ctrl_interops = Blueprint("interops", __name__, url_prefix="/inter-ops")
 
 
-@ctrl_export.route("")
-@ctrl_export.route("/")
+@ctrl_interops.route("/export")
 @auth.auth_request
-def index() -> Response:
+def export() -> Response:
     logging.info("Serving /export")
     export_data = Export().run(glow.user["user_id"])
-    export_file = json.dumps(export_data)
+    try:
+        export_file = json.dumps(export_data)
+    except Exception as e:
+        logging.error("Failed to convert export to JSON: %s" % e)
+        return jsonify({"stauts": "error"}), 500
     json_bytes = io.BytesIO(export_file.encode('utf-8'))
     json_bytes.seek(0)
     try:
@@ -39,4 +42,4 @@ def index() -> Response:
         return jsonify({"stauts": "error"}), 500
 
 
-# End File: politeauthroity/bookmarky/src/bookmarky/api/controllers/ctrl_export.py
+# End File: politeauthroity/bookmarky/src/bookmarky/api/controllers/ctrl_interops.py

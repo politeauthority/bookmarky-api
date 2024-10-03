@@ -1,4 +1,4 @@
-# Bookmarky Api v0.0.1.57
+# Bookmarky Api v0.0.1.58
 
 Self hosted open source bookmark tool
 
@@ -35,7 +35,8 @@ Self hosted open source bookmark tool
  - Figuee out why https://www.youtube.com/watch?v=lhlRHOxMNys&t=1s wont save
 
 #### Api
- - User Settings Meta update and loadb
+ - Fix slug generation for instances like "News - Internation" becomining "news---international"
+ - Make Tag slugs unique to user
  
  
  ### Web

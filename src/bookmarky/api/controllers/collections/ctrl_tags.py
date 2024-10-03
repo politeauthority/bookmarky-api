@@ -74,6 +74,24 @@ def search() -> Response:
     logging.debug("\nEND SEARCH\n\n")
     return jsonify(data)
 
+# @ctrl_tags.route("/recently-used")
+# @auth.auth_request
+# def recently_used() -> Response:
+#     """Get recently used Tags. """
+#     extra_args = {
+#         "fields": {
+#             "user_id": {
+#                 "value": glow.user["user_id"],
+#                 "op": "=",
+#                 "overrideable": False
+#             }
+#         },
+#         "order_by": {},
+#         "limit": None
+#     }
+#     data = ctrl_collection_base.get(Tags, extra_args)
+#     return jsonify(data)
+
 
 def _gen_search_query(search_phrase: str, page: int) -> dict:
     """Generate the search query SQL."""

@@ -74,6 +74,9 @@ def post_model_meta():
     for meta_key, meta_value in metas_to_set.items():
         user.metas[meta_key] = meta_value
 
+    logging.info("\n\nUser Meta")
+    logging.info(user.metas)
+    logging.info("\n\n")
     if not user.save():
         logging.error("Failed to save User")
         data["message"] = "Error saving User"

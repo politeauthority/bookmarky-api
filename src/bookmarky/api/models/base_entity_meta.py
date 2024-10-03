@@ -149,6 +149,9 @@ class BaseEntityMeta(Base):
 
     def _save_single_meta(self, existing_meta, meta_name, meta_value) -> EntityMeta:
         """Save a single meta field."""
+        print("\n\nSaving Single Meta")
+        print(meta_name)
+        print("End Single Meta\n\n")
         if meta_name not in self.field_map_metas:
             logging.error(f"Model {self} does not allow meta key {meta_name}")
             return False
