@@ -1,6 +1,6 @@
 """
     Bookmarky Shared
-    Model - Tag
+    Model - Tag Feature
 
 """
 
@@ -21,6 +21,12 @@ FIELD_MAP = {
         "type": "datetime",
         "api_searchable": True,
     },
+    "tag_id": {
+        "name": "tag_id",
+        "type": "int",
+        "api_writeable": True,
+        "api_searchable": True,
+    },
     "user_id": {
         "name": "user_id",
         "type": "int",
@@ -33,28 +39,17 @@ FIELD_MAP = {
         "api_writeable": True,
         "api_searchable": True,
     },
-    "slug": {
-        "name": "slug",
+    "value": {
+        "name": "value",
         "type": "str",
         "api_display": True,
         "api_writeable": True,
     },
-    "deleted": {
-        "name": "deleted",
-        "type": "bool",
+    "data": {
+        "name": "data",
+        "type": "str",
         "api_searchable": True,
     },
-    "hidden": {
-        "name": "hidden",
-        "type": "bool",
-        "api_searchable": True,
-        "api_display": True,
-        "api_writeable": True,
-    }
-}
-
-FIELD_META = {
-    "ux_key": ["user_id", "slug"]
 }
 
 
