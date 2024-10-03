@@ -15,6 +15,7 @@ from bookmarky.api.collects.bookmark_tags import BookmarkTags
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import api_util
 from bookmarky.api.utils import glow
+from bookmarky.api.utils.auto_tag_features import AutoTagFeatures
 
 ctrl_bookmark = Blueprint("bookmark", __name__, url_prefix="/bookmark")
 
@@ -53,7 +54,10 @@ def post_model(bookmark_id: int = None):
         BookmarkTag().create(bookmark_id, r_args["tag_id"])
     if r_args and "tag_id_remove" in r_args:
         BookmarkTag().remove(bookmark_id, r_args["tag_id_remove"])
-    return ctrl_base.post_model(Bookmark, bookmark_id, data)
+    data, return_code = ctrl_base.post_model(Bookmark, bookmark_id, data)
+    if data["status"] == "success":
+        _handle_auto_features(data)
+    return data, return_code
 
 
 # @ctrl_bookmark.route("/meta/<bookmark_id>", methods=["POST"])
@@ -103,5 +107,14 @@ def delete_model(bookmark_id: int = None):
     bts_col.delete_for_bookmark(bookmark.id)
     return ctrl_base.delete_model(Bookmark, bookmark.id)
 
+
+def _handle_auto_features(data: dict) -> bool:
+    """When we add a Bookmark, run through all the Auto Features and apply all of those which fit
+    the Bookmark.
+    """
+    bookmark = Bookmark()
+    bookmark.build_from_dict(data["object"])
+    AutoTagFeatures().run(glow.user["user_id"], bookmark)
+    return True
 
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/controllers/ctrl_models/ctrl_bookmark.py
