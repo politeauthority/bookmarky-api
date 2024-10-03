@@ -23,18 +23,6 @@ class Tags(Base):
         self.field_map = self.collect_model().field_map
         self.per_page = 50
 
-    def get_by_user_id(self, user_id: int) -> list:
-        """Get all Tags for a User by user_id."""
-        sql = f"""
-            SELECT *
-            FROM {self.table_name}
-            WHERE
-                user_id = %s;
-        """
-        self.cursor.execute(sql, (user_id,))
-        raws = self.cursor.fetchall()
-        return self.load_presiteines(raws)
-
     def get_tag_ids_by_user_and_name(self, user_id: int, tags: list) -> list:
         """Get tags where the tags supplied match the User.id"""
         sql = f"""
@@ -78,6 +66,21 @@ class Tags(Base):
                     }
                     bookmark["tags"].append(tag)
         return bookmarks
+    
+    def get_tags_for_bookmark(self, bookmark_id: int) -> list:
+        """Get all the Tags for a single Bookmark, returning hydrated Tag objects."""
+        select_fields = Tag()._get_field_names_str(prefix="t")
+        sql = f"""
+            SELECT {select_fields}
+            FROM bookmark_tags bt
+                JOIN tags t
+                    ON bt.tag_id = t.id
+            WHERE
+                bt.bookmark_id = %s;
+        """
+        self.cursor.execute(sql, (bookmark_id,))
+        raws = self.cursor.fetchall()
+        return self.load_presiteines(raws)
 
     def _get_bookmark_ids(self, bookmarks: list) -> tuple:
         """Unpack a Bookmarks, getting their Ids as a tuple. We'll unpack a list of dicts or a list

@@ -978,6 +978,27 @@ class TestApiModelBase:
         }
         assert base._is_model_json()
 
+    def test___get_field_names_str(self):
+        """
+        """
+        base = Base()
+        FIELD_MAP = BASE_MAP
+        FIELD_MAP["new"] = {
+            "name": "new",
+            "type": "bool",
+            "default": True
+        }
+        base.field_map = FIELD_MAP
+        result = base._get_field_names_str()
+        expected = "id,created_ts,updated_ts,name,test_int,test_list,test_str,test_date,test_bool,"
+        expected += "new,long_number,list_field"
+        assert expected == result
+
+        expected = "x.id,x.created_ts,x.updated_ts,x.name,x.test_int,x.test_list,x.test_str,"
+        expected += "x.test_date,x.test_bool,x.new,x.long_number,x.list_field"
+        result = base._get_field_names_str("x")
+        assert expected == result
+
     def test____get_datetime(self):
         """
         :method: Base()._get_date_time

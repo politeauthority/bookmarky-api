@@ -178,7 +178,6 @@ def _get_fields(field_data: dict, field_map: dict) -> list:
         ]
     :unit-test: TestCtrlCollectionBase.test___get_fields
     """
-    
     where_and_fields = []
     for fn, query_data in field_data.items():
 

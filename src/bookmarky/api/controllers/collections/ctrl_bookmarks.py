@@ -11,6 +11,7 @@ from flask import Blueprint, jsonify, request, Response
 from bookmarky.api.collects.bookmarks import Bookmarks
 from bookmarky.api.collects.tags import Tags
 from bookmarky.api.models.tag import Tag
+from bookmarky.api.models.directory import Directory
 from bookmarky.api.controllers.collections import ctrl_collection_base
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import glow
@@ -141,6 +142,31 @@ def by_tag() -> Response:
     data["objects"] = Tags().get_tags_for_bookmarks(bookmarks_json)
     data["info"]["total_objects"] = len(data["objects"])
     data["info"]["tag"] = tag.json()
+    return jsonify(data)
+
+
+@ctrl_bookmarks.route("/by-dir")
+@auth.auth_request
+def by_dir() -> Response:
+    """Get Bookmarks by a Directory.
+    @todo: This feels lazy, this should be done better probably.
+        - If dir slug can't be found return a 404
+    """
+    data = {
+        "info": {
+            "current_page": 1,
+        },
+        "objects": []
+    }
+    search_args = request.args
+    directory = Directory()
+    directory.get_by_slug(search_args["dir_slug"])
+    bookmarks_col = Bookmarks()
+    bookmarks = bookmarks_col.get_by_dir_id(directory.id)
+    bookmarks_json = bookmarks_col.make_json(bookmarks)
+    data["objects"] = Tags().get_tags_for_bookmarks(bookmarks_json)
+    data["info"]["total_objects"] = len(data["objects"])
+    data["info"]["dir"] = directory.json()
     return jsonify(data)
 
 

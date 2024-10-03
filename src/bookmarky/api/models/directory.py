@@ -25,6 +25,10 @@ class Directory(BaseEntityMeta):
         self.setup()
         self.rw_only_own = True
 
+    def get_by_slug(self, slug: str) -> bool:
+        """Get a Directory by the slug."""
+        return self.get_by_field("slug", slug)
+
     def save(self):
         """Save a Directory, updating the slug to a URL safe value."""
         self.slug = xlate.slugify(self.name)

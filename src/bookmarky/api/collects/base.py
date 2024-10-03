@@ -234,6 +234,21 @@ class Base:
             rets.append(entity.json())
         return rets
 
+    def get_by_user_id(self, user_id: int) -> list:
+        """Get all Entities by user_id. This obviously requires the model to have a user_id field.
+        """
+        if "user_id" not in self.field_map:
+            raise ValueError(f"Model {self} does not have a user_id field.")
+        sql = f"""
+            SELECT *
+            FROM {self.table_name}
+            WHERE
+                user_id = %s;
+        """
+        self.cursor.execute(sql, (user_id,))
+        raws = self.cursor.fetchall()
+        return self.load_presiteines(raws)
+
     def _generate_paginated_sql(
         self,
         page: int,
@@ -341,7 +356,7 @@ class Base:
     def _pagination_where_and_one(self, where_a: dict) -> dict:
         """Handles a single field's "where and" SQL statemnt portion.
         Note: We append multiple statements with an AND in the sql statement.
-        :param where_a: dict 
+        :param where_a: dict
             {
                 "field": "name",
                 "value": "hello world",
@@ -350,7 +365,7 @@ class Base:
         :returns: dict
             {
                 "sql": "",
-                "param: 
+                "param:
             }
         @todo: This should be more parameterized
         """
