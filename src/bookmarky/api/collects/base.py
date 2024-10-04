@@ -498,4 +498,9 @@ class Base:
             LIMIT %s;"""
         return sql
 
+    def _get_field_names_str(self, prefix: str = None) -> str:
+        """Get the model's fields in a lists.
+        """
+        return self.collect_model()._get_field_names_str(prefix)
+
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/collections/base.py

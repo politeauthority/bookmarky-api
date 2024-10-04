@@ -4,7 +4,7 @@
 
 """
 
-version = "0.0.1.59"
+version = "0.0.1.60"
 
 
 # End File: politeauthority/bookmarky-api/src/bookmarky/modules/version.py

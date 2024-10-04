@@ -80,6 +80,10 @@ FIELD_MAP_METAS = {
     "favorite": {
         "name": "favorite",
         "type": "bool"
+    },
+    "featured_image": {
+        "name": "featured_image",
+        "type": "str"
     }
 }
 
