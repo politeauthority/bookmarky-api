@@ -23,6 +23,8 @@ How to use:
             device.metas['notes'].value = request.form['device_notes']
 
 """
+import logging
+
 from polite_lib.utils import xlate
 from polite_lib.utils import date_utils
 
@@ -61,6 +63,8 @@ class EntityMeta(Base):
             count += 1
         if self.type == "bool":
             self.value = xlate.convert_str_to_bool(raw[7])
+        elif self.type == "int":
+            self.value = self.convert_str_to_int(raw[7])
         else:
             self.value = raw[7]
         return True
@@ -107,5 +111,22 @@ class EntityMeta(Base):
             "value": self.value
         }
         return json_ret
+
+    def convert_str_to_int(self, value: str) -> bool:
+        """Convert a string value to an int value if one can be derrived.
+        :unit-test: TestXlate::test__convert_str_to_int
+        """
+        if not value:
+            return None
+        if isinstance(value, int):
+            return value
+        if not isinstance(value, str):
+            logging.error('Cannot convert value "%s" of type %s to int' % (value, type(value)))
+            return None
+        if value.isdigit():
+            return int(value)
+        else:
+            logging.error('Cannot convert value "%s" of type %s to int' % (value, type(value)))
+            return None
 
 # End File: politeauthority/bookmarky-api//src/api/models/entity_meta.py

@@ -30,13 +30,16 @@ def image(image_name: str) -> Response:
         logging.error("No IMAGE_DIR set for current environment")
         return jsonify(error, 500)
     if not is_safe_filename(image_name):
+        logging.error("User attempted to access and unsafe filepath!")
         return jsonify(error), 403
-    image_path = os.path.join(IMAGE_DIR, image_name)
-    if not os.path.exists(image_path):
+    full_image_path = os.path.join(IMAGE_DIR, "bookmarks", image_name)
+    load_path = os.path.join("bookmarks", image_name)
+    logging.debug("\n\nlooking for: %s\n\n" % full_image_path)
+    if not os.path.exists(full_image_path):
         error["message"] = "Not Found"
         return jsonify(error), 404
-    logging.info("Serving /image/%s" % image_name)
-    return send_from_directory(IMAGE_DIR, image_name), 200
+    logging.info("Serving %s/image/%s" % (IMAGE_DIR, load_path))
+    return send_from_directory(IMAGE_DIR, load_path), 200
 
 
 def is_safe_filename(filename):

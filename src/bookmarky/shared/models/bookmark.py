@@ -80,6 +80,14 @@ FIELD_MAP_METAS = {
     "favorite": {
         "name": "favorite",
         "type": "bool"
+    },
+    "featured-image": {
+        "name": "featured-image",
+        "type": "str"
+    },
+    "click-count": {
+        "name": "click-count",
+        "type": "int"
     }
 }
 

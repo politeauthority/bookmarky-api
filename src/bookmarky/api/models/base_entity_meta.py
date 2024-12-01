@@ -8,6 +8,7 @@ import logging
 
 from bookmarky.api.models.base import Base
 from bookmarky.api.models.entity_meta import EntityMeta
+from bookmarky.api.utils import glow
 
 
 class BaseEntityMeta(Base):
@@ -59,15 +60,20 @@ class BaseEntityMeta(Base):
         """
         super(BaseEntityMeta, self).save()
         if not self.metas:
+            logging.debug("No Meta to save, skipping")
             return True
 
         if not self.id:
             raise AttributeError('Model %s cant save entity metas with out id' % self)
 
-        existing_meta = self.load_meta(set_values=False)
-        for meta_name, meta_value in self.metas.items():
-            self.metas[meta_name] = self._save_single_meta(existing_meta, meta_name, meta_value)
-
+        logging.debug("Saving Metas")
+        existing_metas = self.load_raw_meta()
+        logging.debug("Found %s metas to save" % len(self.metas))
+        for meta_name, meta in self.metas.items():
+            if isinstance(meta, EntityMeta):
+                self._save_single_meta(existing_metas[meta_name], meta_name, meta.value)
+            else:
+                self._save_single_meta(False, meta_name, meta)
         return True
 
     def json(self, get_api: bool = False) -> dict:
@@ -134,10 +140,26 @@ class BaseEntityMeta(Base):
         logging.debug(f"Loading meta data for {self}")
         metas = self._load_from_meta_raw(meta_raws)
         if set_values:
+            metas.update(self.metas)
             self.metas = metas
         return metas
 
-    def _load_from_meta_raw(self, meta_raws) -> dict:
+    def load_raw_meta(self) -> dict:
+        """Load an entity's meta values and return them as EntityMeta objects in a dict, keyed by
+        the EntityMeta's name.
+        """
+        sql = f"""
+            SELECT *
+            FROM {self.table_name_meta}
+            WHERE
+                entity_id = %s AND
+                entity_type = %s;
+            """
+        self.cursor.execute(sql, (self.id, self.table_name))
+        meta_raws = self.cursor.fetchall()
+        return self._load_from_meta_raw(meta_raws)
+
+    def _load_from_meta_raw(self, meta_raws: list) -> dict:
         """Load meta data from the database, returning it as a dictionary"""
         ret_metas = {}
         for meta_raw in meta_raws:
@@ -147,43 +169,38 @@ class BaseEntityMeta(Base):
         return ret_metas
         # self.metas = ret_metas
 
-    def _save_single_meta(self, existing_meta, meta_name, meta_value) -> EntityMeta:
-        """Save a single meta field."""
-        print("\n\nSaving Single Meta")
-        print(meta_name)
-        print("End Single Meta\n\n")
+    def _save_single_meta(self, existing_meta, meta_name: str, meta_value) -> bool:
+        """Save a single meta field.
+        :param existing_meta: An EntityMeta object if the meta record exists already, or False if
+            it does not.
+        """
+        logging.debug("\n\nSaving Single Meta: meta_name")
+        logging.debug(meta_name)
         if meta_name not in self.field_map_metas:
             logging.error(f"Model {self} does not allow meta key {meta_name}")
             return False
-        meta_desc = self.field_map_metas[meta_name]
-        if not isinstance(meta_value, EntityMeta):
-            meta = EntityMeta()
-            meta.name = meta_name
-            meta.value = str(meta_value)
+        if not existing_meta:
+            logging.debug("Meta is NOT existing, lets create it")
+            meta_desc = self.field_map_metas[meta_name]
+            entity_meta = EntityMeta()
+            entity_meta.entity_type = self.table_name
+            entity_meta.entity_id = self.id
+            entity_meta.name = meta_name
+            entity_meta.type = meta_desc["type"]
+            entity_meta.user_id = glow.user["user_id"]
+            entity_meta.value = meta_value
+            entity_meta.save()
         else:
-            meta = meta_value
-            meta.value = meta_value
-        if hasattr(self, "user_id"):
-            meta.user_id = self.user_id
-        elif hasattr(self, "user_id_field"):
-            meta.user_id = getattr(self, "user_id_field")
+            logging.debug("Meta is existing, lets update")
+            entity_meta = existing_meta
+            entity_meta.value = meta_value
+            entity_meta.update()
+
+        if entity_meta.save():
+            return True
         else:
-            error_msg = f"Model {self} does not have a user identification attribute! Failed to "
-            error_msg += f"save meta key: {meta_name}"
-            logging.error(error_msg)
-
-        if existing_meta and meta_name in existing_meta:
-            meta.id = existing_meta[meta_name].id
-            meta.user_id = existing_meta[meta_name].user_id
-
-        meta.entity_type = self.table_name
-        meta.entity_id = self.id
-        meta.type = meta_desc["type"]
-
-        if meta.save():
-            return meta
-        else:
-            logging.error("Failed to save meta")
+            logging.error("Error saving EntityMeta: %s" % entity_meta)
             return False
+
 
 # End File: politeauthority/bookmarky-api/src/bookmarky/models/base_entity_meta.py

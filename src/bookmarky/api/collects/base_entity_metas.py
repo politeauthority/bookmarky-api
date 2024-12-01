@@ -74,6 +74,27 @@ class BaseEntityMetas(Base):
             prestines.append(model)
         return prestines
 
+    def get_entities_without_meta_key(self, meta_name: str) -> list:
+        """Collect models that do not have a given a meta key. """
+        # select_fields = self.
+        select_fields = self._get_field_names_str("b")
+        sql = f"""
+            SELECT {select_fields}
+            FROM {self.table_name} as b
+                LEFT JOIN {self.meta_table} as em
+                    ON
+                        b.id = em.entity_id AND
+                        em.entity_type = '{self.table_name}' AND
+                        em.name = %s;
+        """
+        logging.info("\n\n")
+        self.cursor.mogrify(sql, (meta_name,))
+        logging.info(sql)
+        logging.info("\n\n")
+        self.cursor.execute(sql, (meta_name,))
+        entities_raw = self.cursor.fetchall()
+        return self.load_presiteines(entities_raw)
+
     def get_paginated(
         self,
         page: int = 1,

@@ -99,10 +99,11 @@ class Base:
         """Insert a new record of the model.
         :unit-test: TestApiModelBase::test__insert
         """
-        statement = self._gen_insert_statement()
+        query = self._gen_insert_statement()
         try:
-            # print("\nINSERT\n%s\n%s\n" % (statement["sql"], statement["values"]))
-            self.cursor.execute(statement["sql"], statement["values"])
+            # logging.debug("We're about to run an INSERT statement")
+            # logging.info(self.cursor.mogrify(query["sql"], query["values"]))
+            self.cursor.execute(query["sql"], query["values"])
             self.conn.commit()
         except psycopg2.errors.UniqueViolation as e:
             logging.warning(f"Query violates unique constraint, entity already exists. {e}")
@@ -131,6 +132,8 @@ class Base:
             WHERE
             %(where)s;""" % sql_args
         try:
+            # logging.debug("We're about to run an UPDATE statement")
+            # logging.debug(self.cursor.mogrify(update_sql, set_values))
             self.cursor.execute(update_sql, set_values)
             self.conn.commit()
         except Exception as e:
@@ -528,7 +531,13 @@ class Base:
         return ret_sql_fields
 
     def _gen_insert_statement(self) -> dict:
-        """Generate the insert SQL statement, returning the new generated row's id."""
+        """Generate the insert paramaterized SQL statement.
+        :returns: dict
+            {
+                "sql": The SQL operation,
+                "values: tuple of values
+            }
+        """
         insert_segments = self._sql_values()
         insert = {}
         insert["sql"] = f"""

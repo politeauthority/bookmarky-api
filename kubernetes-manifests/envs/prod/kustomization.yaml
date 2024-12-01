@@ -3,10 +3,10 @@ kind: Kustomization
 namespace: bookmarky
 resources:
   - ../../base
-  - storage.yaml
+  # - storage.yaml
 images:
   - name: harbor.squid-ink.us/politeauthority/bookmarky-api
-    newTag: 0.0.1.59
+    newTag: 0.0.1.62
 patches:
   - target:
       kind: Deployment
