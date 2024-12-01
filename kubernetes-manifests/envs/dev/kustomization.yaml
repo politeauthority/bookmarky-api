@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: bookmarky-dev
 resources:
   - ../../base
-  - storage.yaml
+  # - storage.yaml
   # - secrets.yaml
 images:
   - name: harbor.squid-ink.us/politeauthority/bookmarky-api

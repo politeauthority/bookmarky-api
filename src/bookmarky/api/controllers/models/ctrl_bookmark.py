@@ -11,6 +11,7 @@ from flask import Blueprint, jsonify, Response
 from bookmarky.api.controllers.models import ctrl_base
 from bookmarky.api.models.bookmark import Bookmark
 from bookmarky.api.models.bookmark_tag import BookmarkTag
+from bookmarky.api.models.bookmark_track import BookmarkTrack
 from bookmarky.api.collects.bookmark_tags import BookmarkTags
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import api_util
@@ -139,6 +140,11 @@ def click_track(bookmark_id: int = None):
     else:
         bookmark.metas["click-count"].value += 1
     bookmark.save()
+    # Save the Bookmark Track record
+    bookmark_track = BookmarkTrack()
+    bookmark_track.bookmark_id = bookmark_id
+    bookmark_track.user_id = glow.user["user_id"]
+    bookmark_track.save()
     return bookmark.json()
 
 
