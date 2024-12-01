@@ -101,8 +101,8 @@ class Base:
         """
         statement = self._gen_insert_statement()
         try:
-            # print("\nINSERT\n%s\n%s\n" % (statement["sql"], statement["values"]))
-            self.cursor.execute(statement["sql"], statement["values"])
+            # logging.debug("We're about to run an INSERT statement")
+            # logging.debug(self.cursor.mogrify(statement["sql"], statement["values"]))
             self.conn.commit()
         except psycopg2.errors.UniqueViolation as e:
             logging.warning(f"Query violates unique constraint, entity already exists. {e}")
@@ -131,6 +131,8 @@ class Base:
             WHERE
             %(where)s;""" % sql_args
         try:
+            # logging.debug("We're about to run an UPDATE statement")
+            # logging.debug(self.cursor.mogrify(update_sql, set_values))
             self.cursor.execute(update_sql, set_values)
             self.conn.commit()
         except Exception as e:

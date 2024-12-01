@@ -1,0 +1,197 @@
+#!/usr/bin/env python
+"""
+    Bookmarky Api
+    Web App
+    Primary web app entrpoint
+
+"""
+import logging
+import os
+import traceback
+import sys
+
+from flask import Flask, jsonify, request
+from werkzeug.exceptions import HTTPException
+from flask.logging import default_handler
+
+from bookmarky.shared.utils.custom_formatter import CustomFormatter
+# from bookmarky.shared.utils.log_config import log_config
+from bookmarky.api.utils import db
+from bookmarky.api.utils import glow
+# from cver.api.utils import glow
+# from cver.api.utils import misc
+from bookmarky.api.controllers.models.ctrl_api_key import ctrl_api_key
+from bookmarky.api.controllers.collections.ctrl_api_keys import ctrl_api_keys
+from bookmarky.api.controllers.ctrl_index import ctrl_index
+from bookmarky.api.controllers.ctrl_inter_ops import ctrl_interops
+# from cver.api.controllers.ctrl_collections.ctrl_migrations import ctrl_migrations
+# from cver.api.controllers.ctrl_models.ctrl_role import ctrl_role
+# from cver.api.controllers.ctrl_collections.ctrl_roles import ctrl_roles
+# from cver.api.controllers.ctrl_models.ctrl_role_perm import ctrl_role_perm
+# from cver.api.controllers.ctrl_collections.ctrl_role_perms import ctrl_role_perms
+# from cver.api.controllers.ctrl_models.ctrl_perm import ctrl_perm
+# from cver.api.controllers.ctrl_collections.ctrl_perms import ctrl_perms
+from bookmarky.api.controllers.models.ctrl_user import ctrl_user
+from bookmarky.api.controllers.collections.ctrl_users import ctrl_users
+from bookmarky.api.controllers.models.ctrl_option import ctrl_option
+from bookmarky.api.controllers.collections.ctrl_options import ctrl_options
+
+from bookmarky.api.controllers.models.ctrl_bookmark import ctrl_bookmark
+from bookmarky.api.controllers.collections.ctrl_bookmarks import ctrl_bookmarks
+
+from bookmarky.api.controllers.models.ctrl_bookmark_tag import ctrl_bookmark_tag
+from bookmarky.api.controllers.models.ctrl_tag_feature import ctrl_tag_feature
+from bookmarky.api.controllers.collections.ctrl_tag_features import ctrl_tag_features
+
+from bookmarky.api.controllers.models.ctrl_directory import ctrl_directory
+from bookmarky.api.controllers.collections.ctrl_directories import ctrl_directories
+from bookmarky.api.controllers.models.ctrl_tag import ctrl_tag
+from bookmarky.api.controllers.collections.ctrl_tags import ctrl_tags
+
+from bookmarky.api.controllers.ctrl_stats import ctrl_stats
+from bookmarky.api.controllers.ctrl_image import ctrl_image
+
+
+# create logger with 'spam_application'
+
+
+
+# End
+# logging.config.dictConfig(log_config)
+# logger = logging.getLogger(__name__)
+# logger.propagate = True
+
+app = Flask(__name__)
+app.config.update(DEBUG=True)
+app.debugger = False
+
+
+def register_blueprints(app: Flask) -> bool:
+    """Register controller blueprints to flask."""
+    app.register_blueprint(ctrl_index)
+    app.register_blueprint(ctrl_api_key)
+    app.register_blueprint(ctrl_api_keys)
+    app.register_blueprint(ctrl_user)
+    app.register_blueprint(ctrl_users)
+    app.register_blueprint(ctrl_option)
+    app.register_blueprint(ctrl_options)
+
+    app.register_blueprint(ctrl_bookmark)
+    app.register_blueprint(ctrl_bookmarks)
+    app.register_blueprint(ctrl_bookmark_tag)
+    app.register_blueprint(ctrl_directory)
+    app.register_blueprint(ctrl_directories)
+    app.register_blueprint(ctrl_tag)
+    app.register_blueprint(ctrl_tags)
+    app.register_blueprint(ctrl_tag_feature)
+    app.register_blueprint(ctrl_tag_features)
+
+    app.register_blueprint(ctrl_interops)
+    app.register_blueprint(ctrl_stats)
+    app.register_blueprint(ctrl_image)
+
+    return True
+
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    """Catch 500 errors, and pass through the exception
+    @todo: Remove the exception for non prod environments.
+    """
+    data = {
+        "message": "Server error",
+        "request-id": glow.session["short_id"],
+        "status": "error"
+    }
+    RESPONSE_CODE = 500
+    # pass through HTTP errors
+    exc_type, exc_obj, exc_tb = sys.exc_info()
+    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+    print(exc_type, fname, exc_tb.tb_lineno)
+    if isinstance(e, HTTPException):
+        data["message"] = e.description
+        return jsonify(data), RESPONSE_CODE
+
+    traceback.print_exc(file=sys.stdout)
+    logging.error(traceback)
+    if glow.general["TEST"]:
+        data["message"] = traceback
+        return jsonify(data), 500
+    else:
+        return jsonify(data), RESPONSE_CODE
+
+
+@app.before_request
+def before_request():
+    """Before we route the request log some info about the request."""
+    url_requested = request.base_url[request.base_url.rfind("/"):]
+    if url_requested == "/healthz":
+        return
+    glow.start_session()
+    logging.info(
+        "[Start Request] %s\tpath: %s | method: %s" % (
+            glow.session["short_id"][:8],
+            request.path,
+            request.method))
+    db.connect()
+    return
+
+
+@app.after_request
+def after_request(response):
+    url_requested = request.base_url[request.base_url.rfind("/"):]
+    if url_requested == "/healthz":
+        return response
+    logging.info(
+        "[End Request] %s\tpath: %s | method: %s | status: %s | size: %s",
+        glow.session["short_id"],
+        request.path,
+        request.method,
+        response.status,
+        response.content_length
+    )
+    db.close()
+    return response
+
+
+register_blueprints(app)
+
+# Development Runner
+if __name__ == "__main__":
+    app.logger.removeHandler(default_handler)
+    logging.info("Starting develop webserver")
+    # del logging.Logger.manager.loggerDict['web-app']
+    logger = logging.getLogger("web-app")
+    logger.setFormatter(CustomFormatter)
+    logger.setLevel(logging.DEBUG)
+    # create console handler with a higher log level
+    # ch = logging.StreamHandler()
+    # ch.setLevel(logging.DEBUG)
+    # default_handler.setFormatter(CustomFormatter)
+    # app.logger.handlers = []
+    # app.logger.addHandler(ch)
+    app.logger.setLevel(logging.DEBUG)
+
+    app.logger.debug("debug message")
+    app.logger.info("info message")
+    app.logger.warning("warning message")
+    app.logger.error("error message")
+    app.logger.critical("critical message")
+    logger_dict = logging.Logger.manager.loggerDict
+
+    for name, logger in logger_dict.items():
+        print(f'Logger Name: {name}, Logger: {logger}')
+
+    app.run(host='0.0.0.0', port=80)
+
+
+# Production Runner
+if __name__ != "__main__":
+    gunicorn_logger = logging.getLogger("gunicorn.debug")
+    logging.info("Starting production webserver")
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
+    app.config['DEBUG'] = False
+
+
+# End File: politeauthority/bookmarky-api/src/bookmarky/api/app.py

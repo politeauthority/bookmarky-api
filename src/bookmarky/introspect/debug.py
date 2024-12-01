@@ -2,19 +2,14 @@
     Bookmarky Introspect
     Debug
 
-select id, name, tags, url
-	from bookmarks
-	where tags in ('{2}', '{9}');
-	
-
 """
 from psycopg2 import sql
 
-from bookmarky.api.models.bookmark import Bookmark
+# from bookmarky.api.models.bookmark import Bookmark
 from bookmarky.api.utils import glow
 from bookmarky.api.utils import db
-from bookmarky.api.utils import sql_tools
-from psycopg2 import sql
+# from bookmarky.api.utils import sql_tools
+
 
 db.connect()
 
@@ -40,7 +35,7 @@ class Debug:
         for result in x:
             print(result)
             print("")
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
 
     def run_query_2(self):
         items = [2, 3]
@@ -54,7 +49,7 @@ class Debug:
         for result in x:
             print(result)
             print("")
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
 
     def run_param_1(self):
         items = [2, 3]
@@ -65,8 +60,8 @@ class Debug:
         """
         thing = (sql.Literal(items[0]), sql.Literal(items[1]))
         glow.db["cursor"].execute(query, thing)
-        x = glow.db["cursor"].fetchall()
-        
+        # x = glow.db["cursor"].fetchall()
+
     def run_query_hack(self):
         """This works but is gross."""
         items = [2, 3]
