@@ -59,4 +59,4 @@ def close() -> bool:
     glow.db["conn"].close()
     return True
 
-# End File: cver/src/api/utils/db.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/api/utils/db.py

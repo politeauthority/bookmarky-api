@@ -3,8 +3,12 @@
     Model Bookmark
 
 """
+import logging
+
 from bookmarky.shared.models.bookmark import FIELD_MAP, FIELD_META, FIELD_MAP_METAS
 from bookmarky.api.models.base_entity_meta import BaseEntityMeta
+from bookmarky.api.collects.bookmark_tags import BookmarkTags
+from bookmarky.api.collects.bookmark_tracks import BookmarkTracks
 
 
 class Bookmark(BaseEntityMeta):
@@ -36,5 +40,14 @@ class Bookmark(BaseEntityMeta):
         elif self.id:
             return "<%s: %s>" % (self.__class__.__name__, self.id)
         return "<%s>" % self.__class__.__name__
+
+    def delete(self) -> bool:
+        """Delete a model Bookmark and all of it's supporting data."""
+        logging.info(f"Deleting Bookmark: {self}")
+        super(Bookmark, self).delete()
+        logging.info("Deleting BookmarkTags")
+        BookmarkTags().delete_for_bookmark(self.id)
+        BookmarkTracks().delete_for_bookmark(self.id)
+        return True
 
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/models/bookmark.py

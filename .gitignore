@@ -1,6 +1,7 @@
 # Bookmarky
 helpers/
 src/bookmarky/introspect/debug.py
+*.bak
 
 ## K8s
 kubernetes-manifests/envs/dev/secrets.yaml

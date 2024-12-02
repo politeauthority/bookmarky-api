@@ -105,45 +105,33 @@ tasks:
         # Print the new version
         echo "New version: $new_version"
 
-  update-version:
+  update-semver:
     cmds:
       - |
-        new_version="{{.CLI_ARGS}}"
-        file_path="src/bookmarky/api/version.py"
-        current_version=$(awk -F'"' '/version = / {print $2}' $file_path)
-
-        echo $current_version
-        # Replace the current version number with the new version number using a different delimiter
-        sed -i "" 's/version = "'"$current_version"'"/version = "'"$new_version"'"/g' $file_path
-
-        # Update README
-        file_path="README.md"
-        sed -i "" "s/# Bookmarky Api v$current_version/# Bookmarky Api v$new_version/g" $file_path
-
-        #Update pyproject
-        file_path="pyproject.toml"
-        sed -i "" "s/version = \"$current_version\"/version = \"$new_version\"/g" $file_path
-
-        # Update the newTag in the kustomization.yaml file for prod
-        file_path="kubernetes-manifests/envs/prod/kustomization.yaml"
-        yq e ".images[0].newTag = \"$new_version\"" -i $file_path
-
-        # Update the newTag in the kustomization.yaml file for stage
-        file_path="kubernetes-manifests/envs/stage/kustomization.yaml"
-        yq e ".images[0].newTag = \"stage-$new_version\"" -i $file_path
-
-        # # Update the newTag in the kustomization.yaml file for dev
-        # file_path="kubernetes-manifests/envs/dev/kustomization.yaml"
-        # yq e ".images[0].newTag = \"stage-$new_version\"" -i $file_path
-
-        git add src/bookmarky/api/version.py
+        # Read the version number from the file
+        CURRENT_VERSION=$(<"VERSION")
+        IFS='.' read -r major minor patch revision <<< "$CURRENT_VERSION"
+        ((revision++))
+        NEW_VERSION="$major.$minor.$patch.$revision"
+        echo "$CURRENT_VERSION > $NEW_VERSION"
+        sed -i.bak "s/$CURRENT_VERSION/$NEW_VERSION/g" "VERSION"
+        echo "Updated VERSION"
+        sed -i.bak "s/$CURRENT_VERSION/$NEW_VERSION/g" "README.md"
+        echo "Updated README.md"
+        sed -i.bak "s/$CURRENT_VERSION/$NEW_VERSION/g" "src/bookmarky/api/version.py"
+        echo "Updated src/bookmarky/api/version.py"
+        sed -i.bak "s/$CURRENT_VERSION/$NEW_VERSION/g" "pyproject.toml"
+        echo "Updated pyproject.toml"
+        sed -i.bak "s/$CURRENT_VERSION/$NEW_VERSION/g" "kubernetes-manifests/envs/stage/kustomization.yaml"
+        echo "Updated kustomize stage"
+        sed -i.bak "s/$CURRENT_VERSION/$NEW_VERSION/g" "kubernetes-manifests/envs/prod/kustomization.yaml"
+        echo "Update kustomize prod"
         git add README.md
+        git add VERSION
+        git add src/bookmarky/api/version.py
         git add pyproject.toml
-        git add kubernetes-manifests/envs/dev/kustomization.yaml
         git add kubernetes-manifests/envs/stage/kustomization.yaml
         git add kubernetes-manifests/envs/prod/kustomization.yaml
-        echo "Version number updated from $current_version to $new_version"
-    silent: True
 
   stage-deploy:
     cmds:
@@ -211,7 +199,7 @@ tasks:
         rm -rf docker/build-files
     silent: True
 
-  ci-new-stage:
+  manci-new-stage:
     cmds:
       - |
         # git config --global --add safe.directory /__w/bookmarky/bookmarky
@@ -230,7 +218,7 @@ tasks:
         #  - Create PR with that sem ver
     silent: False
 
-  ci-new-stage-pr:
+  manci--stage-pr:
     cmds:
       - |
         git checkout stage
