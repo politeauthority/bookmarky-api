@@ -10,13 +10,13 @@ from bookmarky.api.models.base import Base
 
 class BookmarkTrack(Base):
 
-    model_name = "bookmark_tag"
+    model_name = "bookmark_track"
 
     def __init__(self, conn=None, cursor=None):
         """Create the instance."""
         super(BookmarkTrack, self).__init__(conn, cursor)
         self.field_map = FIELD_MAP
-        self.table_name = "bookmark_track"
+        self.table_name = "bookmark_tracks"
         self.immutable = False
         self.createable = True
         self.setup()

@@ -91,7 +91,7 @@ class BaseEntityMeta(Base):
                     json_out["metas"] = {}
                 json_out["metas"][meta_key] = meta.json()
             else:
-                logging.error("Entity {self} meta key {meta_key} not not instance of EntityMeta")
+                logging.error(f"Entity {self} meta key {meta_key} not not instance of EntityMeta")
                 continue
         return json_out
 
