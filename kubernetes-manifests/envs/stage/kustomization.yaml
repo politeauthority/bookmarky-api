@@ -6,7 +6,7 @@ resources:
   # - storage.yaml
 images:
   - name: harbor.squid-ink.us/politeauthority/bookmarky-api
-    newTag: stage-0.0.1.63
+    newTag: stage-0.0.1.64
 patches:
   - target:
       kind: Deployment

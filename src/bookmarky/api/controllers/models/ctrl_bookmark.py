@@ -12,11 +12,12 @@ from bookmarky.api.controllers.models import ctrl_base
 from bookmarky.api.models.bookmark import Bookmark
 from bookmarky.api.models.bookmark_tag import BookmarkTag
 from bookmarky.api.models.bookmark_track import BookmarkTrack
+from bookmarky.api.collects.auto_features import AutoFeatures
 from bookmarky.api.collects.bookmark_tags import BookmarkTags
+from bookmarky.api.utils.auto_features import UtilAutoFeatures
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import api_util
 from bookmarky.api.utils import glow
-from bookmarky.api.utils.auto_tag_features import AutoTagFeatures
 
 ctrl_bookmark = Blueprint("bookmark", __name__, url_prefix="/bookmark")
 
@@ -68,25 +69,6 @@ def post_model(bookmark_id: int = None):
     if ret_data["status"] == "success":
         _handle_auto_features(ret_data)
     return jsonify(ret_data), return_code
-
-
-# @ctrl_bookmark.route("/meta/<bookmark_id>", methods=["POST"])
-# @auth.auth_request
-# def post_model_meta(bookmark_id: int = None):
-#     """POST operation for a Bookmark model metas.
-#     POST /meta/bookmark
-#     @todo: This needs to be locked down to only allow users to delete their own Tag relationships
-#     """
-#     data = {
-#         "user_id": glow.user["user_id"]
-#     }
-#     logging.info("POST Bookmark")
-#     r_args = api_util.get_post_data()
-#     if r_args and "tag_id" in r_args:
-#         BookmarkTag().create(bookmark_id, r_args["tag_id"])
-#     if r_args and "tag_id_remove" in r_args:
-#         BookmarkTag().remove(bookmark_id, r_args["tag_id_remove"])
-#     return ctrl_base.post_model(Bookmark, bookmark_id, data)
 
 
 @ctrl_bookmark.route("/<bookmark_id>", methods=["DELETE"])
@@ -149,12 +131,17 @@ def click_track(bookmark_id: int = None):
 
 
 def _handle_auto_features(data: dict) -> bool:
-    """When we add a Bookmark, run through all the Auto Features and apply all of those which fit
+    """When we add a Bookmark, run through all the AutoFeatures and apply all of those which fit
     the Bookmark.
     """
     bookmark = Bookmark()
     bookmark.build_from_dict(data["object"])
-    AutoTagFeatures().run(glow.user["user_id"], bookmark)
-    return True
+    afs = AutoFeatures().get_by_user_id(glow.user["user_id"])
+    if UtilAutoFeatures(glow.user["user_id"], afs).run(bookmark):
+        logging.info("Auto Features ran successfully for %s" % bookmark)
+        return True
+    else:
+        logging.error("Failed to run Auto Features for %s" % bookmark)
+        return False
 
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/controllers/ctrl_models/ctrl_bookmark.py
