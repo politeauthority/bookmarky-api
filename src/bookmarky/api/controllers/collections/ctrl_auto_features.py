@@ -1,25 +1,25 @@
 """
     Bookmark Api
     Controller Collection
-    Tag Features
+    Auto Features
 
 """
 from flask import Blueprint, jsonify, Response
 
-from bookmarky.api.collects.tags import Tags
+from bookmarky.api.collects.auto_features import AutoFeatures
 from bookmarky.api.controllers.collections import ctrl_collection_base
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import glow
 
-ctrl_tag_features = Blueprint("tag-features", __name__, url_prefix="/tag-features")
+ctrl_auto_features = Blueprint("auto-features", __name__, url_prefix="/auto-features")
 
 PER_PAGE = 50
 
 
-@ctrl_tag_features.route("")
+@ctrl_auto_features.route("")
 @auth.auth_request
 def index() -> Response:
-    """Get Tag Features."""
+    """Get Auto Features."""
     extra_args = {
         "fields": {
             "user_id": {
@@ -31,9 +31,9 @@ def index() -> Response:
         "order_by": {},
         "limit": None
     }
-    data = ctrl_collection_base.get(Tags, extra_args)
+    data = ctrl_collection_base.get(AutoFeatures, extra_args)
     return jsonify(data)
 
 
 # End File: politeauthority/bookmarky-api/src/bookmarky/api/controllers/ctrl_collections/
-#           ctrl_tag_features.py
+#           ctrl_auto_features.py

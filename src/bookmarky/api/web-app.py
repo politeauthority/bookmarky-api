@@ -38,8 +38,8 @@ from bookmarky.api.controllers.models.ctrl_bookmark import ctrl_bookmark
 from bookmarky.api.controllers.collections.ctrl_bookmarks import ctrl_bookmarks
 
 from bookmarky.api.controllers.models.ctrl_bookmark_tag import ctrl_bookmark_tag
-from bookmarky.api.controllers.models.ctrl_tag_feature import ctrl_tag_feature
-from bookmarky.api.controllers.collections.ctrl_tag_features import ctrl_tag_features
+from bookmarky.api.controllers.models.ctrl_auto_feature import ctrl_auto_feature
+from bookmarky.api.controllers.collections.ctrl_auto_features import ctrl_auto_features
 
 from bookmarky.api.controllers.models.ctrl_directory import ctrl_directory
 from bookmarky.api.controllers.collections.ctrl_directories import ctrl_directories
@@ -76,8 +76,8 @@ def register_blueprints(app: Flask) -> bool:
     app.register_blueprint(ctrl_directories)
     app.register_blueprint(ctrl_tag)
     app.register_blueprint(ctrl_tags)
-    app.register_blueprint(ctrl_tag_feature)
-    app.register_blueprint(ctrl_tag_features)
+    app.register_blueprint(ctrl_auto_feature)
+    app.register_blueprint(ctrl_auto_features)
 
     app.register_blueprint(ctrl_interops)
     app.register_blueprint(ctrl_stats)

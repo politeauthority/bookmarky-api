@@ -23,7 +23,8 @@ logger.propagate = True
 
 image_store_loc = glow.general["IMAGE_DIR"]
 user_agents = [
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 14.7; rv:131.0) Gecko/20100101 Firefox/131.0"]
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 14.7; rv:131.0) Gecko/20100101 Firefox/131.0"
+]
 
 
 class GetImages:

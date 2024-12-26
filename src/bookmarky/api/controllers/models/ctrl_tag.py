@@ -25,6 +25,7 @@ ctrl_tag = Blueprint("tag", __name__, url_prefix="/tag")
 def get_model(tag_search: int = None) -> Response:
     """GET operation for a bookmark.
     GET /tag
+    @Todo: This could be better generalized, and should be.
     """
     logging.info("GET - /tag")
     if tag_search:
@@ -32,10 +33,9 @@ def get_model(tag_search: int = None) -> Response:
             tag_id = int(tag_search)
             data = ctrl_base.get_model(Tag, tag_id)
         else:
-            # tag_slug = tag_search
-            logging.error("we dont know what we're doing here")
-            return jsonify({}), 400
-
+            logging.error("This route not set for Tag")
+            return jsonify({"status": "error"}), 400
+    data = ctrl_base.get_model(Tag)
     if not isinstance(data, dict):
         return data
     return jsonify(data)

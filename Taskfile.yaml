@@ -60,6 +60,7 @@ tasks:
         echo "Coppied tests"
         echo "Building"
         kubectl exec -it -n ${NS} ${POD} -- sh -c "cd /work/tests && pip install . --ignore-requires-python"
+    silent: True
 
   dev-deploy:
     cmds:

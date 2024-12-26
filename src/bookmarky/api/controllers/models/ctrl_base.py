@@ -241,8 +241,11 @@ def get_entity_by_ux_keys(entity, request_args: dict):
 
 def get_entity_by_fields(entity, request_args: dict):
     """Finds an entity based on request fields sent along with the request.
+    NOTE: If the entity model does not have "api_searchable = True" the field will not be able to
+    be searched through the API interface!!
     :unit-test:
     """
+    logging.info(f"Getting entity by fields: {request_args}")
     search_fields = []
     for r_arg_key, r_arg_value in request_args.items():
         if r_arg_key not in entity.field_map:
@@ -251,6 +254,9 @@ def get_entity_by_fields(entity, request_args: dict):
             if field["name"] != r_arg_key:
                 continue
         if "api_searchable" not in entity.field_map[r_arg_key]:
+            log_msg = "Entity model search: field {r_arg_key} requested, but is not api_searchable "
+            log_msg += "according to entity field_map"
+            logging.warning(log_msg)
             continue
         search_field = {
             "field": r_arg_key,
@@ -258,6 +264,8 @@ def get_entity_by_fields(entity, request_args: dict):
             "op": "eq"
         }
         search_fields.append(search_field)
+    if not search_fields:
+        logging.error(f"Entity model search by field found no fields to search for {entity}")
     return entity.get_by_fields(search_fields)
 
 
@@ -309,6 +317,7 @@ def _determine_entity_search_type(entity, entity_id=None, request_args: dict = N
     """
     logging.debug(request_args)
     if entity_id:
+        logging.debug("Getting model 'by-id'")
         return "by-id"
 
     # Check for UX keys within the model and the request
@@ -319,12 +328,14 @@ def _determine_entity_search_type(entity, entity_id=None, request_args: dict = N
                 has_all_ux_key_fields = False
                 break
         if has_all_ux_key_fields:
+            logging.debug("Getting model 'by-ux-key'")
             return "by-ux-key"
 
     # Check for a unique field we can seearch on
     for field_name, field_info in entity.field_map.items():
         if "extra" in field_info and field_info["extra"] == "UNIQUE":
             if field_name in request_args:
+                logging.debug("Getting model 'by-ux-field'")
                 return "by-ux-field"
 
     by_fields = True
@@ -332,6 +343,7 @@ def _determine_entity_search_type(entity, entity_id=None, request_args: dict = N
         if request_arg not in entity.field_map:
             by_fields = False
     if by_fields:
+        logging.debug("Getting model 'by-field'")
         return "by-fields"
 
     return "cant"

@@ -1,6 +1,7 @@
 """
     Bookmarky Shared
-    Model - Tag
+    Model
+    Auto Feature
 
 """
 
@@ -27,27 +28,37 @@ FIELD_MAP = {
         "api_writeable": True,
         "api_searchable": True,
     },
-    "name": {
-        "name": "name",
-        "type": "str",
+    "entity_id": {
+        "name": "entity_id",
+        "type": "int",
         "api_writeable": True,
         "api_searchable": True,
     },
-    "slug": {
-        "name": "slug",
+    "entity_type": {
+        "name": "entity_type",
         "type": "str",
-        "api_searchable": True,
         "api_display": True,
+        "api_searchable": True,
         "api_writeable": True,
     },
-    "deleted": {
-        "name": "deleted",
-        "type": "bool",
+    "auto_feature_type": {
+        "name": "auto_feature_type",
+        "type": "str",
+        "api_display": True,
         "api_searchable": True,
+        "api_writeable": True,
     },
-    "hidden": {
-        "name": "hidden",
+    "auto_feature_value": {
+        "name": "auto_feature_value",
+        "type": "str",
+        "api_display": True,
+        "api_searchable": True,
+        "api_writeable": True,
+    },
+    "enabled": {
+        "name": "enabled",
         "type": "bool",
+        "default": False,
         "api_searchable": True,
         "api_display": True,
         "api_writeable": True,
@@ -55,8 +66,8 @@ FIELD_MAP = {
 }
 
 FIELD_META = {
-    "ux_key": ["user_id", "slug"]
+    "ux_key": ["user_id", "entity_id", "entity_type", "auto_feature_type", "auto_feature_value"]
 }
 
 
-# End File: politeauthority/bookmarky/src/bookmarky/shared/models/tag.py
+# End File: politeauthority/bookmark-apiy/src/bookmarky/shared/models/auto_feature.py

@@ -4,3 +4,4 @@ PyJWT==2.8.0
 sqlescapy==1.0.1
 tldextract==5.1.2
 rich==10.11.0
+ipdb==0.13.13

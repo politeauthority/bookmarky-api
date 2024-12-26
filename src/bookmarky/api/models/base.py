@@ -223,6 +223,7 @@ class Base:
             ]
         :unit-test: None
         """
+        logging.info(f"\n\nGetting by fields: {fields}")
         sql_fields = self._gen_get_by_fields_sql(fields)
         fields_str = self._get_field_names_str()
         sql = f"""
@@ -230,6 +231,7 @@ class Base:
             FROM {self.table_name}
             WHERE {sql_fields["sql"]}
             LIMIT 1;"""
+        # logging.debug(self.cursor.mogrify(sql, sql_fields["values"]))
         self.cursor.execute(sql, sql_fields["values"])
         raw = self.cursor.fetchone()
         if not raw:
