@@ -11,7 +11,7 @@ from bookmarky.api.utils import db
 from bookmarky.api.collects.bookmarks import Bookmarks
 from bookmarky.api.collects.auto_features import AutoFeatures
 from bookmarky.shared.utils.log_config import log_config
-from bookmarky.api.utils.handle_auto_features import HandleAutoFeatures
+from bookmarky.api.utils.auto_features import AutoFeatures as UtilAutoFeatures
 
 
 logging.config.dictConfig(log_config)
@@ -32,17 +32,21 @@ class ManualAutoFeatures:
     def run(self) -> bool:
         """Primary entrypoint."""
         logging.info("Starting Manual Auto Features for User: %s" % USER_ID)
-        self.load_all()
+        self.load_afs()
+        self.load_bookmarks()
         for bookmark in self.bookmarks:
-            HandleAutoFeatures(USER_ID, self.afs).run(bookmark)
+            UtilAutoFeatures(USER_ID, self.afs).run(bookmark)
         return True
 
-    def load_all(self) -> bool:
-        """Load all Bookmarks and AutoFeatures for a given User ID."""
+    def load_afs(self) -> bool:
+        """Load all AutoFeatures for the User."""
         self.afs = self.af_col.get_by_user_id(USER_ID)
+
+    def load_bookmarks(self) -> bool:
+        """Load all Bookmarks and AutoFeatures for a given User ID."""
         logging.info("Loaded %s AutoFeatures" % (len(self.afs)))
-        self.bookmarks = self.b_col.get_by_user_id(USER_ID)
-        # self.bookmarks = self.b_col.get_by_ids([488, 489, 503, 504, 522])
+        # self.bookmarks = self.b_col.get_by_user_id(USER_ID)
+        self.bookmarks = self.b_col.get_by_ids([606, 101])
         logging.info("Loaded %s Bookmarks" % (len(self.bookmarks)))
         return True
 

@@ -6,7 +6,7 @@
 """
 from flask import Blueprint, jsonify, Response
 
-from bookmarky.api.collects.tags import Tags
+from bookmarky.api.collects.auto_features import AutoFeatures
 from bookmarky.api.controllers.collections import ctrl_collection_base
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import glow
@@ -31,7 +31,7 @@ def index() -> Response:
         "order_by": {},
         "limit": None
     }
-    data = ctrl_collection_base.get(Tags, extra_args)
+    data = ctrl_collection_base.get(AutoFeatures, extra_args)
     return jsonify(data)
 
 

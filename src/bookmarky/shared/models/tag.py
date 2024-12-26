@@ -36,6 +36,7 @@ FIELD_MAP = {
     "slug": {
         "name": "slug",
         "type": "str",
+        "api_searchable": True,
         "api_display": True,
         "api_writeable": True,
     },

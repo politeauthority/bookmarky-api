@@ -14,7 +14,7 @@ from bookmarky.api.models.bookmark_tag import BookmarkTag
 from bookmarky.api.models.bookmark_track import BookmarkTrack
 from bookmarky.api.collects.auto_features import AutoFeatures
 from bookmarky.api.collects.bookmark_tags import BookmarkTags
-from bookmarky.api.utils.auto_features import UtilAutoFeatures
+from bookmarky.api.utils.auto_features import AutoFeatures as UtilAutoFeatures
 from bookmarky.api.utils import auth
 from bookmarky.api.utils import api_util
 from bookmarky.api.utils import glow

@@ -1,18 +1,20 @@
 """
     Bookmarky Api
     Util
-    Handles Auto Features for a single Bookmark
+    Handles Auto Features for a single Bookmark.
+    We expect that the User's enabled AutoFeatures will be submitted as an argument to this class.
 
 """
 import logging
 from urllib.parse import urlparse
+import re
 
 from bookmarky.api.models.auto_feature import AutoFeature
 from bookmarky.api.models.bookmark import Bookmark
 from bookmarky.api.models.bookmark_tag import BookmarkTag
 
 
-class UtilAutoFeatures:
+class AutoFeatures:
 
     def __init__(self, user_id: int, auto_features: list):
         """Initialize the class, taking in a list of a User's AutoFeatures, and applying them where
@@ -40,6 +42,8 @@ class UtilAutoFeatures:
         for af in self.afs:
             if af.auto_feature_type == "domain":
                 self.handle_domain_feature(af)
+            elif af.auto_feature_type == "url-regex":
+                self.handle_url_regex_feature(af)
         logging.info(
             "For %s added tags: %s" % (
                 self.bookmark,
@@ -56,6 +60,24 @@ class UtilAutoFeatures:
         if af.auto_feature_value in self.parsed_url.netloc:
             if af.entity_type == "tags":
                 self.add_tag(af.entity_id)
+
+    def handle_url_regex_feature(self, af: AutoFeature) -> bool:
+        """Handle the url-regex auto setting features for the Bookmark."""
+        logging.info("Handling `url-regex` Auto Features")
+        logging.info(af)
+        # x = re.search("/r/tifu/", txt)
+        if re.search(af.auto_feature_value, self.bookmark.url):
+            print("We found a match!")
+            logging.info(af)
+            logging.info(self.bookmark)
+            if af.entity_type == "tags":
+                self.add_tag(af.entity_id)
+                return True
+        else:
+            log_msg = f"No match for regex url on {self.bookmark.url} for pattern "
+            log_msg += f'"{af.auto_feature_value}")'
+            logging.info(log_msg)
+            return False
 
     def add_tag(self, tag_id: int) -> bool:
         """Add a Tag association to a Bookmark, given the Tag's ID."""

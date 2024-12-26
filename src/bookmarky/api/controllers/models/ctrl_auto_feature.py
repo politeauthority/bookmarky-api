@@ -31,6 +31,7 @@ def get_model(af_id: int = None) -> Response:
     return jsonify(data)
 
 
+@ctrl_auto_feature.route("", methods=["POST"])
 @ctrl_auto_feature.route("/", methods=["POST"])
 @ctrl_auto_feature.route("/<af_id>", methods=["POST"])
 @ctrl_auto_feature.route("/<af_id>/", methods=["POST"])
@@ -39,10 +40,10 @@ def post_model(af_id: int = None):
     """POST operation for a AutoFeature model.
     POST /auto-feature
     """
+    logging.info("POST Auto Feature")
     data = {
         "user_id": glow.user["user_id"]
     }
-    logging.info("POST Auto Feature")
     if isinstance(af_id, str):
         try:
             af_id = int(af_id)
