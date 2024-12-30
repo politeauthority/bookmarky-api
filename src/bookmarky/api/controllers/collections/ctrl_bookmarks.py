@@ -10,6 +10,7 @@ from flask import Blueprint, jsonify, request, Response
 
 from bookmarky.api.collects.bookmarks import Bookmarks
 from bookmarky.api.collects.tags import Tags
+from bookmarky.api.collects.bookmark_tracks import BookmarkTracks
 from bookmarky.api.models.tag import Tag
 from bookmarky.api.models.directory import Directory
 from bookmarky.api.controllers.collections import ctrl_collection_base
@@ -92,34 +93,6 @@ def search() -> Response:
     return jsonify(data)
 
 
-def _gen_search_query(search_phrase: str, page: int) -> dict:
-    """Generate the search query SQL."""
-    if page == 1:
-        offset = 0
-    else:
-        offset = (page * PER_PAGE) - PER_PAGE
-
-    query = {
-        "sql": None,
-        "params": ()
-    }
-    query["sql"] = f"""
-        SELECT *
-        FROM bookmarks
-        WHERE
-            user_id = %s AND
-            (
-                url ILIKE %s OR
-                title ILIKE %s OR
-                notes ILIKE %s
-            )
-        ORDER BY created_ts DESC
-        LIMIT 20 OFFSET {offset};
-    """
-    query["params"] = (glow.user["user_id"], search_phrase, search_phrase, search_phrase)
-    return query
-
-
 @ctrl_bookmarks.route("/by-tag")
 @auth.auth_request
 def by_tag() -> Response:
@@ -168,6 +141,59 @@ def by_dir() -> Response:
     data["info"]["total_objects"] = len(data["objects"])
     data["info"]["dir"] = directory.json()
     return jsonify(data)
+
+
+@ctrl_bookmarks.route("/popular")
+@ctrl_bookmarks.route("/popular/")
+@auth.auth_request
+def get_most_clicked() -> Response:
+    """Get the most clicked Bookmarks for a logged in User.
+    @todo: Support date range feature, getting popular Bookmarks _since_ a given UTC datetime.
+    """
+    logging.info("Running Popular Search")
+    bookmark_ids = BookmarkTracks().get_popular_bookmarks(glow.user["user_id"])
+    bookmark_ids_search = []
+    for b_id in bookmark_ids:
+        bookmark_ids_search.append(b_id[0])
+    bookmarks_collected = Bookmarks().get_by_ids(bookmark_ids_search)
+    bookmarks = []
+    for b in bookmarks_collected:
+        bookmarks.append(b.json())
+    data = {
+        "objects": bookmarks,
+        "info": {
+            "total_objects": len(bookmarks)
+        }
+    }
+    return jsonify(data)
+
+
+def _gen_search_query(search_phrase: str, page: int) -> dict:
+    """Generate the search query SQL. Helper function for search function."""
+    if page == 1:
+        offset = 0
+    else:
+        offset = (page * PER_PAGE) - PER_PAGE
+
+    query = {
+        "sql": None,
+        "params": ()
+    }
+    query["sql"] = f"""
+        SELECT *
+        FROM bookmarks
+        WHERE
+            user_id = %s AND
+            (
+                url ILIKE %s OR
+                title ILIKE %s OR
+                notes ILIKE %s
+            )
+        ORDER BY created_ts DESC
+        LIMIT 20 OFFSET {offset};
+    """
+    query["params"] = (glow.user["user_id"], search_phrase, search_phrase, search_phrase)
+    return query
 
 
 def _get_user_display_hidden() -> dict:

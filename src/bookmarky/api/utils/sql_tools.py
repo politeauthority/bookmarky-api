@@ -12,8 +12,7 @@ from sqlescapy import sqlescape
 
 
 def sql_safe(query_item):
-    """Covert any item to a sql safe value where possible.
-    """
+    """Covert any item to a sql safe value where possible."""
     if not query_item:
         return query_item
     if isinstance(query_item, str) and query_item.isdigit():
@@ -35,4 +34,4 @@ def sql_safe(query_item):
         return sqlescape(query_item)
 
 
-# End File: cver/src/api/utils/sql_tools.py
+# End File: politeauthority/bookmarky-api/src/bookmarky/api/utils/sql_tools.py
